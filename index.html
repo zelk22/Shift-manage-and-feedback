@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>מערכת ניהול משמרת ומשוב (Firebase)</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-color: #10b981;
+            --secondary-hover: #059669;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --danger-color: #ef4444;
+            --danger-hover: #dc2626;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 15px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 10px 0;
+        }
+
+        header h1 {
+            margin: 0;
+            color: #0f172a;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background-color: #e2e8f0;
+            color: #475569;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            flex: 1;
+            min-width: 120px;
+            text-align: center;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .nav-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+        }
+
+        .nav-btn.settings-btn {
+            background-color: #64748b;
+            color: white;
+            flex: 0 1 auto;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .section-title {
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 12px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #0f172a;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #475569;
+        }
+
+        input, select, textarea {
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 15px;
+            background-color: #f8fafc;
+            color: var(--text-color);
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+            appearance: none;
+        }
+
+        select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: left 0.75rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-left: 2.5rem;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background-color: #fff;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+
+        button.action-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 15px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        button.action-btn:hover {
+            background-color: var(--secondary-hover);
+        }
+
+        select:invalid, select.placeholder-active {
+            color: var(--text-muted);
+        }
+
+        .skills-checkbox-container {
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px;
+            max-height: 140px;
+            overflow-y: auto;
+            background: #f8fafc;
+        }
+
+        .skill-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .skill-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .feedback-item {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 15px;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .remove-feedback {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 0 -20px;
+            padding: 0 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 15px;
+            background: white;
+            font-size: 14px;
+        }
+
+        th, td {
+            padding: 14px;
+            border-bottom: 1px solid var(--border-color);
+            text-align: right;
+        }
+
+        th {
+            background-color: #f8fafc;
+            font-weight: 700;
+            color: #475569;
+            white-space: nowrap;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .alert-box {
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .alert-danger {
+            background-color: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #fee2e2;
+        }
+
+        .alert-success {
+            background-color: #f0fdf4;
+            color: #15803d;
+            border: 1px solid #dcfce7;
+        }
+
+        .summary-card {
+            background: #eff6ff;
+            border: 1px solid #dbeafe;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            font-weight: 700;
+            color: #1d4ed8;
+            font-size: 14px;
+        }
+
+        .settings-list li {
+            background: #f8fafc;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        #loadingOverlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.8);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 9999; font-weight: bold; color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .card { padding: 15px; }
+            .form-grid { grid-template-columns: 1fr; }
+            .nav-btn { font-size: 13px; padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="loadingOverlay">טוען נתונים מהענן...</div>
+
+<div class="container">
+    <header>
+        <h1>ניהול משמרות ומשובים</h1>
+    </header>
+
+    <div class="nav-buttons">
+        <button class="nav-btn active" onclick="switchMode('mode1')">✍️ הזנת משמרת</button>
+        <button class="nav-btn" onclick="switchMode('mode2')">📊 צפייה בנתונים</button>
+        <button class="nav-btn settings-btn" onclick="switchMode('mode3')">⚙️ הגדרות</button>
+    </div>
+
+    <div id="mode1" class="mode-section">
+        <div class="card">
+            <h2 class="section-title">פרטי משמרת</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>תאריך</label>
+                    <input type="date" id="shiftDate">
+                </div>
+                <div class="form-group">
+                    <label>מדריך</label>
+                    <select id="shiftInstructor" class="placeholder-active" onchange="checkPlaceholder(this)"></select>
+                </div>
+                <div class="form-group">
+                    <label>סוג משימה</label>
+                    <select id="shiftTask" class="placeholder-active" onchange="checkPlaceholder(this)"></select>
+                </div>
+                <div class="form-group">
+                    <label>תחילת משמרת</label>
+                    <input type="time" id="startTime">
+                </div>
+                <div class="form-group">
+                    <label>סיום משמרת</label>
+                    <input type="time" id="endTime">
+                </div>
+                <div class="form-group">
+                    <label>כמות שיעורים שבוצעו</label>
+                    <input type="number" id="lessonsCount" min="0" value="0">
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title">הזנת טופס משוב</h2>
+            <button class="action-btn" onclick="addFeedbackForm()">➕ הוסף משוב</button>
+            <div id="feedbackContainer"></div>
+            <hr style="margin: 20px 0; border: none; border-bottom: 1px solid var(--border-color);">
+            <button class="action-btn" style="background-color: var(--primary-color); width: 100%; padding: 15px; font-size: 16px;" onclick="saveShift()">💾 שמור משמרת ומשובים</button>
+        </div>
+    </div>
+
+    <div id="mode2" class="mode-section hidden">
+        <div class="card">
+            <h2 class="section-title">צפייה בנתונים</h2>
+            <button class="action-btn" style="background-color: #475569;" onclick="toggleFilters()">🔍 לחצן פילוח (הצג/סתר)</button>
+            
+            <div id="filterArea" class="hidden" style="margin-top: 15px; background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid var(--border-color);">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>מדריך</label>
+                        <select id="filterInstructor" onchange="renderTable()"><option value="">הכל</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>חניך</label>
+                        <select id="filterTrainee" onchange="renderTable()"><option value="">הכל</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>משימה</label>
+                        <select id="filterTask" onchange="renderTable()"><option value="">הכל</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>מיומנות</label>
+                        <select id="filterSkill" onchange="renderTable()"><option value="">הכל</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>מתאריך</label>
+                        <input type="date" id="filterFromDate" onchange="renderTable()">
+                    </div>
+                    <div class="form-group">
+                        <label>עד תאריך</label>
+                        <input type="date" id="filterToDate" onchange="renderTable()">
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="action-btn" style="background-color: #059669;" onclick="exportData()">📥 ייצוא דוח ל-CSV</button>
+            </div>
+
+            <hr style="margin: 20px 0; border: none; border-bottom: 1px solid var(--border-color);">
+            <div id="alertContainer"></div>
+            <div id="lessonSummary" class="summary-card hidden"></div>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>תאריך</th>
+                            <th>מדריך</th>
+                            <th>משימה</th>
+                            <th>שעות</th>
+                            <th>שיעורים</th>
+                            <th>חניך</th>
+                            <th>לשימור</th>
+                            <th>לשיפור</th>
+                            <th>הערות</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="mode3" class="mode-section hidden">
+        <div class="card">
+            <h2 class="section-title">הגדרות מערכת (ניהול רשימות)</h2>
+            <div class="form-grid">
+                <div class="card" style="padding: 15px; box-shadow: none; border: 1px solid var(--border-color);">
+                    <h3 style="margin-top:0; font-size:16px;">מדריכים</h3>
+                    <div style="display:flex; gap:5px; margin-bottom:10px;">
+                        <input type="text" id="newInstructor" placeholder="שם מדריך" style="flex:1;">
+                        <button class="action-btn" onclick="addItem('instructors', 'newInstructor')" style="padding:10px 14px;">הוסף</button>
+                    </div>
+                    <ul id="listInstructors" class="settings-list" style="list-style:none; padding:0; margin:0;"></ul>
+                </div>
+                <div class="card" style="padding: 15px; box-shadow: none; border: 1px solid var(--border-color);">
+                    <h3 style="margin-top:0; font-size:16px;">חניכים</h3>
+                    <div style="display:flex; gap:5px; margin-bottom:10px;">
+                        <input type="text" id="newTrainee" placeholder="שם חניך" style="flex:1;">
+                        <button class="action-btn" onclick="addItem('trainees', 'newTrainee')" style="padding:10px 14px;">הוסף</button>
+                    </div>
+                    <ul id="listTrainees" class="settings-list" style="list-style:none; padding:0; margin:0;"></ul>
+                </div>
+                <div class="card" style="padding: 15px; box-shadow: none; border: 1px solid var(--border-color);">
+                    <h3 style="margin-top:0; font-size:16px;">מיומנויות</h3>
+                    <div style="display:flex; gap:5px; margin-bottom:10px;">
+                        <input type="text" id="newSkill" placeholder="מיומנות חדשה" style="flex:1;">
+                        <button class="action-btn" onclick="addItem('skills', 'newSkill')" style="padding:10px 14px;">הוסף</button>
+                    </div>
+                    <ul id="listSkills" class="settings-list" style="list-style:none; padding:0; margin:0;"></ul>
+                </div>
+                <div class="card" style="padding: 15px; box-shadow: none; border: 1px solid var(--border-color);">
+                    <h3 style="margin-top:0; font-size:16px;">סוגי משימות</h3>
+                    <div style="display:flex; gap:5px; margin-bottom:10px;">
+                        <input type="text" id="newTask" placeholder="סוג משימה" style="flex:1;">
+                        <button class="action-btn" onclick="addItem('tasks', 'newTask')" style="padding:10px 14px;">הוסף</button>
+                    </div>
+                    <ul id="listTasks" class="settings-list" style="list-style:none; padding:0; margin:0;"></ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title">מנגנון התרעות חכם</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>בחר מיומנות</label>
+                    <select id="alertSkill"></select>
+                </div>
+                <div class="form-group">
+                    <label>סוג התרעה</label>
+                    <select id="alertType">
+                        <option value="improve">לשיפור (שלילי)</option>
+                        <option value="preserve">לשימור (חיובי)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>כמות מופעים להתרעה</label>
+                    <input type="number" id="alertCount" min="1" value="2">
+                </div>
+            </div>
+            <button class="action-btn" style="background-color: var(--primary-color); margin-top:15px;" onclick="window.addAlertRule()">הוסף כלל התרעה</button>
+            
+            <h3 style="font-size:16px; margin-top:20px;">כללי התרעה קיימים:</h3>
+            <ul id="alertRulesList" style="list-style:none; padding:0; margin:0;"></ul>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, setDoc, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // הקונפיגורציה שלך
+    const firebaseConfig = {
+        apiKey: "AIzaSyAhASE5RpG-rfYvSrheRNc7y9IU81jQ-Bw",
+        authDomain: "shift-management-and-feedback.firebaseapp.com",
+        projectId: "shift-management-and-feedback",
+        storageBucket: "shift-management-and-feedback.firebasestorage.app",
+        messagingSenderId: "362507186060",
+        appId: "1:362507186060:web:5d2060be750d579a7e30a9"
+    };
+
+    // אתחול Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // נתוני ברירת מחדל למקרה שאין כלום בענן
+    const defaultLists = {
+        instructors: ['ישראל ישראלי', 'שרה כהן'],
+        trainees: ['חניך א׳', 'חניך ב׳', 'חניך ג׳'],
+        tasks: ['הדרכה מעשית', 'סימולטור', 'שיעור עיוני'],
+        skills: ['קשב וריכוז', 'עמידה בזמנים', 'תקשורת', 'ביצוע טכני', 'בטיחות'],
+        alertRules: [{ skill: 'בטיחות', type: 'improve', count: 2 }]
+    };
+
+    let appData = { ...defaultLists, shifts: [] };
+    let feedbackCounter = 0;
+
+    // פונקציות גלובליות כדי שה-HTML הישן יוכל לקרוא להן
+    window.switchMode = function(modeId) {
+        document.querySelectorAll('.mode-section').forEach(sec => sec.classList.add('hidden'));
+        document.getElementById(modeId).classList.remove('hidden');
+        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+        if (event) event.target.classList.add('active');
+        if (modeId === 'mode2') renderTable();
+    };
+
+    window.toggleFilters = function() {
+        document.getElementById('filterArea').classList.toggle('hidden');
+    };
+
+    window.checkPlaceholder = function(selectElement) {
+        if (selectElement.value === "") selectElement.classList.add('placeholder-active');
+        else selectElement.classList.remove('placeholder-active');
+    };
+
+    // טעינת מידע ראשונית
+    async function init() {
+        document.getElementById('shiftDate').valueAsDate = new Date();
+        try {
+            // 1. טעינת רשימות הגדרות
+            const settingsDoc = await getDoc(doc(db, "settings", "lists"));
+            if (settingsDoc.exists()) {
+                const data = settingsDoc.data();
+                appData.instructors = data.instructors || [];
+                appData.trainees = data.trainees || [];
+                appData.tasks = data.tasks || [];
+                appData.skills = data.skills || [];
+                appData.alertRules = data.alertRules || [];
+            } else {
+                // אם אין מסמך, ניצור אותו עם ברירות המחדל
+                await setDoc(doc(db, "settings", "lists"), defaultLists);
+            }
+
+            // 2. טעינת משמרות
+            const q = query(collection(db, "shifts"), orderBy("date", "desc"));
+            const querySnapshot = await getDocs(q);
+            appData.shifts = [];
+            querySnapshot.forEach((doc) => {
+                appData.shifts.push(doc.data());
+            });
+
+            // עדכון הממשק
+            populateDropdowns();
+            renderLists();
+            renderTable();
+            renderAlertRules();
+            
+            // הסרת מסך הטעינה
+            document.getElementById('loadingOverlay').style.display = 'none';
+
+        } catch (error) {
+            console.error("שגיאה בטעינת הנתונים:", error);
+            alert("חלה שגיאה בטעינת הנתונים מהשרת. ודא שחוקי ה-Database מוגדרים נכון.");
+        }
+    }
+
+    function populateDropdowns() {
+        const fill = (id, array, defaultText, isPlaceholder = false) => {
+            const el = document.getElementById(id);
+            if(!el) return;
+            let html = isPlaceholder ? `<option value="" selected disabled hidden>${defaultText}</option>` : `<option value="">${defaultText}</option>`;
+            array.forEach(item => { html += `<option value="${item}">${item}</option>`; });
+            el.innerHTML = html;
+        };
+        fill('shiftInstructor', appData.instructors, 'בחר מדריך...', true);
+        fill('shiftTask', appData.tasks, 'בחר משימה...', true);
+        fill('filterInstructor', appData.instructors, 'הכל');
+        fill('filterTrainee', appData.trainees, 'הכל');
+        fill('filterTask', appData.tasks, 'הכל');
+        fill('filterSkill', appData.skills, 'הכל');
+        fill('alertSkill', appData.skills);
+    }
+
+    window.addFeedbackForm = function() {
+        feedbackCounter++;
+        const container = document.getElementById('feedbackContainer');
+        const feedbackDiv = document.createElement('div');
+        feedbackDiv.className = 'feedback-item';
+        feedbackDiv.id = `fb-item-${feedbackCounter}`;
+        
+        let traineeOptions = `<option value="" selected disabled hidden>בחר חניך...</option>` + appData.trainees.map(t => `<option value="${t}">${t}</option>`).join('');
+        let preserveCheckboxes = appData.skills.map(s => `<div class="skill-item"><input type="checkbox" class="preserve-skill" value="${s}"><span>${s}</span></div>`).join('');
+        let improveCheckboxes = appData.skills.map(s => `<div class="skill-item"><input type="checkbox" class="improve-skill" value="${s}"><span>${s}</span></div>`).join('');
+
+        feedbackDiv.innerHTML = `
+            <button class="remove-feedback" onclick="this.parentElement.remove()">X</button>
+            <div class="form-grid">
+                <div class="form-group"><label>בחר חניך</label><select class="fb-trainee placeholder-active" onchange="checkPlaceholder(this)">${traineeOptions}</select></div>
+                <div class="form-group"><label>לשימור</label><div class="skills-checkbox-container">${preserveCheckboxes}</div></div>
+                <div class="form-group"><label>לשיפור</label><div class="skills-checkbox-container">${improveCheckboxes}</div></div>
+                <div class="form-group"><label>הערות חופשיות</label><textarea class="fb-notes" rows="3" placeholder="כתוב כאן..."></textarea></div>
+            </div>
+        `;
+        container.appendChild(feedbackDiv);
+    };
+
+    // שמירת משמרת ב-Firebase
+    window.saveShift = async function() {
+        const date = document.getElementById('shiftDate').value;
+        const instructor = document.getElementById('shiftInstructor').value;
+        const task = document.getElementById('shiftTask').value;
+        const start = document.getElementById('startTime').value;
+        const end = document.getElementById('endTime').value;
+        const lessons = parseInt(document.getElementById('lessonsCount').value) || 0;
+        
+        if (!instructor) { alert('אנא בחר מדריך!'); return; }
+
+        const feedbackElements = document.querySelectorAll('.feedback-item');
+        const shiftsToSave = [];
+
+        if (feedbackElements.length === 0) {
+            shiftsToSave.push({ date, instructor, task, start, end, lessons, trainee: '-', preserve: [], improve: [], notes: '-' });
+        } else {
+            let errorFlag = false;
+            feedbackElements.forEach(el => {
+                const trainee = el.querySelector('.fb-trainee').value;
+                if (!trainee) { errorFlag = true; return; }
+                const notes = el.querySelector('.fb-notes').value;
+                const preserve = Array.from(el.querySelectorAll('.preserve-skill:checked')).map(chk => chk.value);
+                const improve = Array.from(el.querySelectorAll('.improve-skill:checked')).map(chk => chk.value);
+                shiftsToSave.push({ date, instructor, task, start, end, lessons, trainee, preserve, improve, notes });
+            });
+            if (errorFlag) { alert('אנא ודא שבחרת חניך בכל אחד מטפסי המשוב!'); return; }
+        }
+
+        document.getElementById('loadingOverlay').style.display = 'flex';
+        document.getElementById('loadingOverlay').innerText = 'שומר בענן...';
+
+        try {
+            for (const s of shiftsToSave) {
+                await addDoc(collection(db, "shifts"), s);
+                appData.shifts.unshift(s); 
+            }
+            alert('הנתונים נשמרו בהצלחה בענן!');
+            
+            // איפוס טופס
+            document.getElementById('feedbackContainer').innerHTML = '';
+            document.getElementById('lessonsCount').value = 0;
+            const si = document.getElementById('shiftInstructor');
+            const st = document.getElementById('shiftTask');
+            si.value = ""; checkPlaceholder(si);
+            st.value = ""; checkPlaceholder(st);
+            
+            renderTable();
+        } catch (e) {
+            console.error("Error adding document: ", e);
+            alert("שגיאה בשמירת הנתונים.");
+        } finally {
+            document.getElementById('loadingOverlay').style.display = 'none';
+            document.getElementById('loadingOverlay').innerText = 'טוען נתונים מהענן...';
+        }
+    };
+
+    window.renderTable = function() {
+        const tbody = document.getElementById('dataTableBody');
+        tbody.innerHTML = '';
+        const fInst = document.getElementById('filterInstructor').value;
+        const fTrain = document.getElementById('filterTrainee').value;
+        const fTask = document.getElementById('filterTask').value;
+        const fSkill = document.getElementById('filterSkill').value;
+        const fFromDate = document.getElementById('filterFromDate').value;
+        const fToDate = document.getElementById('filterToDate').value;
+
+        let totalLessonsForInstructor = 0;
+
+        const filtered = appData.shifts.filter(s => {
+            const matchInst = !fInst || s.instructor === fInst;
+            const matchTrain = !fTrain || s.trainee === fTrain;
+            const matchTask = !fTask || s.task === fTask;
+            const matchSkill = !fSkill || s.preserve.includes(fSkill) || s.improve.includes(fSkill);
+            const matchFromDate = !fFromDate || s.date >= fFromDate;
+            const matchToDate = !fToDate || s.date <= fToDate;
+
+            const isMatch = matchInst && matchTrain && matchTask && matchSkill && matchFromDate && matchToDate;
+            if (isMatch && fInst && s.lessons) totalLessonsForInstructor += s.lessons;
+            return isMatch;
+        });
+
+        const summaryCard = document.getElementById('lessonSummary');
+        if (fInst && filtered.length > 0) {
+            summaryCard.classList.remove('hidden');
+            summaryCard.innerHTML = `📈 סה"כ שיעורים שבוצעו על ידי המדריך <strong>${fInst}</strong> בטווח שנבחר: <strong>${totalLessonsForInstructor}</strong>`;
+        } else { summaryCard.classList.add('hidden'); }
+
+        filtered.forEach(s => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${s.date}</td><td>${s.instructor}</td><td>${s.task}</td>
+                <td>${s.start || '--'} - ${s.end || '--'}</td><td>${s.lessons || '0'}</td>
+                <td>${s.trainee}</td><td>${s.preserve.join(', ') || '-'}</td>
+                <td style="${s.improve.length ? 'color: var(--danger-color); font-weight:bold;' : ''}">${s.improve.join(', ') || '-'}</td>
+                <td>${s.notes}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+        checkAlerts();
+    };
+
+    function checkAlerts() {
+        const alertContainer = document.getElementById('alertContainer');
+        alertContainer.innerHTML = '';
+        const counts = {};
+
+        appData.shifts.forEach(shift => {
+            if (shift.trainee === '-') return;
+            if (!counts[shift.trainee]) counts[shift.trainee] = {};
+
+            shift.preserve.forEach(skill => {
+                if (!counts[shift.trainee][skill]) counts[shift.trainee][skill] = { preserve: 0, improve: 0 };
+                counts[shift.trainee][skill].preserve++;
+            });
+            shift.improve.forEach(skill => {
+                if (!counts[shift.trainee][skill]) counts[shift.trainee][skill] = { preserve: 0, improve: 0 };
+                counts[shift.trainee][skill].improve++;
+            });
+        });
+
+        appData.alertRules.forEach(rule => {
+            for (const trainee in counts) {
+                const traineeSkills = counts[trainee];
+                if (traineeSkills[rule.skill]) {
+                    const actualCount = traineeSkills[rule.skill][rule.type];
+                    if (actualCount >= rule.count) {
+                        const div = document.createElement('div');
+                        if (rule.type === 'improve') {
+                            div.className = 'alert-box alert-danger';
+                            div.innerHTML = `🚨 שים לב: החניך <strong>${trainee}</strong> קיבל ${actualCount} פעמים סימון לשיפור במיומנות <strong>"${rule.skill}"</strong>!`;
+                        } else {
+                            div.className = 'alert-box alert-success';
+                            div.innerHTML = `🌟 כל הכבוד: החניך <strong>${trainee}</strong> קיבל ${actualCount} פעמים סימון לשימור במיומנות <strong>"${rule.skill}"</strong>!`;
+                        }
+                        alertContainer.appendChild(div);
+                    }
+                }
+            }
+        });
+    }
+
+    // ניהול רשימות הגדרות מול Firebase
+    async function updateSettingsOnFirebase() {
+        await setDoc(doc(db, "settings", "lists"), {
+            instructors: appData.instructors,
+            trainees: appData.trainees,
+            tasks: appData.tasks,
+            skills: appData.skills,
+            alertRules: appData.alertRules
+        });
+        populateDropdowns();
+        renderLists();
+        renderAlertRules();
+    }
+
+    window.addItem = async function(arrayName, inputId) {
+        const input = document.getElementById(inputId);
+        const value = input.value.trim();
+        if(value) {
+            appData[arrayName].push(value);
+            input.value = '';
+            await updateSettingsOnFirebase();
+        }
+    };
+
+    window.removeItem = async function(arrayName, index) {
+        appData[arrayName].splice(index, 1);
+        await updateSettingsOnFirebase();
+    };
+
+    window.addAlertRule = async function() {
+        const skill = document.getElementById('alertSkill').value;
+        const type = document.getElementById('alertType').value;
+        const count = parseInt(document.getElementById('alertCount').value);
+        if(!skill) return;
+        appData.alertRules.push({ skill, type, count });
+        await updateSettingsOnFirebase();
+    };
+
+    window.removeAlertRule = async function(index) {
+        appData.alertRules.splice(index, 1);
+        await updateSettingsOnFirebase();
+    };
+
+    function renderLists() {
+        const draw = (listId, arrayName) => {
+            const ul = document.getElementById(listId);
+            ul.innerHTML = '';
+            appData[arrayName].forEach((item, index) => {
+                const li = document.createElement('li');
+                li.style.display = 'flex'; li.style.justifyContent = 'space-between'; li.style.alignItems = 'center'; li.style.marginBottom = '6px';
+                li.innerHTML = `
+                    <span style="font-size:14px;">${item}</span>
+                    <button style="background:var(--danger-color); color:white; border:none; border-radius:6px; cursor:pointer; padding:5px 10px; font-size:12px; font-weight:bold;" onclick="window.removeItem('${arrayName}', ${index})">מחק</button>
+                `;
+                ul.appendChild(li);
+            });
+        };
+        draw('listInstructors', 'instructors');
+        draw('listTrainees', 'trainees');
+        draw('listSkills', 'skills');
+        draw('listTasks', 'tasks');
+    }
+
+    function renderAlertRules() {
+        const ul = document.getElementById('alertRulesList');
+        ul.innerHTML = '';
+        appData.alertRules.forEach((rule, index) => {
+            const li = document.createElement('li');
+            li.style.display = 'flex'; li.style.justifyContent = 'space-between'; li.style.alignItems = 'center'; li.style.marginBottom = '8px';
+            li.style.background = '#f8fafc'; li.style.padding = '10px'; li.style.borderRadius = '8px'; li.style.border = '1px solid var(--border-color)';
+            
+            const typeText = rule.type === 'improve' ? 'לשיפור' : 'לשימור';
+            li.innerHTML = `
+                <span style="font-size:14px;">חוק: <strong>${rule.skill}</strong> (${typeText}) מופעים: ${rule.count}</span>
+                <button style="background:var(--danger-color); color:white; border:none; border-radius:6px; cursor:pointer; padding:6px 12px; font-size:12px; font-weight:bold;" onclick="window.removeAlertRule(${index})">מחק</button>
+            `;
+            ul.appendChild(li);
+        });
+    }
+
+    window.exportData = function() {
+        let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; 
+        csvContent += "תאריך,מדריך,משימה,שעות,שיעורים,חניך,לשימור,לשיפור,הערות\n";
+        appData.shifts.forEach(s => {
+            let row = [s.date, s.instructor, s.task, `${s.start}-${s.end}`, s.lessons, s.trainee, `"${s.preserve.join(' | ')}"`, `"${s.improve.join(' | ')}"`, `"${s.notes}"`].join(",");
+            csvContent += row + "\n";
+        });
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri); link.setAttribute("download", "shift_report.csv");
+        document.body.appendChild(link); link.click(); document.body.removeChild(link);
+    };
+
+    // הרצה
+    init();
+</script>
+
+</body>
+</html>
