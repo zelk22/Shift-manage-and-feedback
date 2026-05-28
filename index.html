@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <!-- חסימה מוחלטת של מנגנוני התרגום האוטומטי של גוגל, אפל ושאר הדפדפנים בטלפונים -->
+    <!-- חסימה מוחלטת של מנגנוני התרגום האוטומטי -->
     <meta name="google" content="notranslate" />
     <meta name="google" content="nopagereader" />
     
-    <title>צ'אט בוט נדל"ן</title>
+    <title>צ'אט בוט נדל"ן - גישה מוגנת</title>
     
     <style>
-        /* איפוס והכנת העמוד למסך מלא לחלוטין בניידים ובמחשב */
+        /* איפוס והכנת העמוד למסך מלא */
         html, body {
             margin: 0;
             padding: 0;
@@ -22,7 +22,7 @@
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         }
 
-        /* מיכל האייפרם שתופס את כל שטח המסך בצורה נקייה */
+        /* מיכל האייפרם */
         .chat-container {
             width: 100%;
             height: 100%;
@@ -32,6 +32,7 @@
             left: 0;
             right: 0;
             bottom: 0;
+            display: none; /* הבוט מוסתר כברירת מחדל עד להקשת סיסמה נכונה */
         }
 
         iframe {
@@ -44,15 +45,40 @@
 </head>
 <body class="notranslate">
 
-    <!-- המיכל שמציג את הבוט במסך מלא ומסומן כלא מיועד לתרגום -->
-    <div class="chat-container notranslate">
-        <!-- הקישור המדויק של הבוט שלך מוטמע כאן בפנים -->
+    <!-- המיכל שמציג את הבוט במסך מלא -->
+    <div id="botContainer" class="chat-container notranslate">
         <iframe 
             src="https://cdn.botpress.cloud/webchat/v3.6/shareable.html?configUrl=https://files.bpcontent.cloud/2026/05/28/05/20260528054019-BJA7KHOQ.json" 
             title="בוט נדלן"
             allow="geolocation; microphone; camera">
         </iframe>
     </div>
+
+    <script>
+        // פונקציה שמבקשת סיסמה מהמשתמש
+        function checkPassword() {
+            // שינוי הסיסמה: החלף את '1234' במה שאתה רוצה (שמור על הגרשיים!)
+            const correctPassword = "646464"; 
+            
+            let userPassword = prompt("על מנת להיכנס לצ'אט, אנא הזן את סיסמת הגישה שלך:");
+            
+            if (userPassword === correctPassword) {
+                // אם הסיסמה נכונה, נציג את הבוט
+                document.getElementById("botContainer").style.display = "block";
+            } else if (userPassword === null) {
+                // אם המשתמש לחץ על ביטול
+                alert("הכניסה בוטלה. לא ניתן לגשת לצ'אט ללא סיסמה.");
+                document.body.innerHTML = "<h2 style='text-align:center; margin-top:20%; color:#ff4d4d;'>הגישה נחסמה. נא לרענן את העמוד ולהזין סיסמה נכונה.</h2>";
+            } else {
+                // אם הסיסמה שגויה
+                alert("סיסמה שגויה! הגישה נדחתה.");
+                document.body.innerHTML = "<h2 style='text-align:center; margin-top:20%; color:#ff4d4d;'>סיסמה שגויה. הגישה נחסמה.</h2>";
+            }
+        }
+
+        // הפעלת בדיקת הסיסמה מיד עם טעינת העמוד
+        window.onload = checkPassword;
+    </script>
 
 </body>
 </html>
