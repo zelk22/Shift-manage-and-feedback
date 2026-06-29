@@ -375,10 +375,6 @@ tr:hover td{background:#fafbff}
 
 <button id="admin-btn" onclick="showAdminLogin()" title="כניסת מנהל">⚙️</button>
 
-<button id="admin-btn" onclick="showAdminLogin()" title="כניסת מנהל">⚙️</button>
-
-<button id="admin-btn" onclick="showAdminLogin()" title="כניסת מנהל">⚙️</button>
-
 <script>
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxrDJSPInV3fseQNm7GPSbTv4wtleU8CtQfew1RRDRAiMPXOZ8uYChauxUbL5pa44lUGw/exec';
 
@@ -784,6 +780,7 @@ function initApp() {
       '<button class="nav-tab" data-tab="questions" onclick="showTab(\'questions\')">📚 שאלות</button>' +
       '<button class="nav-tab" data-tab="reports" onclick="showTab(\'reports\')">📊 דיווחים</button>' +
       '<button class="nav-tab" data-tab="myresults" onclick="showTab(\'myresults\')">🏅 ההתקדמות שלי</button>' +
+      '<button class="nav-tab" data-tab="advisor" onclick="showTab(\'advisor\')">💡 יועץ משחקים</button>' +
       '<button class="nav-tab" data-tab="config" onclick="showTab(\'config\')">⚙️ הגדרות</button>';
   } else {
     const tabs = [...playerTabs, ['myresults','🏅 ההתקדמות שלי']];
@@ -854,7 +851,522 @@ function showTab(id, direct) {
   if(game && GAME_REGISTRY && GAME_REGISTRY[game.templateId] && GAME_REGISTRY[game.templateId].renderLobby) {
     return GAME_REGISTRY[game.templateId].renderLobby(mc, game);
   }
-  ({questions:renderQuestions,reports:renderReports,config:renderConfig,myresults:renderMyResults}[id]||function(c){var g=getGame&&getGame('game');if(g&&GAME_REGISTRY.image_timed)GAME_REGISTRY.image_timed.renderLobby(c,g);else renderGame(c);})(mc);
+  ({questions:renderQuestions,reports:renderReports,config:renderConfig,myresults:renderMyResults,advisor:renderAdvisor}[id]||function(c){var g=getGame&&getGame('game');if(g&&GAME_REGISTRY.image_timed)GAME_REGISTRY.image_timed.renderLobby(c,g);else renderGame(c);})(mc);
+}
+
+// ── מסמך רקע מקצועי — יועץ משחקים ─────────────────────────────
+function showAdvisorBackground() {
+  var existing = document.getElementById('adv-bg-modal');
+  if (existing) { existing.remove(); return; }
+  var overlay = document.createElement('div');
+  overlay.id = 'adv-bg-modal';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9000;overflow-y:auto;display:flex;justify-content:center;align-items:flex-start;padding:24px 16px';
+  overlay.innerHTML = [
+    '<div style="background:#fff;border-radius:16px;max-width:680px;width:100%;padding:28px 28px 32px;position:relative;direction:rtl">',
+
+    // Close button
+    '<button onclick="document.getElementById(\'adv-bg-modal\').remove()" style="position:absolute;top:14px;left:14px;background:none;border:none;font-size:22px;cursor:pointer;color:#aaa;line-height:1">×</button>',
+
+    // Title
+    '<h2 style="font-size:18px;font-weight:700;color:#1a1a2e;margin:0 0 4px">רקע מקצועי — כיצד להתאים משחקים לכישורים שונים</h2>',
+    '<p style="font-size:12px;color:#888;margin:0 0 20px">מסמך תמציתי המבוסס על מחקר בתחום הכשרת מפעילי תחבורה ציבורית</p>',
+
+    // Section 1 — Skills taxonomy
+    '<div style="background:#fef3c7;border-radius:10px;padding:14px 16px;margin-bottom:14px;border-right:4px solid #f59e0b">',
+      '<div style="font-size:13px;font-weight:700;color:#92400e;margin-bottom:8px">1 · שישה תחומי כישור — לא כולם שווים</div>',
+      '<p style="font-size:12px;color:#92400e;line-height:1.65;margin:0 0 10px">מחקרים בתחום הכשרת מפעילי תחבורה ציבורית מגדירים שישה תחומי כישור שחיוניים לנהיגה בטוחה ומקצועית ברכבת קלה. לא כל התחומים נרכשים באותה דרך — חלקם דורשים זיכרון עובדות, חלקם דורשים תרגול רצף, וחלקם — בעיקר הכישורים הקוגניטיביים — דורשים חשיפה חוזרת ללחץ ולהחלטות בזמן אמת. הבחנה זו היא הבסיס לבחירת סוג המשחק הנכון.</p>',
+      '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px">',
+        '<div style="background:#fff;border-radius:7px;padding:8px 10px;border:1px solid #fcd34d"><div style="font-size:18px">🛤️</div><div style="font-size:11px;font-weight:700;color:#92400e">ידע מסלול</div><div style="font-size:10px;color:#b45309">ידע עובדתי</div></div>',
+        '<div style="background:#fff;border-radius:7px;padding:8px 10px;border:1px solid #fcd34d"><div style="font-size:18px">🚦</div><div style="font-size:11px;font-weight:700;color:#92400e">איתותים ובטיחות</div><div style="font-size:10px;color:#b45309">ידע + זיהוי מהיר</div></div>',
+        '<div style="background:#fff;border-radius:7px;padding:8px 10px;border:1px solid #fcd34d"><div style="font-size:18px">📋</div><div style="font-size:11px;font-weight:700;color:#92400e">נהלים תפעוליים</div><div style="font-size:10px;color:#b45309">ידע רצפי</div></div>',
+        '<div style="background:#fff;border-radius:7px;padding:8px 10px;border:1px solid #fcd34d"><div style="font-size:18px">🚇</div><div style="font-size:11px;font-weight:700;color:#92400e">הכרת הרכבת</div><div style="font-size:10px;color:#b45309">ידע עובדתי + מרחבי</div></div>',
+        '<div style="background:#fee2e2;border-radius:7px;padding:8px 10px;border:2px solid #f87171"><div style="font-size:18px">⚡</div><div style="font-size:11px;font-weight:700;color:#991b1b">מיומנות קוגניטיבית</div><div style="font-size:10px;color:#dc2626">הכי קשה לאמן</div></div>',
+        '<div style="background:#fff;border-radius:7px;padding:8px 10px;border:1px solid #fcd34d"><div style="font-size:18px">🗣️</div><div style="font-size:11px;font-weight:700;color:#92400e">שירות ותקשורת</div><div style="font-size:10px;color:#b45309">ידע ומיומנות</div></div>',
+      '</div>',
+      '<div style="font-size:11px;color:#92400e;line-height:1.6">',
+        '<strong>ההבחנה הקריטית:</strong> ידע עובדתי ("מה זה?") נרכש בקוויז. ידע רצפי ("מה עושים ובאיזה סדר?") דורש תרגול שלבים. מיומנות ("כמה מהר וכמה נכון תחת לחץ?") דורש חשיפה חוזרת עם טיימר. ',
+        'טעות נפוצה: שימוש בקוויז טקסט לאימון מיומנויות — זה כמו ללמד שחייה בכיתה.',
+      '</div>',
+    '</div>',
+
+    // Section 2 — Research findings
+    '<div style="background:#eff6ff;border-radius:10px;padding:14px 16px;margin-bottom:14px;border-right:4px solid #3b82f6">',
+      '<div style="font-size:13px;font-weight:700;color:#1e40af;margin-bottom:10px">2 · ממצאי מחקר מרכזיים</div>',
+      '<div style="display:flex;flex-direction:column;gap:8px">',
+
+        '<div style="background:#fff;border-radius:7px;padding:10px 12px;border:1px solid #bfdbfe">',
+          '<div style="display:flex;align-items:flex-start;gap:8px">',
+            '<div style="background:#dbeafe;border-radius:5px;padding:3px 7px;font-size:11px;font-weight:700;color:#1d4ed8;white-space:nowrap;flex-shrink:0">+30%</div>',
+            '<div style="font-size:12px;color:#1e40af;line-height:1.55">תוכניות אימון <strong>hazard perception</strong> הראו שיפור של מעל 30% ביכולת הניבוי, עם תוצאות שנשמרות עד 6 חודשים. המפתח: חשיפה חוזרת לתמונות עם טיימר קצר. <span style="color:#6b7280;font-size:10px">(Crundall et al., 2012)</span></div>',
+          '</div>',
+        '</div>',
+
+        '<div style="background:#fff;border-radius:7px;padding:10px 12px;border:1px solid #bfdbfe">',
+          '<div style="display:flex;align-items:flex-start;gap:8px">',
+            '<div style="background:#dbeafe;border-radius:5px;padding:3px 7px;font-size:11px;font-weight:700;color:#1d4ed8;white-space:nowrap;flex-shrink:0">3 גורמים</div>',
+            '<div style="font-size:12px;color:#1e40af;line-height:1.55">מחקר על נהגי רכבת קלה זיהה 3 גורמי תאונות עיקריים: <strong>מודעות מצב, לחץ זמן, התנהגות ארגונית.</strong> שניים מתוך שלושה ניתנים לאימון ישיר בפלטפורמה. <span style="color:#6b7280;font-size:10px">(Heijer et al., 2019)</span></div>',
+          '</div>',
+        '</div>',
+
+        '<div style="background:#fff;border-radius:7px;padding:10px 12px;border:1px solid #bfdbfe">',
+          '<div style="display:flex;align-items:flex-start;gap:8px">',
+            '<div style="background:#dbeafe;border-radius:5px;padding:3px 7px;font-size:11px;font-weight:700;color:#1d4ed8;white-space:nowrap;flex-shrink:0">SJT</div>',
+            '<div style="font-size:12px;color:#1e40af;line-height:1.55"><strong>Situational Judgment Tests</strong> — תרחיש + 4 אפשרויות בהן 2 "נכונות לכאורה" — הוכחו כמנבאים טובים יותר של ביצועים בשטח מאשר שאלות ידע פשוטות. <span style="color:#6b7280;font-size:10px">(McDaniel & Nguyen, 2001)</span></div>',
+          '</div>',
+        '</div>',
+
+        '<div style="background:#fff;border-radius:7px;padding:10px 12px;border:1px solid #bfdbfe">',
+          '<div style="display:flex;align-items:flex-start;gap:8px">',
+            '<div style="background:#fee2e2;border-radius:5px;padding:3px 7px;font-size:11px;font-weight:700;color:#dc2626;white-space:nowrap;flex-shrink:0">SA</div>',
+            '<div style="font-size:12px;color:#1e40af;line-height:1.55"><strong>Situational Awareness (מודעות מצב)</strong> היא הכישור הקריטי ביותר שנזנח ביותר באימון מפעילי תחבורה. מערכות עתידיות מזהות ירידה ב-SA ומתאימות אימון. <span style="color:#6b7280;font-size:10px">(Endsley, 1995; adapted to transit)</span></div>',
+          '</div>',
+        '</div>',
+
+      '</div>',
+    '</div>',
+
+    // Section 3 — Game templates matrix
+    '<div style="background:#f0fdf4;border-radius:10px;padding:14px 16px;margin-bottom:14px;border-right:4px solid #22c55e">',
+      '<div style="font-size:13px;font-weight:700;color:#14532d;margin-bottom:6px">3 · מה כל סוג משחק עושה בפועל</div>',
+      '<p style="font-size:12px;color:#166534;line-height:1.65;margin:0 0 10px">לכל סוג משחק יש "שריר" שהוא מאמן. בחירת הסוג הנכון תלויה בשאלה: מה אתה רוצה שהנהג יוכל לעשות טוב יותר אחרי האימון?</p>',
+      '<div style="display:flex;flex-direction:column;gap:6px">',
+
+        '<div style="background:#fff;border-radius:8px;padding:10px 12px;border:1px solid #bbf7d0">',
+          '<div style="display:flex;align-items:flex-start;gap:10px">',
+            '<div style="font-size:20px;flex-shrink:0">📝</div>',
+            '<div>',
+              '<div style="font-size:12px;font-weight:700;color:#14532d;margin-bottom:3px">שאלת טקסט — ללמד עובדות וכללים</div>',
+              '<div style="font-size:12px;color:#166534;line-height:1.6">מתאים כשרוצים שהנהג <strong>ידע מידע</strong> — מה שמות התחנות, מה אומר נוהל מסוים, מה עושים במצב X. פשוט לבניה, מתאים לכמויות גדולות של שאלות. <span style="color:#6b7280">לא מתאים: כשרוצים שיזהה משהו מהר בשטח — ידע בכיתה לא מתרגם לתגובה בזמן אמת.</span></div>',
+            '</div>',
+          '</div>',
+        '</div>',
+
+        '<div style="background:#fff;border-radius:8px;padding:10px 12px;border:1px solid #bbf7d0">',
+          '<div style="display:flex;align-items:flex-start;gap:10px">',
+            '<div style="font-size:20px;flex-shrink:0">⏱️</div>',
+            '<div>',
+              '<div style="font-size:12px;font-weight:700;color:#14532d;margin-bottom:3px">תמונה + טיימר — לאמן עין ותגובה</div>',
+              '<div style="font-size:12px;color:#166534;line-height:1.6">מתאים כשרוצים שהנהג <strong>יזהה מצב מתמונה ויגיב מהר</strong> — תמרור, סכנה, מצב בשטח. הטיימר הוא המפתח: 3 שניות = אימון תגובה, 12 שניות = אימון ידע. <span style="color:#6b7280">לא מתאים: ללמד סדר פעולות — תמונה לא מלמדת רצף.</span></div>',
+            '</div>',
+          '</div>',
+        '</div>',
+
+        '<div style="background:#fff;border-radius:8px;padding:10px 12px;border:1px solid #bbf7d0">',
+          '<div style="display:flex;align-items:flex-start;gap:10px">',
+            '<div style="font-size:20px;flex-shrink:0">🎯</div>',
+            '<div>',
+              '<div style="font-size:12px;font-weight:700;color:#14532d;margin-bottom:3px">לחיצה על תמונה — ללמד "איפה זה"</div>',
+              '<div style="font-size:12px;color:#166534;line-height:1.6">מתאים כשרוצים שהנהג <strong>ידע למקם דברים בחלל</strong> — איפה כפתור מסוים בלוח הבקרה, איפה תחנה על המסלול, מה הרכיב הזה בתמונה. מאמן זיכרון מרחבי שקשה ללמד בטקסט. <span style="color:#6b7280">לא מתאים: ללמד מה לעשות — רק היכן הדבר נמצא.</span></div>',
+            '</div>',
+          '</div>',
+        '</div>',
+
+        '<div style="background:#fff;border-radius:8px;padding:10px 12px;border:1px solid #bbf7d0">',
+          '<div style="display:flex;align-items:flex-start;gap:10px">',
+            '<div style="font-size:20px;flex-shrink:0">📋</div>',
+            '<div>',
+              '<div style="font-size:12px;font-weight:700;color:#14532d;margin-bottom:3px">רצף פעולות — ללמד נהלים בסדר הנכון</div>',
+              '<div style="font-size:12px;color:#166534;line-height:1.6">מתאים כשרוצים שהנהג <strong>ידע לא רק מה לעשות אלא באיזה סדר</strong> — בדיקות טרום יציאה, נוהל תקלה, פינוי נוסעים. הסדר עצמו הוא הלמידה. <span style="color:#6b7280">לא מתאים: כשאין חשיבות לסדר — אז עדיף שאלת טקסט פשוטה.</span></div>',
+            '</div>',
+          '</div>',
+        '</div>',
+
+        '<div style="background:#fff;border-radius:8px;padding:10px 12px;border:1px solid #bbf7d0">',
+          '<div style="display:flex;align-items:flex-start;gap:10px">',
+            '<div style="font-size:20px;flex-shrink:0">🖱️</div>',
+            '<div>',
+              '<div style="font-size:12px;font-weight:700;color:#14532d;margin-bottom:3px">גרירה והתאמה — ללמד קישורים</div>',
+              '<div style="font-size:12px;color:#166534;line-height:1.6">מתאים כשרוצים שהנהג <strong>יקשר בין דברים</strong> — תמרור ↔ משמעות, רכיב ↔ תפקיד, מצב ↔ נוהל. מאמן חשיבה קטגוריאלית. <span style="color:#6b7280">לא מתאים: ללמד תגובה מהירה — הגרירה לוקחת זמן ולא מדמה לחץ.</span></div>',
+            '</div>',
+          '</div>',
+        '</div>',
+
+        '<div style="background:#fee2e2;border-radius:8px;padding:10px 12px;border:2px solid #f87171">',
+          '<div style="display:flex;align-items:flex-start;gap:10px">',
+            '<div style="font-size:20px;flex-shrink:0">🧠</div>',
+            '<div>',
+              '<div style="font-size:12px;font-weight:700;color:#991b1b;margin-bottom:3px">חלוקת קשב — לאמן ריבוי ערוצים בו-זמנית</div>',
+              '<div style="font-size:12px;color:#dc2626;line-height:1.6">הסוג הייחודי ביותר. מתאים כשרוצים שהנהג <strong>יעבד מידע ממספר מקורות בו-זמנית</strong> — תמונת שטח + הודעת מוקד בו-זמנית, עם שאלה על כל אחד. מדמה את הלחץ האמיתי של נהיגה. <span style="color:#b91c1c">חשוב: מתאים לנהגים שכבר יודעים את הבסיס — לא כנקודת התחלה.</span></div>',
+            '</div>',
+          '</div>',
+        '</div>',
+
+      '</div>',
+    '</div>',
+
+    // Section 4 — Design principles
+    '<div style="background:#fdf4ff;border-radius:10px;padding:14px 16px;margin-bottom:16px;border-right:4px solid #a855f7">',
+      '<div style="font-size:13px;font-weight:700;color:#581c87;margin-bottom:8px">4 · עקרונות עיצוב תוכן מבוסס-מחקר</div>',
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">',
+        '<div style="background:#fff;border-radius:7px;padding:9px 11px;border:1px solid #e9d5ff">',
+          '<div style="font-size:11px;font-weight:700;color:#6d28d9;margin-bottom:3px">⏱️ טיימר הוא כלי, לא עונש</div>',
+          '<div style="font-size:11px;color:#7c3aed;line-height:1.55">3–5 שנ׳ = אימון תגובה. 10–15 שנ׳ = אימון ידע. אותה שאלה, אפקט שונה לחלוטין.</div>',
+        '</div>',
+        '<div style="background:#fff;border-radius:7px;padding:9px 11px;border:1px solid #e9d5ff">',
+          '<div style="font-size:11px;font-weight:700;color:#6d28d9;margin-bottom:3px">📈 קושי הדרגתי</div>',
+          '<div style="font-size:11px;color:#7c3aed;line-height:1.55">התחל עם עובדות פשוטות → תרחישים → מצבי לחץ. המוח בונה סכמות בהדרגה.</div>',
+        '</div>',
+        '<div style="background:#fff;border-radius:7px;padding:9px 11px;border:1px solid #e9d5ff">',
+          '<div style="font-size:11px;font-weight:700;color:#6d28d9;margin-bottom:3px">🔄 נפח > עומק</div>',
+          '<div style="font-size:11px;color:#7c3aed;line-height:1.55">50 תמונות שונות > 10 תמונות "מושלמות". זיהוי דפוסים נבנה מחשיפה מגוונת.</div>',
+        '</div>',
+        '<div style="background:#fff;border-radius:7px;padding:9px 11px;border:1px solid #e9d5ff">',
+          '<div style="font-size:11px;font-weight:700;color:#6d28d9;margin-bottom:3px">💡 הסבר אחרי כל תשובה</div>',
+          '<div style="font-size:11px;color:#7c3aed;line-height:1.55">Feedback מיידי הוא הגורם החד-משמעי המשפיע ביותר על אחסון בזיכרון לטווח ארוך.</div>',
+        '</div>',
+      '</div>',
+    '</div>',
+
+    // Footer
+    '<div style="text-align:center;padding:10px 0 0;border-top:1px solid #e5e7eb">',
+      '<p style="font-size:11px;color:#9ca3af;margin:0">מבוסס על: Crundall et al. (2012), Heijer et al. (2019), Endsley (1995), McDaniel & Nguyen (2001)</p>',
+    '</div>',
+
+    '</div>'
+  ].join('');
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
+}
+window._advShowBg = showAdvisorBackground;
+
+// ── יועץ משחקים ─────────────────────────────────────────────────
+function renderAdvisor(mc) {
+  var state = { step: 0, domain: null, action: null, material: null };
+
+  var DOMAINS = [
+    { id: 'route',    icon: '🛤️', name: 'ידע מסלול',          sub: 'תחנות, צמתים, קטעים, מהירויות' },
+    { id: 'safety',   icon: '🚦', name: 'איתותים ובטיחות',    sub: 'תמרורים, רמזורים, זיהוי סכנה' },
+    { id: 'ops',      icon: '📋', name: 'נהלים תפעוליים',      sub: 'OTI, בדיקות, תגובה לתקלה' },
+    { id: 'vehicle',  icon: '🚇', name: 'הכרת הרכבת',         sub: 'לוח בקרה, מערכות, התראות' },
+    { id: 'cog',      icon: '⚡', name: 'מיומנות קוגניטיבית', sub: 'קשב, תגובה, שיפוט מצב' },
+    { id: 'service',  icon: '🗣️', name: 'שירות ותקשורת',      sub: 'נוסעים, הודעות, מוקד' }
+  ];
+
+  var STEP2 = {
+    route: {
+      q: 'מה הנהג צריך לעשות במשחק?',
+      opts: [
+        { id: 'fact',   label: 'לענות על שאלת ידע — טקסט בלבד' },
+        { id: 'img',    label: 'לזהות מיקום / תמונה מהמסלול' },
+        { id: 'click',  label: 'ללחוץ על נקודה במפה / תמונה' },
+        { id: 'fast',   label: 'לזהות מהר — תגובה מהירה חשובה' }
+      ]
+    },
+    safety: {
+      q: 'מה הנהג צריך לעשות במשחק?',
+      opts: [
+        { id: 'fact',   label: 'לזהות משמעות תמרור / איתות (טקסט)' },
+        { id: 'fast',   label: 'לזהות סכנה מהיר מתמונה' },
+        { id: 'click',  label: 'לסמן איזור / סכנה בתמונה' },
+        { id: 'error',  label: 'למצוא מה שגוי בתמונה' }
+      ]
+    },
+    ops: {
+      q: 'מה חשוב יותר — הסדר, או הידע עצמו?',
+      opts: [
+        { id: 'order',  label: 'סדר הפעולות קריטי (נוהל, צ\'ק-ליסט)' },
+        { id: 'fact',   label: 'ידע הנוהל — לא חייב בסדר' },
+        { id: 'match',  label: 'חיבור: מצב ↔ נוהל נכון' },
+        { id: 'sjt',    label: 'תרחיש: "מה הפעולה הנכונה?" (SJT)' }
+      ]
+    },
+    vehicle: {
+      q: 'מה הנהג צריך לזהות?',
+      opts: [
+        { id: 'click',  label: 'רכיב בלוח בקרה — לחיצה על תמונה' },
+        { id: 'img',    label: 'משמעות התראה / נורית' },
+        { id: 'match',  label: 'חיבור: רכיב ↔ תפקידו' },
+        { id: 'fact',   label: 'ידע כללי על מערכות הרכבת' }
+      ]
+    },
+    cog: {
+      q: 'איזו יכולת ספציפית?',
+      opts: [
+        { id: 'fast',   label: 'זיהוי סכנה מהיר — תגובה בשניות' },
+        { id: 'sjt',    label: 'קבלת החלטה תחת לחץ זמן' },
+        { id: 'multi',  label: 'חלוקת קשב — מידע ממספר מקורות' },
+        { id: 'memory', label: 'זיכרון מצב: מידע שנעלם + תגובה' }
+      ]
+    },
+    service: {
+      q: 'מה התרחיש?',
+      opts: [
+        { id: 'sjt',    label: 'תקשורת עם נוסע — "מה אומרים?"' },
+        { id: 'order',  label: 'נוהל עזרה / פינוי — יש סדר ברור' },
+        { id: 'fact',   label: 'ידע כללי — נהלי שירות' }
+      ]
+    }
+  };
+
+  var STEP3 = {
+    q: 'מה חומר הגלם שיש לך?',
+    opts: [
+      { id: 'text',    label: 'טקסט בלבד — שאלות, נהלים, עובדות' },
+      { id: 'photos',  label: 'תמונות — מהקו, הרכבת, תמרורים, לוח בקרה' },
+      { id: 'steps',   label: 'רשימת שלבים / פעולות מסודרת' },
+      { id: 'pairs',   label: 'זוגות: פריט ↔ מיקום / תפקיד / נוהל' }
+    ]
+  };
+
+  // Decision engine — returns { template, title, why, tip, examples }
+  function decide(domain, action, material) {
+    var t = { template: 'text_quiz', title: 'שאלת טקסט', why: '', tip: '', examples: [] };
+
+    // Multi-stream — always when cog+multi
+    if (domain === 'cog' && action === 'multi') {
+      return { template: 'multi_stream', title: 'חלוקת קשב — זרמים מקבילים',
+        why: 'זהו הטמפלייט היחיד שמאמן חלוקת קשב אמיתית — תמונה והודעת טקסט בו-זמנית, שאלה על כל אחד.',
+        tip: 'הגדר "נעלם אחרי 5 שניות" בהודעה — זה מכריח את הנהג לזכור ולענות מזיכרון.',
+        examples: [
+          { q: 'תמונה: צומת עמוס. הודעת OTI: "עיכוב בתחנה ב — עצור לנוסעים". מה המהירות המותרת בצומת? / מה הפעולה לפי ההודעה?' },
+          { q: 'תמונה: רמזור צהוב. הודעה: "בדיקות תחזוקה בקטע ג — עבור לאט". האם לעצור? / מה הקטע שבו יש בדיקות?' }
+        ]
+      };
+    }
+    if (domain === 'cog' && action === 'memory') {
+      return { template: 'multi_stream', title: 'חלוקת קשב עם מידע שנעלם',
+        why: 'multi_stream עם "disappearAfter" — ההודעה נעלמת אחרי X שניות והנהג חייב לענות מזיכרון.',
+        tip: 'הגדר disappearAfter=5 שניות. זה מדרגת קושי גבוהה — התחל עם 8 שניות ותקצר בהדרגה.',
+        examples: [
+          { q: 'הודעה מוצגת 5 שניות: "הגבלת מהירות 30 בקטע ד-ה". לאחר מכן תמונה של הקטע — מה המהירות המותרת?' }
+        ]
+      };
+    }
+
+    // sequence_order
+    if (action === 'order') {
+      return { template: 'sequence_order', title: 'רצף פעולות',
+        why: 'כשסדר הפעולות הוא עצמו הלמידה — sequence_order הוא הבחירה הנכונה.',
+        tip: 'הוסף 4–6 שלבים לכל תרחיש. ניקוד חלקי מתגמל נהגים שסדרו נכון חלק מהשלבים.',
+        examples: [
+          { q: 'סדר את שלבי בדיקת הטרום יציאה: בדיקת בלמים / בדיקת דלתות / בדיקת לוח / קשר עם מוקד / יציאה מהתחנה' },
+          { q: 'סדר נוהל תקלת חשמל: עצירה בטוחה / דיווח למוקד / פינוי נוסעים / נעילת דלתות / המתנה להוראות' }
+        ]
+      };
+    }
+
+    // drag_drop
+    if (action === 'match' || material === 'pairs') {
+      return { template: 'drag_drop', title: 'גרירה והתאמה',
+        why: 'כשצריך לחבר בין פריטים — תמרור לפעולה, רכיב לתפקיד, מצב לנוהל — drag_drop הוא הבחירה.',
+        tip: 'שים 3–4 זוגות בכל שאלה. יותר מדי מבלבל. השתמש בשמות קצרים וברורים.',
+        examples: [
+          { q: 'חבר כל רמזור לפעולה הנכונה: אדום / ירוק / צהוב / לבן מהבהב ← עצור / המשך / האט / שים לב' },
+          { q: 'חבר כל רכיב בלוח לתפקידו: מד מהירות / נורית דלתות / כפתור חירום / מד לחץ ← מהירות / דלתות סגורות / עצירה / לחץ מערכת' }
+        ]
+      };
+    }
+
+    // image_hotspot
+    if (action === 'click' || action === 'error' || material === 'photos') {
+      return { template: 'image_hotspot', title: 'לחיצה על תמונה',
+        why: 'כשהנהג צריך לזהות מיקום מדויק בתמונה — לוח בקרה, מפה, סצנה — image_hotspot הוא הבחירה.',
+        tip: 'הגדר רדיוס קבלה של 8% — לא קטן מדי. אפשר להשתמש בכל תמונה: לוח בקרה, מפת קו, תמונת צומת. לסימון "שגויים" הגדר מספר נקודות ושאל "לחץ על כל מה שלא בסדר".',
+        examples: [
+          { q: 'לחץ על כפתור החירום בתמונת לוח הבקרה' },
+          { q: 'סמן את הרמזור שמחייב עצירה בתמונה' },
+          { q: 'לחץ על תחנת "הר הצופים" במפת הקו הירוק' }
+        ]
+      };
+    }
+
+    // image_timed — תמונות + זיהוי/מהירות, אבל לא כשaction=click/error (אלה כבר נלכדו למעלה)
+    if (action === 'fast' || action === 'img' || (material === 'photos' && action !== 'click' && action !== 'error')) {
+      var timerTip = (domain === 'cog' || action === 'fast')
+        ? 'הגדר טיימר של 3–5 שניות — זה מה שמאמן תגובה. לזיהוי ידע בלי לחץ — 10–15 שניות.'
+        : 'הגדר טיימר של 8–12 שניות. הוסף הסבר קצר שמוצג אחרי כל תשובה.';
+      return { template: 'image_timed', title: 'תמונה + טיימר',
+        why: 'תמונה + שאלה + טיימר — מאמן זיהוי מהיר ותגובה. אפשרי עם כל סוג תמונה.',
+        tip: timerTip,
+        examples: [
+          { q: 'תמונת צומת — "האם לעצור?" (עוצר / ממשיך)' },
+          { q: 'תמונת התראה בלוח — "מה עושים עכשיו?" (4 אפשרויות)' },
+          { q: 'תמונת תמרור — "מה מהירות הגבלת האזור?"' }
+        ]
+      };
+    }
+
+    // Default: text_quiz
+    var whyMap = {
+      fact: 'שאלות עובדתיות ללא תמונה — text_quiz הוא הטמפלייט הפשוט והמהיר להכנה.',
+      sjt: 'שאלות SJT ("מה הפעולה הנכונה?") — text_quiz עם 4 אפשרויות. אחת נכונה לפי הנוהל.',
+      default: 'text_quiz מתאים לרוב שאלות הידע. מהיר להכנה, תומך ב-50+ שאלות בנושא.'
+    };
+    var examplesMap = {
+      ops: [
+        { q: 'קיבלת הודעת OTI על עיכוב בקטע ג. מה הפעולה הראשונה שלך? א) האט ב) דווח למוקד ג) עצור ד) המשך' },
+        { q: 'מה שם התחנה שאחרי "ממילא" בכיוון צפון? א) יפו מרכז ב) שוק מחנה יהודה ג) הר הצופים ד) צמרת הבירה' }
+      ],
+      default: [
+        { q: 'מה מהירות הנסיעה המותרת ב[קטע]? א) 30 ב) 40 ג) 50 ד) 60 קמ"ש' },
+        { q: 'בנוהל [X] — מה הפעולה הראשונה? (4 אפשרויות)' }
+      ]
+    };
+    return { template: 'text_quiz', title: 'שאלת טקסט',
+      why: whyMap[action] || whyMap.default,
+      tip: 'כתוב שאלות ברמת קושי עולה — התחל עם עובדות פשוטות, המשך לתרחישים מורכבים. הוסף הסבר לכל תשובה נכונה.',
+      examples: examplesMap[domain] || examplesMap.default
+    };
+  }
+
+  var TEMPLATE_LABELS = {
+    text_quiz: 'שאלת טקסט', image_timed: 'תמונה + טיימר',
+    image_hotspot: 'לחיצה על תמונה', drag_drop: 'גרירה והתאמה',
+    sequence_order: 'רצף פעולות', multi_stream: 'חלוקת קשב'
+  };
+  var TEMPLATE_COLORS = {
+    text_quiz: '#4361ee', image_timed: '#0284c7',
+    image_hotspot: '#7c3aed', drag_drop: '#7c3aed',
+    sequence_order: '#0284c7', multi_stream: '#dc2626'
+  };
+
+  function renderStep() {
+    var s = state.step;
+    var html = '<div style="max-width:720px;margin:0 auto;padding:24px 16px;direction:rtl">';
+
+    // Header
+    html += '<div style="margin-bottom:20px">' +
+      '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">' +
+        '<div>' +
+          '<h2 style="font-size:20px;font-weight:700;color:#1a1a2e;margin:0 0 4px">💡 יועץ משחקים</h2>' +
+          '<p style="font-size:13px;color:#888;margin:0">ענה על 3 שאלות ותקבל המלצה + שאלות לדוגמה מוכנות להעתקה</p>' +
+        '</div>' +
+        '<button onclick="window._advShowBg()" style="white-space:nowrap;padding:6px 12px;background:#f0f4ff;border:1px solid #bfdbfe;border-radius:8px;font-size:12px;font-weight:600;color:#1d4ed8;cursor:pointer;flex-shrink:0">📖 רקע מקצועי</button>' +
+      '</div>' +
+      '</div>';
+
+    // Progress
+    var steps = ['תחום כישור', 'מטרה', 'חומר גלם'];
+    html += '<div style="display:flex;gap:6px;margin-bottom:20px">';
+    steps.forEach(function(step, i) {
+      var active = i === s;
+      var done = i < s;
+      html += '<div style="flex:1;padding:6px 10px;border-radius:8px;text-align:center;font-size:12px;font-weight:' + (active?'700':'400') + ';' +
+        'background:' + (done?'#d1fae5':active?'#eff6ff':'#f8f9ff') + ';' +
+        'color:' + (done?'#065f46':active?'#1d4ed8':'#aaa') + ';' +
+        'border:1px solid ' + (done?'#a7f3d0':active?'#bfdbfe':'#e0e7ff') + '">' +
+        (done ? '✓ ' : '') + step + '</div>';
+    });
+    html += '</div>';
+
+    // Step content
+    if (s === 0) {
+      // Domain selection
+      html += '<div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px;margin-bottom:12px">' +
+        '<p style="font-size:14px;font-weight:600;color:#1a1a2e;margin:0 0 12px">מה הכישור שרוצים לפתח?</p>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">';
+      DOMAINS.forEach(function(d) {
+        html += '<button onclick="window._advDomain(\'' + d.id + '\')" style="text-align:right;padding:10px 12px;background:#f8f9ff;border:1.5px solid #e0e7ff;border-radius:10px;cursor:pointer;transition:all .15s" ' +
+          'onmouseover="this.style.borderColor=\'#4361ee\';this.style.background=\'#eff6ff\'" ' +
+          'onmouseout="this.style.borderColor=\'#e0e7ff\';this.style.background=\'#f8f9ff\'">' +
+          '<div style="font-size:18px;margin-bottom:3px">' + d.icon + '</div>' +
+          '<div style="font-size:13px;font-weight:600;color:#1a1a2e">' + d.name + '</div>' +
+          '<div style="font-size:11px;color:#888;margin-top:2px">' + d.sub + '</div>' +
+          '</button>';
+      });
+      html += '</div></div>';
+
+    } else if (s === 1) {
+      // Action question — depends on domain
+      var domainData = DOMAINS.find(function(d) { return d.id === state.domain; });
+      var step2Data = STEP2[state.domain];
+      html += '<div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px;margin-bottom:12px">' +
+        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">' +
+          '<span style="font-size:20px">' + (domainData ? domainData.icon : '') + '</span>' +
+          '<div>' +
+            '<div style="font-size:12px;color:#888">תחום נבחר</div>' +
+            '<div style="font-size:14px;font-weight:600;color:#1a1a2e">' + (domainData ? domainData.name : '') + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<p style="font-size:14px;font-weight:600;color:#1a1a2e;margin:0 0 10px">' + step2Data.q + '</p>' +
+        '<div style="display:flex;flex-direction:column;gap:6px">';
+      step2Data.opts.forEach(function(opt) {
+        html += '<button onclick="window._advAction(\'' + opt.id + '\')" style="text-align:right;padding:10px 14px;background:#f8f9ff;border:1.5px solid #e0e7ff;border-radius:9px;font-size:13px;color:#1a1a2e;cursor:pointer" ' +
+          'onmouseover="this.style.borderColor=\'#4361ee\';this.style.background=\'#eff6ff\'" ' +
+          'onmouseout="this.style.borderColor=\'#e0e7ff\';this.style.background=\'#f8f9ff\'">' + opt.label + '</button>';
+      });
+      html += '</div></div>' +
+        '<button onclick="window._advBack()" style="font-size:12px;color:#888;background:none;border:none;cursor:pointer;padding:4px 0">← חזור</button>';
+
+    } else if (s === 2) {
+      // Material question
+      var domainData2 = DOMAINS.find(function(d) { return d.id === state.domain; });
+      var step2D2 = STEP2[state.domain];
+      var actionLabel = step2D2.opts.find(function(o) { return o.id === state.action; });
+      html += '<div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px;margin-bottom:12px">' +
+        '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">' +
+          '<span style="font-size:12px;background:#eff6ff;color:#1d4ed8;padding:3px 9px;border-radius:20px;border:1px solid #bfdbfe">' + (domainData2 ? domainData2.icon + ' ' + domainData2.name : '') + '</span>' +
+          '<span style="font-size:12px;background:#f5f3ff;color:#5b21b6;padding:3px 9px;border-radius:20px;border:1px solid #c4b5fd">' + (actionLabel ? actionLabel.label : '') + '</span>' +
+        '</div>' +
+        '<p style="font-size:14px;font-weight:600;color:#1a1a2e;margin:0 0 10px">' + STEP3.q + '</p>' +
+        '<div style="display:flex;flex-direction:column;gap:6px">';
+      STEP3.opts.forEach(function(opt) {
+        html += '<button onclick="window._advMaterial(\'' + opt.id + '\')" style="text-align:right;padding:10px 14px;background:#f8f9ff;border:1.5px solid #e0e7ff;border-radius:9px;font-size:13px;color:#1a1a2e;cursor:pointer" ' +
+          'onmouseover="this.style.borderColor=\'#4361ee\';this.style.background=\'#eff6ff\'" ' +
+          'onmouseout="this.style.borderColor=\'#e0e7ff\';this.style.background=\'#f8f9ff\'">' + opt.label + '</button>';
+      });
+      html += '</div></div>' +
+        '<button onclick="window._advBack()" style="font-size:12px;color:#888;background:none;border:none;cursor:pointer;padding:4px 0">← חזור</button>';
+
+    } else if (s === 3) {
+      // Result
+      var result = decide(state.domain, state.action, state.material);
+      var color = TEMPLATE_COLORS[result.template] || '#4361ee';
+      html += '<div style="background:#fff;border:2px solid ' + color + ';border-radius:12px;padding:18px;margin-bottom:12px">' +
+        '<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">' +
+          '<span style="font-size:24px">✅</span>' +
+          '<div>' +
+            '<div style="font-size:11px;color:#888;font-weight:500;text-transform:uppercase;letter-spacing:.05em">המלצה</div>' +
+            '<div style="font-size:17px;font-weight:700;color:' + color + '">' + result.title + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<p style="font-size:13px;color:#374151;margin:0 0 8px;line-height:1.6"><strong>למה?</strong> ' + result.why + '</p>' +
+        '<div style="background:#f0f9ff;border-radius:8px;padding:10px 12px;font-size:12px;color:#0369a1;margin-bottom:14px">' +
+          '💡 <strong>טיפ:</strong> ' + result.tip +
+        '</div>' +
+        '<div style="font-size:13px;font-weight:600;color:#1a1a2e;margin-bottom:8px">שאלות לדוגמה — מוכנות להעתקה:</div>' +
+        result.examples.map(function(ex, i) {
+          return '<div style="background:#f8f9ff;border:1px solid #e0e7ff;border-radius:8px;padding:10px 12px;margin-bottom:6px;font-size:12px;color:#374151;line-height:1.6;cursor:pointer" ' +
+            'onclick="navigator.clipboard&&navigator.clipboard.writeText(' + JSON.stringify(ex.q) + ').then(function(){var el=document.querySelectorAll(\'.ex-copy\')[' + i + '];if(el){el.textContent=\'✓ הועתק\';setTimeout(function(){el.textContent=\'העתק\'},1500)}})" ' +
+            'title="לחץ להעתקה">' +
+            ex.q +
+            '<span class="ex-copy" style="display:block;text-align:left;font-size:10px;color:#4361ee;margin-top:4px">העתק</span>' +
+          '</div>';
+        }).join('') +
+        '</div>' +
+        '<button onclick="window._advOpenWizard(\'' + result.template + '\')" style="width:100%;padding:12px;background:' + color + ';color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px">' +
+          '🚀 צור משחק מסוג זה עכשיו' +
+        '</button>' +
+        '<button onclick="window._advReset()" style="width:100%;padding:10px;background:transparent;color:#888;border:1px solid #e0e7ff;border-radius:10px;font-size:13px;cursor:pointer">' +
+          '↺ התחל מחדש' +
+        '</button>';
+    }
+
+    html += '</div>';
+    mc.innerHTML = html;
+  }
+
+  // Handlers
+  window._advDomain = function(id) { state.domain = id; state.step = 1; renderStep(); };
+  window._advAction = function(id) { state.action = id; state.step = 2; renderStep(); };
+  window._advMaterial = function(id) { state.material = id; state.step = 3; renderStep(); };
+  window._advBack = function() { state.step = Math.max(0, state.step - 1); renderStep(); };
+  window._advReset = function() { state = { step: 0, domain: null, action: null, material: null }; renderStep(); };
+  window._advOpenWizard = function(templateId) {
+    // Open the new game wizard with the template pre-selected
+    if (typeof openGameWizard === 'function') {
+      openGameWizard(templateId);
+    } else {
+      // Fallback: switch to questions tab
+      showTab('questions');
+      setTimeout(function() {
+        var wizBtn = document.querySelector('[onclick*="openGameWizard"]');
+        if (wizBtn) wizBtn.click();
+      }, 200);
+    }
+  };
+
+  renderStep();
 }
 
 // ── משחק ────────────────────────────────────────────────────────
@@ -3018,7 +3530,11 @@ function renderConfig(mc, tab) {
 
     generalTabHtml = `<div class="card">
       <div class="settings-group">
-        <h3 style="font-size:15px;font-weight:700;margin-bottom:4px;padding-bottom:8px;border-bottom:2px solid var(--primary)">✍️ הודעת פתיחה לנהגים</h3>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:8px;border-bottom:2px solid var(--primary);margin-bottom:0;cursor:pointer" onclick="(function(){var b=document.getElementById('wm-body-area');var arr=document.getElementById('wm-arrow');if(!b)return;var open=b.style.display!=='none';b.style.display=open?'none':'block';arr.textContent=open?'▶':'▼';})()">
+          <h3 style="font-size:15px;font-weight:700;margin:0">✍️ הודעת פתיחה לנהגים</h3>
+          <span id="wm-arrow" style="font-size:12px;color:#aaa;user-select:none">▶</span>
+        </div>
+        <div id="wm-body-area" style="display:none;margin-top:12px">
         <p style="font-size:12px;color:#888;margin-bottom:12px">הטקסט שיוצג בכרטיס הצהוב בלובי של הנהגים. שלושה שורות: כותרת, גוף, סיסמה.</p>
         <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:4px">
           <div class="form-group">
@@ -3081,6 +3597,7 @@ function renderConfig(mc, tab) {
             });
           });
         </scr` + `ipt>
+        </div>
         <h3 style="font-size:15px;font-weight:700;margin-bottom:4px;padding-bottom:8px;border-bottom:2px solid var(--primary);margin-top:20px">📁 ניהול נושאים</h3>
         <p style="font-size:12px;color:#888;margin-bottom:14px">סדר, ערוך, הסתר ונהל את הנושאים והמשחקים שלהם.</p>
         <div id="unified-topics-list">${buildUnifiedTopicList()}</div>
@@ -3446,6 +3963,70 @@ function exportFullHTML(){
         bonusForSpeed: false,
         showCountdown: false,
         showAnswerWithImage: true,
+        requireName: false,
+        filterLocation: 'הכל',
+        filterDiff: 'הכל'
+      }
+    },
+    image_hotspot: {
+      id: 'image_hotspot',
+      label: 'נקודות לחיצה על תמונה',
+      defaultSettings: {
+        imageDisplayTime: 0,
+        answerTime: 30,
+        questionsPerSession: 10,
+        pointsPerCorrect: 10,
+        bonusForSpeed: false,
+        showCountdown: true,
+        showAnswerWithImage: false,
+        requireName: false,
+        filterLocation: 'הכל',
+        filterDiff: 'הכל'
+      }
+    },
+    drag_drop: {
+      id: 'drag_drop',
+      label: 'גרירה — התאמה / מיקום על תמונה',
+      defaultSettings: {
+        imageDisplayTime: 0,
+        answerTime: 45,
+        questionsPerSession: 10,
+        pointsPerCorrect: 10,
+        bonusForSpeed: false,
+        showCountdown: true,
+        showAnswerWithImage: false,
+        requireName: false,
+        filterLocation: 'הכל',
+        filterDiff: 'הכל'
+      }
+    },
+    sequence_order: {
+      id: 'sequence_order',
+      label: 'רצף פעולות — סידור שלבים',
+      defaultSettings: {
+        imageDisplayTime: 0,
+        answerTime: 60,
+        questionsPerSession: 8,
+        pointsPerCorrect: 10,
+        bonusForSpeed: false,
+        showCountdown: false,
+        showAnswerWithImage: false,
+        requireName: false,
+        filterLocation: 'הכל',
+        filterDiff: 'הכל'
+      }
+    },
+    multi_stream: {
+      id: 'multi_stream',
+      label: 'חלוקת קשב — זרמים מקבילים',
+      defaultSettings: {
+        imageDisplayTime: 0,
+        answerTime: 35,
+        questionsPerSession: 8,
+        pointsPerCorrect: 10,
+        bonusForSpeed: false,
+        showCountdown: true,
+        showAnswerWithImage: false,
         requireName: false,
         filterLocation: 'הכל',
         filterDiff: 'הכל'
@@ -4006,7 +4587,1337 @@ function exportFullHTML(){
     }
   };
 
-  window.GAME_REGISTRY = { image_timed: IMAGE_TIMED, text_quiz: TEXT_QUIZ };
+  // ── MULTI_STREAM Template ────────────────────────────────────────────────────
+  // חלוקת קשב: תמונה + הודעת טקסט בו-זמנית, שאלה על כל זרם
+
+  function renderMultiStreamLobby(mc, game) {
+    var label = getGameLabel(game);
+    var qs = (game.msQuestions || []).length;
+    var accent = game.color || '#dc2626';
+    mc.innerHTML = '<div class="game-wrapper"><div class="card" style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:40px 48px;max-width:760px;width:100%;margin:0 auto;text-align:center">' +
+      '<div style="font-size:72px;margin-bottom:16px">' + (game.icon || '🧠') + '</div>' +
+      '<h2 style="font-size:28px;font-weight:800;margin-bottom:8px">' + label + '</h2>' +
+      '<p style="color:#777;font-size:15px;margin-bottom:8px">' + (game.description || 'שני זרמי מידע בו-זמנית — ענה על שניהם') + '</p>' +
+      '<div style="background:#fff8e1;border-radius:10px;padding:12px 16px;margin-bottom:20px;font-size:13px;color:#92400e;text-align:right">' +
+        '⚡ <strong>איך זה עובד:</strong> תראה תמונה ובו-זמנית הודעת טקסט. תצטרך לענות על שאלה מכל אחד — תוך ' + (getGameSettings(game).answerTime || 35) + ' שניות.' +
+      '</div>' +
+      '<p style="font-size:13px;color:#999;margin-bottom:24px">' + qs + ' שאלות</p>' +
+      '<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">' +
+      '<button onclick="window._studyMode=true;GAME_REGISTRY.multi_stream.startGame(getGame(\'' + game.id + '\'))" style="padding:12px 28px;background:#059669;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer">📚 מצב לימוד</button>' +
+      '<button onclick="window._studyMode=false;GAME_REGISTRY.multi_stream.startGame(getGame(\'' + game.id + '\'))" style="padding:12px 28px;background:' + accent + ';color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer">▶ מצב אתגר</button>' +
+      '</div></div></div>';
+  }
+
+  function startMultiStreamGame(game) {
+    var mc = document.getElementById('mc');
+    if (!mc) return;
+    mc.classList.add('fullscreen-game');
+    var questions = game.msQuestions || [];
+    if (!questions.length) {
+      alert('אין שאלות מוגדרות! הגדר שאלות בממשק המנהל.');
+      mc.classList.remove('fullscreen-game');
+      return;
+    }
+    var s = getGameSettings(game);
+    var maxQ = s.questionsPerSession || 8;
+    var selected = questions.slice().sort(function() { return Math.random() - 0.5; }).slice(0, Math.min(maxQ, questions.length));
+    var state = {
+      gameId: game.id, game: game,
+      questions: selected, current: 0,
+      score: 0, correct: 0, totalAnswers: 0, correctAnswers: 0,
+      studyMode: !!window._studyMode,
+      log: []
+    };
+
+    mc.innerHTML = '<div class="game-wrapper"><div class="card" id="ms-shell" style="padding:0;overflow:hidden;max-width:900px;margin:0 auto;width:100%"></div></div>';
+    showGameExitButton && showGameExitButton();
+    var exitBtn = document.getElementById('game-exit-btn');
+    if (exitBtn) exitBtn.onclick = function() {
+      mc.classList.remove('fullscreen-game');
+      hideGameExitButton && hideGameExitButton();
+      clearInterval(state._timerInt);
+      GAME_REGISTRY.multi_stream.renderLobby(mc, game);
+    };
+
+    function renderMSQuestion() {
+      var shell = document.getElementById('ms-shell');
+      if (!shell) return;
+      if (state.current >= state.questions.length) { endMSGame(); return; }
+
+      var q = state.questions[state.current];
+      var total = state.questions.length;
+      var pct = Math.round((state.current / total) * 100);
+      var timeLimit = state.studyMode ? 999 : (s.answerTime || 35);
+      var timeLeft = timeLimit;
+      var answers = {}; // qIdx -> chosen option index
+      var submitted = false;
+      var studyBadge = state.studyMode
+        ? '<span style="background:#d1fae5;color:#065f46;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;margin-right:8px">מצב לימוד</span>'
+        : '';
+
+      // q.streamA: { type:'image', src, label }
+      // q.streamB: { type:'text', content, label }
+      // q.questions: [ { text, options:[], correct:0, streamRef:'A'|'B' }, ... ]
+      var sA = q.streamA || {};
+      var sB = q.streamB || {};
+      var subQs = q.questions || [];
+
+      // Build stream A html
+      var streamAHtml = '';
+      if (sA.type === 'image') {
+        streamAHtml = '<div style="border-radius:8px;overflow:hidden;background:#000">' +
+          (sA.src ? '<img src="' + sA.src + '" style="width:100%;max-height:220px;object-fit:cover;display:block">' : '<div style="height:180px;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:13px;background:#f0f2f5">אין תמונה</div>') +
+          '</div>';
+      }
+
+      // Build stream B html
+      var streamBHtml = '';
+      if (sB.type === 'text') {
+        var bAppear = sB.disappearAfter || 0; // seconds, 0 = stays
+        streamBHtml = '<div id="ms-stream-b" style="background:#1a1a2e;border-radius:8px;padding:14px 16px;min-height:80px;display:flex;flex-direction:column;justify-content:center">' +
+          (sB.label ? '<div style="font-size:10px;font-weight:700;color:#4361ee;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">' + sB.label + '</div>' : '') +
+          '<div id="ms-b-content" style="font-size:14px;color:#fff;line-height:1.6;font-weight:500">' + (sB.content || '') + '</div>' +
+          (bAppear > 0 ? '<div id="ms-b-timer" style="font-size:11px;color:#888;margin-top:6px">נעלם בעוד <span id="ms-b-sec">' + bAppear + '</span> שניות</div>' : '') +
+        '</div>';
+      }
+
+      // Build sub-questions html
+      var subQsHtml = subQs.map(function(sq, qi) {
+        var refLabel = sq.streamRef === 'B' ? sB.label || 'הודעה' : sA.label || 'תמונה';
+        var refColor = sq.streamRef === 'B' ? '#4361ee' : '#dc2626';
+        return '<div class="ms-subq" data-qi="' + qi + '" style="margin-bottom:12px">' +
+          '<div style="display:flex;align-items:center;gap:6px;margin-bottom:7px">' +
+            '<span style="background:' + refColor + ';color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px">' + refLabel + '</span>' +
+            '<span style="font-size:14px;font-weight:600;color:var(--color-text-primary)">' + sq.text + '</span>' +
+          '</div>' +
+          '<div style="display:flex;flex-direction:column;gap:5px" id="ms-opts-' + qi + '">' +
+            sq.options.map(function(opt, oi) {
+              return '<button class="ms-opt" data-qi="' + qi + '" data-oi="' + oi + '" onclick="window._msPick(' + qi + ',' + oi + ')" style="text-align:right;padding:9px 14px;background:var(--color-background-secondary);border:1.5px solid var(--color-border-secondary);border-radius:8px;font-size:13px;color:var(--color-text-primary);cursor:pointer;transition:all .12s">' + opt + '</button>';
+            }).join('') +
+          '</div>' +
+        '</div>';
+      }).join('');
+
+      shell.innerHTML =
+        '<div style="padding:12px 16px;border-bottom:0.5px solid var(--color-border-tertiary)">' +
+          '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">' +
+            '<span style="font-size:13px;color:var(--color-text-secondary)">שאלה ' + (state.current+1) + '/' + total + studyBadge + '</span>' +
+            '<span style="font-size:13px;font-weight:700;color:#dc2626">⭐ ' + state.score + '</span>' +
+          '</div>' +
+          '<div style="height:4px;background:var(--color-background-secondary);border-radius:2px">' +
+            '<div style="width:' + pct + '%;height:100%;background:#dc2626;border-radius:2px;transition:width .3s"></div>' +
+          '</div>' +
+        '</div>' +
+        '<div style="padding:12px 16px">' +
+          // Two streams side by side on wide, stacked on narrow
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px" id="ms-streams">' +
+            '<div>' +
+              (sA.label ? '<div style="font-size:10px;font-weight:700;color:#dc2626;letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px">' + sA.label + '</div>' : '') +
+              streamAHtml +
+            '</div>' +
+            '<div>' + streamBHtml + '</div>' +
+          '</div>' +
+          '<div id="ms-questions">' + subQsHtml + '</div>' +
+          '<div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">' +
+            (state.studyMode
+              ? '<span style="font-size:12px;color:var(--color-text-tertiary)">מצב לימוד — אין טיימר</span>'
+              : '<span style="font-size:13px;color:var(--color-text-secondary)">⏱️ <span id="ms-timer" style="font-weight:700;color:#dc2626">' + timeLeft + '</span> שניות</span>') +
+            '<button id="ms-submit" onclick="window._msSubmit()" style="padding:10px 28px;background:#dc2626;color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer">שלח תשובות ←</button>' +
+          '</div>' +
+          '<div id="ms-feedback" style="margin-top:10px;min-height:32px"></div>' +
+        '</div>';
+
+      // Responsive: stack on narrow screens
+      var streamsGrid = document.getElementById('ms-streams');
+      if (streamsGrid && shell.offsetWidth < 500) {
+        streamsGrid.style.gridTemplateColumns = '1fr';
+      }
+
+      // Stream B disappear timer
+      if (sB.disappearAfter && sB.disappearAfter > 0 && !state.studyMode) {
+        var bSec = sB.disappearAfter;
+        var bInt = setInterval(function() {
+          bSec--;
+          var bSecEl = document.getElementById('ms-b-sec');
+          if (bSecEl) bSecEl.textContent = bSec;
+          if (bSec <= 0) {
+            clearInterval(bInt);
+            var bContent = document.getElementById('ms-b-content');
+            var bTimerEl = document.getElementById('ms-b-timer');
+            if (bContent) { bContent.style.filter = 'blur(4px)'; bContent.style.opacity = '0.3'; }
+            if (bTimerEl) bTimerEl.textContent = '(הוסתר — תוכן זה כבר לא זמין)';
+          }
+        }, 1000);
+      }
+
+      // Main countdown timer
+      if (!state.studyMode) {
+        state._timerInt = setInterval(function() {
+          timeLeft--;
+          var tel = document.getElementById('ms-timer');
+          if (tel) {
+            tel.textContent = timeLeft;
+            if (timeLeft <= 5) tel.style.color = '#e63946';
+          }
+          if (timeLeft <= 0) {
+            clearInterval(state._timerInt);
+            if (!submitted) { submitted = true; window._msSubmit(true); }
+          }
+        }, 1000);
+      }
+
+      // Pick handler
+      window._msPick = function(qi, oi) {
+        if (submitted) return;
+        answers[qi] = oi;
+        // Visual feedback on button selection
+        var optsDiv = document.getElementById('ms-opts-' + qi);
+        if (optsDiv) {
+          optsDiv.querySelectorAll('.ms-opt').forEach(function(btn, i) {
+            btn.style.background = i === oi ? '#4361ee' : 'var(--color-background-secondary)';
+            btn.style.color = i === oi ? '#fff' : 'var(--color-text-primary)';
+            btn.style.borderColor = i === oi ? '#4361ee' : 'var(--color-border-secondary)';
+          });
+        }
+      };
+
+      // Submit handler
+      window._msSubmit = function(timedOut) {
+        if (submitted && !timedOut) return;
+        submitted = true;
+        clearInterval(state._timerInt);
+        var submitBtn = document.getElementById('ms-submit');
+        if (submitBtn) { submitBtn.disabled = true; submitBtn.style.opacity = '0.5'; }
+
+        var qCorrect = 0;
+        var qTotal = subQs.length;
+
+        subQs.forEach(function(sq, qi) {
+          var chosen = answers[qi];
+          var isOk = chosen === sq.correct;
+          if (isOk) qCorrect++;
+          state.totalAnswers++;
+          if (isOk) state.correctAnswers++;
+
+          // Color the options
+          var optsDiv = document.getElementById('ms-opts-' + qi);
+          if (optsDiv) {
+            optsDiv.querySelectorAll('.ms-opt').forEach(function(btn, oi) {
+              btn.disabled = true;
+              btn.style.cursor = 'default';
+              if (oi === sq.correct) {
+                btn.style.background = '#d1fae5';
+                btn.style.borderColor = '#2dc653';
+                btn.style.color = '#065f46';
+              } else if (oi === chosen && !isOk) {
+                btn.style.background = '#fee2e2';
+                btn.style.borderColor = '#e63946';
+                btn.style.color = '#991b1b';
+              }
+            });
+          }
+
+          // Show explanation if study mode
+          if (state.studyMode && sq.explanation) {
+            var subqDiv = document.querySelector('.ms-subq[data-qi="' + qi + '"]');
+            if (subqDiv) {
+              var expDiv = document.createElement('div');
+              expDiv.style.cssText = 'background:#f0f9ff;border-radius:6px;padding:7px 10px;font-size:12px;color:#0369a1;margin-top:6px';
+              expDiv.textContent = '💡 ' + sq.explanation;
+              subqDiv.appendChild(expDiv);
+            }
+          }
+        });
+
+        // Score: all correct = 10 pts, partial = 5 pts
+        var allCorrect = qCorrect === qTotal;
+        var anyCorrect = qCorrect > 0;
+        var points = 0;
+        if (!state.studyMode) {
+          if (allCorrect) points = 10;
+          else if (anyCorrect) points = 5;
+          state.score += points;
+        }
+        if (allCorrect) state.correct++;
+
+        state.log.push({
+          prompt: q.streamA && q.streamA.label ? q.streamA.label : 'שאלה',
+          ok: allCorrect,
+          partial: anyCorrect && !allCorrect,
+          qCorrect: qCorrect,
+          qTotal: qTotal
+        });
+
+        var feedbackDiv = document.getElementById('ms-feedback');
+        if (feedbackDiv) {
+          if (timedOut && qCorrect === 0) {
+            feedbackDiv.innerHTML = '<div style="background:#fff8e1;border-radius:8px;padding:10px 14px;text-align:center;color:#92400e;font-weight:700">⏰ הזמן נגמר לפני שענית</div>';
+          } else if (allCorrect) {
+            feedbackDiv.innerHTML = '<div style="background:#d1fae5;border-radius:8px;padding:10px 14px;text-align:center;color:#065f46;font-weight:700">✅ מושלם — ענית נכון על שני הזרמים!' + (points ? ' +' + points + ' נקודות' : '') + '</div>';
+          } else if (anyCorrect) {
+            feedbackDiv.innerHTML = '<div style="background:#fff8e1;border-radius:8px;padding:10px 14px;text-align:center;color:#92400e;font-weight:700">⚠️ ' + qCorrect + '/' + qTotal + ' נכון' + (points ? ' +' + points + ' נקודות' : '') + '</div>';
+          } else {
+            feedbackDiv.innerHTML = '<div style="background:#fee2e2;border-radius:8px;padding:10px 14px;text-align:center;color:#991b1b;font-weight:700">❌ לא נכון — ראה תשובות נכונות למעלה</div>';
+          }
+        }
+
+        setTimeout(function() {
+          state.current++;
+          renderMSQuestion();
+        }, state.studyMode ? 2800 : 2000);
+      };
+    }
+
+    function endMSGame() {
+      mc.classList.remove('fullscreen-game');
+      hideGameExitButton && hideGameExitButton();
+      var shell = document.getElementById('ms-shell');
+      if (!shell) return;
+      var total = state.questions.length;
+      var correct = state.correct;
+      var acc = total ? Math.round((correct / total) * 100) : 0;
+      // sub-question accuracy
+      var subAcc = state.totalAnswers ? Math.round((state.correctAnswers / state.totalAnswers) * 100) : 0;
+      var level = 'מתחיל', lc = 'badge-warning';
+      if (acc >= 85) { level = 'מומחה'; lc = 'badge-success'; }
+      else if (acc >= 65) { level = 'מתקדם'; lc = 'badge-info'; }
+      var r = {
+        id: 'r' + Date.now(), userId: currentUser.username, userName: currentUser.name,
+        score: state.score, correct: correct, total: total, accuracy: acc, level: level,
+        date: new Date().toISOString(), gameType: game.id,
+        answerSpeeds: 'sub_accuracy:' + subAcc, avgAnswerTime: '',
+        mode: state.studyMode ? 'study' : 'challenge'
+      };
+      var res = getGameResults(game.id); res.unshift(r); persistGameResults(game.id, res); saveDB();
+      sendToSheets(Object.assign({}, r, { gameType: game.id }));
+      shell.innerHTML =
+        '<div class="results-card" style="padding:32px">' +
+          '<div class="result-score">' + r.score + '</div>' +
+          '<div class="result-label">נקודות סה"כ</div>' +
+          '<div><span class="level-badge ' + lc + '">' + level + '</span></div>' +
+          '<div class="result-stats">' +
+            '<div class="stat-box"><div class="stat-val">' + correct + '/' + total + '</div><div class="stat-lbl">שאלות שלמות</div></div>' +
+            '<div class="stat-box"><div class="stat-val">' + subAcc + '%</div><div class="stat-lbl">דיוק כולל</div></div>' +
+            '<div class="stat-box"><div class="stat-val">' + state.correctAnswers + '/' + state.totalAnswers + '</div><div class="stat-lbl">תתי-שאלות</div></div>' +
+          '</div>' +
+          '<div style="background:#fff8e1;border-radius:8px;padding:10px 14px;margin:12px 0;font-size:12px;color:#92400e">' +
+            '💡 <strong>חלוקת קשב:</strong> ' + (subAcc >= 80 ? 'מצוין! אתה מנהל את שני הזרמים היטב.' : subAcc >= 60 ? 'טוב. המשך לתרגל — המיומנות מתפתחת עם חזרות.' : 'נסה לסרוק את שני הזרמים בסדר קבוע — תמונה → הודעה → תמונה.') +
+          '</div>' +
+          '<div class="flex gap2 center" style="flex-wrap:wrap;gap:8px;margin-top:16px">' +
+            '<button class="btn-primary" onclick="GAME_REGISTRY.multi_stream.startGame(getGame(\'' + game.id + '\'))" style="padding:10px 24px">שחק שוב</button>' +
+            '<button class="btn-ghost" onclick="goBackFromGame()" style="padding:10px 24px">← חזרה לנושא</button>' +
+          '</div>' +
+        '</div>';
+    }
+
+    renderMSQuestion();
+  }
+
+  function renderMultiStreamAdmin(container, game) {
+    var questions = game.msQuestions || [];
+
+    container.innerHTML =
+      '<div style="margin-bottom:14px;padding:10px 14px;background:#fef2f2;border-radius:8px;font-size:13px;color:#991b1b;border:0.5px solid #fecaca">' +
+        '🧠 <strong>חלוקת קשב:</strong> כל שאלה מציגה <strong>תמונה</strong> ו<strong>הודעת טקסט</strong> בו-זמנית. מגדירים שאלה על התמונה ושאלה על ההודעה.' +
+      '</div>' +
+      '<button onclick="window._msAddQ(\'' + game.id + '\')" style="padding:9px 18px;background:#dc2626;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:14px">➕ הוסף שאלת חלוקת קשב</button>' +
+      (questions.length === 0 ? '<p style="color:#aaa;font-size:13px">אין שאלות עדיין</p>' :
+        questions.map(function(q, qi) {
+          var subQs = q.questions || [];
+          return '<div style="background:var(--color-background-secondary);border:1px solid var(--color-border-secondary);border-radius:10px;padding:14px;margin-bottom:14px">' +
+            '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">' +
+              '<span style="font-size:13px;font-weight:700;color:#dc2626">שאלה ' + (qi+1) + '</span>' +
+              '<button onclick="window._msDelQ(\'' + game.id + '\',' + qi + ')" style="background:none;border:none;cursor:pointer;color:#e63946;font-size:16px">🗑</button>' +
+            '</div>' +
+            // Stream A
+            '<div style="margin-bottom:12px;padding:10px 12px;background:var(--color-background-primary);border-radius:8px;border:0.5px solid #fecaca">' +
+              '<div style="font-size:11px;font-weight:700;color:#dc2626;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">זרם א — תמונה</div>' +
+              '<input value="' + (q.streamA && q.streamA.label || 'סצנה') + '" placeholder="תווית (למשל: סצנה, מסלול)" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.msQuestions[' + qi + '].streamA.label=v;var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})(this.value)" style="width:100%;padding:6px 10px;border:1px solid var(--color-border-secondary);border-radius:6px;font-size:12px;margin-bottom:6px">' +
+              '<input value="' + (q.streamA && q.streamA.src || '') + '" placeholder="URL תמונה (Google Drive / lh3.googleusercontent...)" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.msQuestions[' + qi + '].streamA.src=v;var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})(this.value)" style="width:100%;padding:6px 10px;border:1px solid var(--color-border-secondary);border-radius:6px;font-size:12px">' +
+            '</div>' +
+            // Stream B
+            '<div style="margin-bottom:12px;padding:10px 12px;background:var(--color-background-primary);border-radius:8px;border:0.5px solid #bfdbfe">' +
+              '<div style="font-size:11px;font-weight:700;color:#4361ee;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">זרם ב — הודעת טקסט</div>' +
+              '<input value="' + (q.streamB && q.streamB.label || 'הודעת OTI') + '" placeholder="תווית (למשל: הודעת OTI, עדכון מוקד)" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.msQuestions[' + qi + '].streamB.label=v;var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})(this.value)" style="width:100%;padding:6px 10px;border:1px solid var(--color-border-secondary);border-radius:6px;font-size:12px;margin-bottom:6px">' +
+              '<textarea placeholder="תוכן ההודעה (למשל: עיכוב בתחנה ב — עצור)" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.msQuestions[' + qi + '].streamB.content=v;var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})(this.value)" style="width:100%;padding:6px 10px;border:1px solid var(--color-border-secondary);border-radius:6px;font-size:12px;resize:vertical;font-family:inherit;min-height:56px">' + (q.streamB && q.streamB.content || '') + '</textarea>' +
+              '<div style="display:flex;align-items:center;gap:8px;margin-top:5px">' +
+                '<label style="font-size:11px;color:var(--color-text-secondary)">נעלם אחרי (שניות, 0=לא נעלם):</label>' +
+                '<input type="number" value="' + (q.streamB && q.streamB.disappearAfter || 0) + '" min="0" max="30" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.msQuestions[' + qi + '].streamB.disappearAfter=parseInt(v)||0;var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})(this.value)" style="width:60px;padding:4px 8px;border:1px solid var(--color-border-secondary);border-radius:6px;font-size:12px">' +
+              '</div>' +
+            '</div>' +
+            // Sub-questions
+            '<div style="font-size:12px;font-weight:600;color:var(--color-text-secondary);margin-bottom:7px">שאלות (אחת לכל זרם):</div>' +
+            subQs.map(function(sq, sqi) {
+              return '<div style="background:var(--color-background-primary);border-radius:8px;padding:10px 12px;margin-bottom:8px;border:0.5px solid var(--color-border-tertiary)">' +
+                '<div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">' +
+                  '<span style="font-size:11px;font-weight:700;padding:2px 7px;border-radius:10px;background:' + (sq.streamRef === 'B' ? '#dbeafe' : '#fee2e2') + ';color:' + (sq.streamRef === 'B' ? '#1d4ed8' : '#991b1b') + '">' + (sq.streamRef === 'B' ? 'זרם ב' : 'זרם א') + '</span>' +
+                  '<select onchange="(function(v){var g=getGame(\'' + game.id + '\');g.msQuestions[' + qi + '].questions[' + sqi + '].streamRef=v;var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();renderMultiStreamAdmin(document.getElementById(\'q-content\'),g);})(this.value)" style="padding:3px 6px;border:1px solid var(--color-border-secondary);border-radius:6px;font-size:11px">' +
+                    '<option value="A"' + (sq.streamRef !== 'B' ? ' selected' : '') + '>על זרם א (תמונה)</option>' +
+                    '<option value="B"' + (sq.streamRef === 'B' ? ' selected' : '') + '>על זרם ב (הודעה)</option>' +
+                  '</select>' +
+                  '<button onclick="window._msDelSubQ(\'' + game.id + '\',' + qi + ',' + sqi + ')" style="background:none;border:none;cursor:pointer;color:#e63946;font-size:14px;margin-right:auto">✕</button>' +
+                '</div>' +
+                '<input value="' + (sq.text || '') + '" placeholder="טקסט השאלה" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.msQuestions[' + qi + '].questions[' + sqi + '].text=v;var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})(this.value)" style="width:100%;padding:6px 10px;border:1px solid var(--color-border-secondary);border-radius:6px;font-size:12px;margin-bottom:6px">' +
+                (sq.options || []).map(function(opt, oi) {
+                  return '<div style="display:flex;gap:5px;align-items:center;margin-bottom:4px">' +
+                    '<input type="radio" name="ms-correct-' + qi + '-' + sqi + '" ' + (sq.correct === oi ? 'checked' : '') + ' onchange="(function(){var g=getGame(\'' + game.id + '\');g.msQuestions[' + qi + '].questions[' + sqi + '].correct=' + oi + ';var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})()" title="סמן כתשובה נכונה" style="flex-shrink:0">' +
+                    '<input value="' + opt + '" placeholder="אפשרות ' + (oi+1) + '" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.msQuestions[' + qi + '].questions[' + sqi + '].options[' + oi + ']=v;var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})(this.value)" style="flex:1;padding:5px 8px;border:1px solid var(--color-border-secondary);border-radius:6px;font-size:12px">' +
+                  '</div>';
+                }).join('') +
+                '<input value="' + (sq.explanation || '') + '" placeholder="הסבר (יוצג במצב לימוד — אופציונלי)" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.msQuestions[' + qi + '].questions[' + sqi + '].explanation=v;var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})(this.value)" style="width:100%;padding:5px 8px;border:1px solid var(--color-border-secondary);border-radius:6px;font-size:11px;margin-top:5px;color:var(--color-text-secondary)">' +
+              '</div>';
+            }).join('') +
+            '<button onclick="window._msAddSubQ(\'' + game.id + '\',' + qi + ')" style="font-size:12px;color:#dc2626;background:none;border:none;cursor:pointer;padding:3px 0">+ הוסף שאלה</button>' +
+          '</div>';
+        }).join('')
+      );
+
+    window._msAddQ = function(gid) {
+      var g = getGame(gid);
+      if (!g.msQuestions) g.msQuestions = [];
+      g.msQuestions.push({
+        id: 'msq_' + Date.now(),
+        streamA: { type: 'image', src: '', label: 'סצנה' },
+        streamB: { type: 'text', content: '', label: 'הודעת OTI', disappearAfter: 0 },
+        questions: [
+          { text: '', options: ['', '', ''], correct: 0, streamRef: 'A', explanation: '' },
+          { text: '', options: ['', '', ''], correct: 0, streamRef: 'B', explanation: '' }
+        ]
+      });
+      var idx = DB.games.findIndex(function(x) { return x.id === gid; });
+      if (idx >= 0) DB.games[idx] = g;
+      saveDB();
+      renderMultiStreamAdmin(container, g);
+    };
+    window._msDelQ = function(gid, qi) {
+      var g = getGame(gid);
+      g.msQuestions.splice(qi, 1);
+      var idx = DB.games.findIndex(function(x) { return x.id === gid; });
+      if (idx >= 0) DB.games[idx] = g;
+      saveDB();
+      renderMultiStreamAdmin(container, g);
+    };
+    window._msAddSubQ = function(gid, qi) {
+      var g = getGame(gid);
+      g.msQuestions[qi].questions.push({ text: '', options: ['', '', ''], correct: 0, streamRef: 'A', explanation: '' });
+      var idx = DB.games.findIndex(function(x) { return x.id === gid; });
+      if (idx >= 0) DB.games[idx] = g;
+      saveDB();
+      renderMultiStreamAdmin(container, g);
+    };
+    window._msDelSubQ = function(gid, qi, sqi) {
+      var g = getGame(gid);
+      g.msQuestions[qi].questions.splice(sqi, 1);
+      var idx = DB.games.findIndex(function(x) { return x.id === gid; });
+      if (idx >= 0) DB.games[idx] = g;
+      saveDB();
+      renderMultiStreamAdmin(container, g);
+    };
+  }
+
+  var MULTI_STREAM = {
+    renderLobby: renderMultiStreamLobby,
+    startGame: function(game) { if (!game) return; startMultiStreamGame(game); },
+    startAdminDemo: function() { alert('דמו לא זמין לסוג זה עדיין'); },
+    renderQuestionsAdmin: function(container, game) { renderMultiStreamAdmin(container, game); }
+  };
+
+  // ── DRAG_DROP Template ──────────────────────────────────────────────────────
+  // גרירת אובייקט למיקום על תמונה, או התאמת פריטים למיקומים (matching)
+
+  function renderDragDropLobby(mc, game) {
+    var label = getGameLabel(game);
+    var qs = (game.ddQuestions || []).length;
+    var accent = game.color || '#7c3aed';
+    mc.innerHTML = '<div class="game-wrapper"><div class="card" style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:40px 48px;max-width:760px;width:100%;margin:0 auto;text-align:center">' +
+      '<div style="font-size:72px;margin-bottom:16px">' + (game.icon || '🖱️') + '</div>' +
+      '<h2 style="font-size:28px;font-weight:800;margin-bottom:8px">' + label + '</h2>' +
+      '<p style="color:#777;font-size:15px;margin-bottom:8px">' + (game.description || 'גרור כל פריט למיקום הנכון') + '</p>' +
+      '<p style="font-size:13px;color:#999;margin-bottom:24px">' + qs + ' שאלות</p>' +
+      '<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">' +
+      '<button onclick="window._studyMode=true;GAME_REGISTRY.drag_drop.startGame(getGame(\'' + game.id + '\'))" style="padding:12px 28px;background:#059669;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer">📚 מצב לימוד</button>' +
+      '<button onclick="window._studyMode=false;GAME_REGISTRY.drag_drop.startGame(getGame(\'' + game.id + '\'))" style="padding:12px 28px;background:' + accent + ';color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer">▶ מצב אתגר</button>' +
+      '</div></div></div>';
+  }
+
+  function startDragDropGame(game) {
+    var mc = document.getElementById('mc');
+    if (!mc) return;
+    mc.classList.add('fullscreen-game');
+    var questions = game.ddQuestions || [];
+    if (!questions.length) { alert('אין שאלות מוגדרות במשחק זה! הגדר שאלות בממשק המנהל.'); mc.classList.remove('fullscreen-game'); return; }
+    var s = getGameSettings(game);
+    var selected = questions.slice().sort(function() { return Math.random() - 0.5; }).slice(0, Math.min(s.questionsPerSession || 10, questions.length));
+    var state = { gameId: game.id, game: game, questions: selected, current: 0, score: 0, correct: 0, studyMode: !!window._studyMode, log: [] };
+
+    mc.innerHTML = '<div class="game-wrapper"><div class="card" id="dd-shell" style="padding:0;overflow:hidden;max-width:900px;margin:0 auto;width:100%"></div></div>';
+    showGameExitButton && showGameExitButton();
+    var exitBtn = document.getElementById('game-exit-btn');
+    if (exitBtn) exitBtn.onclick = function() { mc.classList.remove('fullscreen-game'); hideGameExitButton && hideGameExitButton(); GAME_REGISTRY.drag_drop.renderLobby(mc, game); };
+
+    function renderDDQuestion() {
+      var shell = document.getElementById('dd-shell');
+      if (!shell) return;
+      if (state.current >= state.questions.length) { endDDGame(); return; }
+      var q = state.questions[state.current];
+      var total = state.questions.length;
+      var pct = Math.round((state.current / total) * 100);
+      var studyBadge = state.studyMode ? '<span style="background:#d1fae5;color:#065f46;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;margin-right:8px">מצב לימוד</span>' : '';
+      // q.type: 'place_on_image' | 'matching'
+      var isMatching = q.type === 'matching';
+
+      if (isMatching) {
+        // matching: items array, targets array, correct pairing by index
+        var items = (q.items || []).slice().sort(function() { return Math.random() - 0.5; });
+        var targets = q.targets || [];
+        var placed = {}; // targetIdx -> itemIdx
+        var draggedItem = null;
+
+        shell.innerHTML =
+          '<div style="padding:14px 16px;border-bottom:1px solid #eee">' +
+            '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">' +
+              '<span style="font-size:13px;color:#666">שאלה ' + (state.current+1) + '/' + total + studyBadge + '</span>' +
+              '<span style="font-size:13px;font-weight:700;color:#7c3aed">⭐ ' + state.score + '</span>' +
+            '</div>' +
+            '<div style="height:5px;background:#eee;border-radius:3px"><div style="width:' + pct + '%;height:100%;background:#7c3aed;border-radius:3px"></div></div>' +
+          '</div>' +
+          '<div style="padding:16px">' +
+            '<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:0 0 16px;text-align:center">' + q.prompt + '</p>' +
+            '<div style="display:flex;gap:16px;flex-wrap:wrap">' +
+              '<div style="flex:1;min-width:160px">' +
+                '<p style="font-size:12px;font-weight:600;color:#888;margin-bottom:8px">פריטים לגרירה:</p>' +
+                '<div id="dd-items" style="display:flex;flex-direction:column;gap:8px">' +
+                  items.map(function(item, i) {
+                    return '<div class="dd-item" draggable="true" data-item="' + i + '" data-label="' + encodeURIComponent(item.label) + '" style="padding:10px 14px;background:#ede9fe;border:1.5px solid #c4b5fd;border-radius:8px;font-size:14px;font-weight:600;color:#5b21b6;cursor:grab;user-select:none;text-align:center">' + item.label + '</div>';
+                  }).join('') +
+                '</div>' +
+              '</div>' +
+              '<div style="flex:2;min-width:200px">' +
+                '<p style="font-size:12px;font-weight:600;color:#888;margin-bottom:8px">מיקומים:</p>' +
+                '<div id="dd-targets" style="display:flex;flex-direction:column;gap:8px">' +
+                  targets.map(function(target, ti) {
+                    return '<div class="dd-zone" data-target="' + ti + '" style="padding:10px 14px;background:#f8f9ff;border:2px dashed #c4b5fd;border-radius:8px;font-size:13px;color:#666;min-height:44px;display:flex;align-items:center;gap:8px">' +
+                      '<span style="font-weight:600;color:#1a1a2e">' + target.label + '</span>' +
+                      '<span class="dd-zone-content" style="color:#aaa;font-style:italic">גרור לכאן...</span>' +
+                    '</div>';
+                  }).join('') +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div style="text-align:center;margin-top:16px">' +
+              '<button id="dd-check" onclick="window._ddCheck()" style="padding:11px 36px;background:#7c3aed;color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer">✓ בדוק</button>' +
+            '</div>' +
+            '<div id="dd-result" style="margin-top:12px;min-height:40px"></div>' +
+          '</div>';
+
+        // Drag events
+        shell.querySelectorAll('.dd-item').forEach(function(el) {
+          el.addEventListener('dragstart', function(e) {
+            draggedItem = { idx: parseInt(el.dataset.item), label: decodeURIComponent(el.dataset.label), el: el };
+            el.style.opacity = '0.5';
+          });
+          el.addEventListener('dragend', function() { el.style.opacity = '1'; });
+        });
+        shell.querySelectorAll('.dd-zone').forEach(function(zone) {
+          zone.addEventListener('dragover', function(e) { e.preventDefault(); zone.style.borderColor = '#7c3aed'; });
+          zone.addEventListener('dragleave', function() { zone.style.borderColor = '#c4b5fd'; });
+          zone.addEventListener('drop', function(e) {
+            e.preventDefault();
+            zone.style.borderColor = '#c4b5fd';
+            if (!draggedItem) return;
+            var ti = parseInt(zone.dataset.target);
+            placed[ti] = draggedItem.idx;
+            var content = zone.querySelector('.dd-zone-content');
+            if (content) { content.textContent = draggedItem.label; content.style.cssText = 'color:#5b21b6;font-style:normal;font-weight:600'; }
+            zone.style.background = '#ede9fe';
+          });
+        });
+
+        window._ddCheck = function() {
+          var allPlaced = Object.keys(placed).length === targets.length;
+          if (!allPlaced && !state.studyMode) { alert('גרור פריטים לכל המיקומים תחילה'); return; }
+          var correct = 0;
+          targets.forEach(function(target, ti) {
+            var placedItemIdx = placed[ti];
+            var correctItemLabel = items.find(function(it, ii) { return ii === target.correctItemIdx; });
+            // find which shuffled item maps to correctItemIdx
+            var isOk = (placedItemIdx !== undefined) && (items[placedItemIdx].correctIdx === ti);
+            if (isOk) correct++;
+            var zone = shell.querySelector('.dd-zone[data-target="' + ti + '"]');
+            if (zone) zone.style.background = isOk ? '#d1fae5' : '#fee2e2';
+          });
+          var allCorrect = correct === targets.length;
+          if (!state.studyMode && allCorrect) state.score += 10;
+          if (allCorrect) state.correct++;
+          state.log.push({ prompt: q.prompt, ok: allCorrect });
+          var resultDiv = document.getElementById('dd-result');
+          if (resultDiv) {
+            resultDiv.innerHTML = allCorrect
+              ? '<div style="background:#d1fae5;border-radius:8px;padding:10px 14px;text-align:center;color:#065f46;font-weight:700">✅ מצוין! כל הזוגות נכונים' + (state.studyMode ? '' : ' +10 נקודות') + '</div>'
+              : '<div style="background:#fee2e2;border-radius:8px;padding:10px 14px;text-align:center;color:#991b1b;font-weight:700">❌ ' + correct + '/' + targets.length + ' נכון — המיקומים הנכונים מסומנים בירוק</div>';
+          }
+          var checkBtn = document.getElementById('dd-check');
+          if (checkBtn) { checkBtn.disabled = true; checkBtn.style.opacity = '0.5'; }
+          setTimeout(function() { state.current++; renderDDQuestion(); }, state.studyMode ? 2500 : 2000);
+        };
+
+      } else {
+        // place_on_image: single item dragged to correct spot on image
+        var imgSrc = q.image || game.hotspotImage || '';
+        var itemLabel = q.itemLabel || 'פריט';
+        var answered = false;
+        var s2 = getGameSettings(game);
+        var timeLeft = state.studyMode ? 999 : (s2.answerTime || 30);
+
+        shell.innerHTML =
+          '<div style="padding:14px 16px;border-bottom:1px solid #eee">' +
+            '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">' +
+              '<span style="font-size:13px;color:#666">שאלה ' + (state.current+1) + '/' + total + studyBadge + '</span>' +
+              '<span style="font-size:13px;font-weight:700;color:#7c3aed">⭐ ' + state.score + '</span>' +
+            '</div>' +
+            '<div style="height:5px;background:#eee;border-radius:3px"><div style="width:' + pct + '%;height:100%;background:#7c3aed;border-radius:3px"></div></div>' +
+          '</div>' +
+          '<div style="padding:12px 16px">' +
+            '<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:0 0 10px;text-align:center">' + q.prompt + '</p>' +
+            '<div style="display:flex;justify-content:center;margin-bottom:10px">' +
+              '<div id="dd-drag-item" draggable="true" style="padding:10px 20px;background:#ede9fe;border:2px solid #7c3aed;border-radius:10px;font-size:15px;font-weight:700;color:#5b21b6;cursor:grab;display:inline-block;user-select:none">' + itemLabel + '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div style="position:relative" id="dd-img-wrap">' +
+            (imgSrc ? '<img src="' + imgSrc + '" style="width:100%;display:block" draggable="false">' : '<div style="height:260px;background:#f0f2f5;display:flex;align-items:center;justify-content:center;color:#aaa">אין תמונה</div>') +
+            '<div id="dd-placed" style="display:none;position:absolute;transform:translate(-50%,-50%);pointer-events:none;padding:8px 14px;background:#7c3aed;color:#fff;border-radius:8px;font-size:13px;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.25)">' + itemLabel + '</div>' +
+          '</div>' +
+          '<div id="dd-result2" style="padding:10px 16px;min-height:44px"></div>' +
+          (state.studyMode ? '' : '<div style="text-align:center;padding-bottom:10px"><span style="font-size:13px;color:#888">⏱️ <span id="dd-timer">' + timeLeft + '</span> שניות</span></div>');
+
+        var dragEl = document.getElementById('dd-drag-item');
+        var imgWrap = document.getElementById('dd-img-wrap');
+
+        if (dragEl) {
+          dragEl.addEventListener('dragstart', function(e) { e.dataTransfer.setData('text/plain', 'item'); dragEl.style.opacity = '0.5'; });
+          dragEl.addEventListener('dragend', function() { dragEl.style.opacity = '1'; });
+        }
+        if (imgWrap) {
+          imgWrap.addEventListener('dragover', function(e) { e.preventDefault(); });
+          imgWrap.addEventListener('drop', function(e) {
+            e.preventDefault();
+            if (answered) return;
+            var rect = imgWrap.getBoundingClientRect();
+            var xPct = ((e.clientX - rect.left) / rect.width) * 100;
+            var yPct = ((e.clientY - rect.top) / rect.height) * 100;
+            clearInterval(timerInt);
+            answered = true;
+            var placed2 = document.getElementById('dd-placed');
+            if (placed2) { placed2.style.left = xPct + '%'; placed2.style.top = yPct + '%'; placed2.style.display = 'block'; }
+            if (dragEl) dragEl.style.display = 'none';
+            var dx = xPct - (q.targetX || 50); var dy = yPct - (q.targetY || 50);
+            var dist = Math.sqrt(dx*dx + dy*dy);
+            var isOk = dist <= (q.radius || 8);
+            if (isOk && !state.studyMode) state.score += 10;
+            if (isOk) state.correct++;
+            state.log.push({ prompt: q.prompt, ok: isOk });
+            var res = document.getElementById('dd-result2');
+            if (res) res.innerHTML = isOk
+              ? '<div style="background:#d1fae5;border-radius:8px;padding:10px;text-align:center;color:#065f46;font-weight:700">✅ נכון!' + (state.studyMode ? '' : ' +10 נקודות') + (q.explanation ? '<br><span style="font-size:12px;font-weight:400">' + q.explanation + '</span>' : '') + '</div>'
+              : '<div style="background:#fee2e2;border-radius:8px;padding:10px;text-align:center;color:#991b1b;font-weight:700">❌ לא מדויק — המיקום הנכון מסומן' + (q.explanation ? '<br><span style="font-size:12px;font-weight:400">' + q.explanation + '</span>' : '') + '</div>';
+            // Show correct position
+            var canvas = document.createElement('canvas');
+            canvas.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none';
+            imgWrap.appendChild(canvas);
+            canvas.width = imgWrap.offsetWidth; canvas.height = imgWrap.offsetHeight;
+            var ctx = canvas.getContext('2d');
+            var tx = ((q.targetX||50)/100)*canvas.width; var ty = ((q.targetY||50)/100)*canvas.height;
+            ctx.beginPath(); ctx.arc(tx, ty, 20, 0, Math.PI*2);
+            ctx.fillStyle = isOk ? 'rgba(45,198,83,0.25)' : 'rgba(124,58,237,0.2)';
+            ctx.fill(); ctx.strokeStyle = isOk ? '#2dc653' : '#7c3aed'; ctx.lineWidth = 2.5; ctx.stroke();
+            setTimeout(function() { state.current++; renderDDQuestion(); }, state.studyMode ? 2500 : 2000);
+          });
+        }
+
+        var timerInt = null;
+        if (!state.studyMode) {
+          timerInt = setInterval(function() {
+            timeLeft--;
+            var tel = document.getElementById('dd-timer');
+            if (tel) tel.textContent = timeLeft;
+            if (timeLeft <= 0 && !answered) {
+              clearInterval(timerInt); answered = true;
+              state.log.push({ prompt: q.prompt, ok: false });
+              var res2 = document.getElementById('dd-result2');
+              if (res2) res2.innerHTML = '<div style="background:#fff8e1;border-radius:8px;padding:10px;text-align:center;color:#92400e;font-weight:700">⏰ הזמן נגמר!</div>';
+              setTimeout(function() { state.current++; renderDDQuestion(); }, 1500);
+            }
+          }, 1000);
+        }
+      }
+    }
+
+    function endDDGame() {
+      mc.classList.remove('fullscreen-game');
+      hideGameExitButton && hideGameExitButton();
+      var shell = document.getElementById('dd-shell');
+      if (!shell) return;
+      var total = state.questions.length, correct = state.correct;
+      var acc = total ? Math.round((correct/total)*100) : 0;
+      var level = 'מתחיל', lc = 'badge-warning';
+      if (acc>=85){level='מומחה';lc='badge-success';}else if(acc>=65){level='מתקדם';lc='badge-info';}
+      var r = { id:'r'+Date.now(), userId:currentUser.username, userName:currentUser.name, score:state.score, correct:correct, total:total, accuracy:acc, level:level, date:new Date().toISOString(), gameType:game.id, answerSpeeds:'', avgAnswerTime:'', mode:state.studyMode?'study':'challenge' };
+      var res = getGameResults(game.id); res.unshift(r); persistGameResults(game.id, res); saveDB();
+      sendToSheets(Object.assign({},r,{gameType:game.id}));
+      shell.innerHTML = '<div class="results-card" style="padding:32px"><div class="result-score">' + r.score + '</div><div class="result-label">נקודות סה"כ</div><div><span class="level-badge ' + lc + '">' + level + '</span></div><div class="result-stats"><div class="stat-box"><div class="stat-val">' + correct + '/' + total + '</div><div class="stat-lbl">תשובות נכונות</div></div><div class="stat-box"><div class="stat-val">' + acc + '%</div><div class="stat-lbl">דיוק</div></div></div><div class="flex gap2 center" style="flex-wrap:wrap;gap:8px;margin-top:16px"><button class="btn-primary" onclick="GAME_REGISTRY.drag_drop.startGame(getGame(\'' + game.id + '\'))" style="padding:10px 24px">שחק שוב</button><button class="btn-ghost" onclick="goBackFromGame()" style="padding:10px 24px">← חזרה לנושא</button></div></div>';
+    }
+
+    renderDDQuestion();
+  }
+
+  function renderDragDropAdmin(container, game) {
+    var questions = game.ddQuestions || [];
+    container.innerHTML =
+      '<div style="margin-bottom:16px;padding:10px 14px;background:#f5f3ff;border-radius:8px;font-size:13px;color:#5b21b6">' +
+        '💡 כל שאלה היא <strong>גרירה להתאמה</strong> (כמה פריטים ← כמה מיקומים) או <strong>גרירת אובייקט לתמונה</strong> (פריט אחד → נקודה בתמונה).' +
+      '</div>' +
+      '<div style="display:flex;gap:8px;margin-bottom:16px">' +
+        '<button onclick="window._ddAddQ(\'' + game.id + '\',\'matching\')" style="padding:9px 16px;background:#7c3aed;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer">➕ הוסף שאלת התאמה</button>' +
+        '<button onclick="window._ddAddQ(\'' + game.id + '\',\'place_on_image\')" style="padding:9px 16px;background:#4361ee;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer">➕ הוסף גרירה לתמונה</button>' +
+      '</div>' +
+      (questions.length === 0 ? '<p style="color:#aaa;font-size:13px">אין שאלות עדיין</p>' :
+        questions.map(function(q, qi) {
+          return '<div style="background:#f8f9ff;border:1px solid #e0e0e0;border-radius:10px;padding:12px 14px;margin-bottom:10px">' +
+            '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">' +
+              '<span style="font-size:12px;font-weight:600;color:#7c3aed;background:#ede9fe;padding:2px 8px;border-radius:10px">' + (q.type === 'matching' ? 'התאמה' : 'גרירה לתמונה') + '</span>' +
+              '<button onclick="window._ddDelQ(\'' + game.id + '\',' + qi + ')" style="background:none;border:none;cursor:pointer;color:#e63946;font-size:16px">🗑</button>' +
+            '</div>' +
+            '<input value="' + (q.prompt || '') + '" placeholder="הנחיה (למשל: חבר כל רכיב למיקומו)" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.ddQuestions[' + qi + '].prompt=v;var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})(this.value)" style="width:100%;padding:7px 10px;border:1px solid #e0e0e0;border-radius:7px;font-size:13px;margin-bottom:8px">' +
+            (q.type === 'matching' ?
+              '<div style="font-size:12px;color:#888;margin-bottom:4px">פריטים (כל שורה = פריט | מיקום נכון):</div>' +
+              (q.items || []).map(function(item, ii) {
+                return '<div style="display:flex;gap:6px;margin-bottom:4px">' +
+                  '<input value="' + (item.label||'') + '" placeholder="שם פריט" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.ddQuestions[' + qi + '].items[' + ii + '].label=v;var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})(this.value)" style="flex:1;padding:5px 8px;border:1px solid #ddd;border-radius:6px;font-size:12px">' +
+                  '<input value="' + (item.targetLabel||'') + '" placeholder="שייך למיקום" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.ddQuestions[' + qi + '].items[' + ii + '].targetLabel=v;var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})(this.value)" style="flex:1;padding:5px 8px;border:1px solid #ddd;border-radius:6px;font-size:12px">' +
+                '</div>';
+              }).join('') +
+              '<button onclick="window._ddAddItem(\'' + game.id + '\',' + qi + ')" style="font-size:12px;color:#7c3aed;background:none;border:none;cursor:pointer;padding:2px 0">+ הוסף פריט</button>'
+            :
+              '<div style="font-size:12px;color:#888;margin-bottom:6px">URL תמונה + שם הפריט + מיקום יעד (%):</div>' +
+              '<input value="' + (q.image||'') + '" placeholder="URL תמונה" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.ddQuestions[' + qi + '].image=v;var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})(this.value)" style="width:100%;padding:5px 8px;border:1px solid #ddd;border-radius:6px;font-size:12px;margin-bottom:4px">' +
+              '<div style="display:flex;gap:6px">' +
+                '<input value="' + (q.itemLabel||'') + '" placeholder="שם הפריט" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.ddQuestions[' + qi + '].itemLabel=v;var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})(this.value)" style="flex:2;padding:5px 8px;border:1px solid #ddd;border-radius:6px;font-size:12px">' +
+                '<input type="number" value="' + (q.targetX||50) + '" min="0" max="100" placeholder="X%" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.ddQuestions[' + qi + '].targetX=parseFloat(v);var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})(this.value)" style="flex:1;padding:5px 8px;border:1px solid #ddd;border-radius:6px;font-size:12px">' +
+                '<input type="number" value="' + (q.targetY||50) + '" min="0" max="100" placeholder="Y%" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.ddQuestions[' + qi + '].targetY=parseFloat(v);var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})(this.value)" style="flex:1;padding:5px 8px;border:1px solid #ddd;border-radius:6px;font-size:12px">' +
+              '</div>'
+            ) +
+          '</div>';
+        }).join('')
+      );
+
+    window._ddAddQ = function(gid, type) {
+      var g = getGame(gid); if (!g.ddQuestions) g.ddQuestions = [];
+      var q = { id: 'ddq_' + Date.now(), type: type, prompt: '', explanation: '' };
+      if (type === 'matching') { q.items = [{label:'', targetLabel:'', correctIdx:0},{label:'', targetLabel:'', correctIdx:1}]; q.targets = [{label:''},{label:''}]; }
+      else { q.image = ''; q.itemLabel = ''; q.targetX = 50; q.targetY = 50; q.radius = 8; }
+      g.ddQuestions.push(q);
+      var idx = DB.games.findIndex(function(x){return x.id===gid;}); if(idx>=0) DB.games[idx]=g; saveDB();
+      renderDragDropAdmin(container, g);
+    };
+    window._ddDelQ = function(gid, qi) {
+      var g = getGame(gid); g.ddQuestions.splice(qi, 1);
+      var idx = DB.games.findIndex(function(x){return x.id===gid;}); if(idx>=0) DB.games[idx]=g; saveDB();
+      renderDragDropAdmin(container, g);
+    };
+    window._ddAddItem = function(gid, qi) {
+      var g = getGame(gid); var n = g.ddQuestions[qi].items.length;
+      g.ddQuestions[qi].items.push({label:'', targetLabel:'', correctIdx:n});
+      if (!g.ddQuestions[qi].targets) g.ddQuestions[qi].targets = [];
+      g.ddQuestions[qi].targets.push({label:''});
+      var idx = DB.games.findIndex(function(x){return x.id===gid;}); if(idx>=0) DB.games[idx]=g; saveDB();
+      renderDragDropAdmin(container, g);
+    };
+  }
+
+  var DRAG_DROP = {
+    renderLobby: renderDragDropLobby,
+    startGame: function(game) { if (!game) return; startDragDropGame(game); },
+    startAdminDemo: function() { alert('דמו לא זמין לסוג זה עדיין'); },
+    renderQuestionsAdmin: function(container, game) { renderDragDropAdmin(container, game); }
+  };
+
+  // ── SEQUENCE_ORDER Template ──────────────────────────────────────────────────
+  // סידור שלבים/כרטיסיות בסדר הנכון — טקסט או תמונות
+
+  function renderSequenceLobby(mc, game) {
+    var label = getGameLabel(game);
+    var qs = (game.seqQuestions || []).length;
+    var accent = game.color || '#0284c7';
+    mc.innerHTML = '<div class="game-wrapper"><div class="card" style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:40px 48px;max-width:760px;width:100%;margin:0 auto;text-align:center">' +
+      '<div style="font-size:72px;margin-bottom:16px">' + (game.icon || '📋') + '</div>' +
+      '<h2 style="font-size:28px;font-weight:800;margin-bottom:8px">' + label + '</h2>' +
+      '<p style="color:#777;font-size:15px;margin-bottom:8px">' + (game.description || 'סדר את השלבים בסדר הנכון') + '</p>' +
+      '<p style="font-size:13px;color:#999;margin-bottom:24px">' + qs + ' תרחישים</p>' +
+      '<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">' +
+      '<button onclick="window._studyMode=true;GAME_REGISTRY.sequence_order.startGame(getGame(\'' + game.id + '\'))" style="padding:12px 28px;background:#059669;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer">📚 מצב לימוד</button>' +
+      '<button onclick="window._studyMode=false;GAME_REGISTRY.sequence_order.startGame(getGame(\'' + game.id + '\'))" style="padding:12px 28px;background:' + accent + ';color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer">▶ מצב אתגר</button>' +
+      '</div></div></div>';
+  }
+
+  function startSequenceGame(game) {
+    var mc = document.getElementById('mc');
+    if (!mc) return;
+    mc.classList.add('fullscreen-game');
+    var questions = game.seqQuestions || [];
+    if (!questions.length) { alert('אין תרחישים מוגדרים! הגדר תרחישים בממשק המנהל.'); mc.classList.remove('fullscreen-game'); return; }
+    var s = getGameSettings(game);
+    var selected = questions.slice().sort(function(){return Math.random()-0.5;}).slice(0, Math.min(s.questionsPerSession||8, questions.length));
+    var state = { gameId:game.id, game:game, questions:selected, current:0, score:0, correct:0, studyMode:!!window._studyMode, log:[] };
+
+    mc.innerHTML = '<div class="game-wrapper"><div class="card" id="seq-shell" style="padding:0;overflow:hidden;max-width:900px;margin:0 auto;width:100%"></div></div>';
+    showGameExitButton && showGameExitButton();
+    var exitBtn = document.getElementById('game-exit-btn');
+    if (exitBtn) exitBtn.onclick = function(){ mc.classList.remove('fullscreen-game'); hideGameExitButton&&hideGameExitButton(); GAME_REGISTRY.sequence_order.renderLobby(mc,game); };
+
+    function renderSeqQuestion() {
+      var shell = document.getElementById('seq-shell');
+      if (!shell) return;
+      if (state.current >= state.questions.length) { endSeqGame(); return; }
+      var q = state.questions[state.current];
+      var total = state.questions.length;
+      var pct = Math.round((state.current/total)*100);
+      var studyBadge = state.studyMode ? '<span style="background:#d1fae5;color:#065f46;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;margin-right:8px">מצב לימוד</span>' : '';
+      // Shuffle steps
+      var steps = (q.steps || []).slice();
+      var shuffled = steps.map(function(s,i){return {text:s.text,image:s.image||'',correctPos:i,currentPos:i};}).sort(function(){return Math.random()-0.5;});
+
+      function renderCards() {
+        var cardsDiv = document.getElementById('seq-cards');
+        if (!cardsDiv) return;
+        cardsDiv.innerHTML = shuffled.map(function(step, si) {
+          return '<div class="seq-card" data-idx="' + si + '" draggable="true" style="background:#fff;border:1.5px solid #bae6fd;border-radius:10px;padding:12px 14px;margin-bottom:8px;cursor:grab;display:flex;align-items:center;gap:10px;user-select:none">' +
+            '<span style="background:#0284c7;color:#fff;font-size:12px;font-weight:700;padding:3px 8px;border-radius:6px;flex-shrink:0">' + (si+1) + '</span>' +
+            (step.image ? '<img src="' + step.image + '" style="height:48px;width:72px;object-fit:cover;border-radius:6px;flex-shrink:0">' : '') +
+            '<span style="font-size:14px;color:#1a1a2e;line-height:1.4">' + step.text + '</span>' +
+          '</div>';
+        }).join('');
+        // Drag-to-reorder
+        var cards = cardsDiv.querySelectorAll('.seq-card');
+        var dragIdx = null;
+        cards.forEach(function(card) {
+          card.addEventListener('dragstart', function() { dragIdx = parseInt(card.dataset.idx); card.style.opacity='0.5'; });
+          card.addEventListener('dragend', function() { card.style.opacity='1'; });
+          card.addEventListener('dragover', function(e) { e.preventDefault(); card.style.borderColor='#0284c7'; card.style.background='#f0f9ff'; });
+          card.addEventListener('dragleave', function() { card.style.borderColor='#bae6fd'; card.style.background='#fff'; });
+          card.addEventListener('drop', function(e) {
+            e.preventDefault(); card.style.borderColor='#bae6fd'; card.style.background='#fff';
+            var dropIdx = parseInt(card.dataset.idx);
+            if (dragIdx === null || dragIdx === dropIdx) return;
+            var moved = shuffled.splice(dragIdx, 1)[0];
+            shuffled.splice(dropIdx, 0, moved);
+            renderCards();
+          });
+        });
+      }
+
+      shell.innerHTML =
+        '<div style="padding:14px 16px;border-bottom:1px solid #eee">' +
+          '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">' +
+            '<span style="font-size:13px;color:#666">תרחיש ' + (state.current+1) + '/' + total + studyBadge + '</span>' +
+            '<span style="font-size:13px;font-weight:700;color:#0284c7">⭐ ' + state.score + '</span>' +
+          '</div>' +
+          '<div style="height:5px;background:#eee;border-radius:3px"><div style="width:' + pct + '%;height:100%;background:#0284c7;border-radius:3px"></div></div>' +
+        '</div>' +
+        '<div style="padding:14px 16px">' +
+          '<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:0 0 6px;text-align:center">' + q.prompt + '</p>' +
+          '<p style="font-size:13px;color:#888;margin:0 0 12px;text-align:center">גרור את הכרטיסיות לסדר הנכון</p>' +
+          '<div id="seq-cards" style="max-width:600px;margin:0 auto"></div>' +
+          '<div style="text-align:center;margin-top:14px">' +
+            '<button onclick="window._seqCheck()" style="padding:11px 36px;background:#0284c7;color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer">✓ בדוק סדר</button>' +
+          '</div>' +
+          '<div id="seq-result" style="margin-top:12px;max-width:600px;margin-left:auto;margin-right:auto;min-height:40px"></div>' +
+        '</div>';
+
+      renderCards();
+
+      window._seqCheck = function() {
+        var correct = shuffled.every(function(step, si) { return step.correctPos === si; });
+        // partial score: count correct positions
+        var partialCorrect = shuffled.filter(function(step,si){return step.correctPos===si;}).length;
+        var points = correct ? 10 : (partialCorrect > 0 && !state.studyMode ? Math.floor((partialCorrect/shuffled.length)*10) : 0);
+        if (!state.studyMode) state.score += points;
+        if (correct) state.correct++;
+        state.log.push({ prompt: q.prompt, ok: correct });
+
+        // Color each card
+        var cards = document.querySelectorAll('.seq-card');
+        shuffled.forEach(function(step, si) {
+          var card = cards[si];
+          if (!card) return;
+          card.style.background = step.correctPos === si ? '#d1fae5' : '#fee2e2';
+          card.style.borderColor = step.correctPos === si ? '#2dc653' : '#e63946';
+          card.draggable = false;
+          card.style.cursor = 'default';
+          if (step.correctPos !== si) {
+            card.innerHTML += '<span style="font-size:11px;color:#991b1b;margin-right:auto;padding-right:8px"> → מיקום נכון: ' + (step.correctPos+1) + '</span>';
+          }
+        });
+
+        // In study mode — show correct order
+        var resHtml = correct
+          ? '<div style="background:#d1fae5;border-radius:8px;padding:10px 14px;text-align:center;color:#065f46;font-weight:700">✅ סדר מושלם!' + (points ? ' +' + points + ' נקודות' : '') + '</div>'
+          : '<div style="background:#fee2e2;border-radius:8px;padding:10px 14px;text-align:center;color:#991b1b;font-weight:700">❌ ' + partialCorrect + '/' + shuffled.length + ' במיקום הנכון' + (state.studyMode && q.explanation ? '<br><span style="font-size:12px;font-weight:400;color:#7f1d1d">' + q.explanation + '</span>' : '') + '</div>';
+        var resDiv = document.getElementById('seq-result');
+        if (resDiv) resDiv.innerHTML = resHtml;
+        var checkBtn = document.querySelector('#seq-shell button[onclick="window._seqCheck()"]');
+        if (checkBtn) { checkBtn.disabled=true; checkBtn.style.opacity='0.5'; }
+        setTimeout(function(){ state.current++; renderSeqQuestion(); }, state.studyMode ? 3000 : 2200);
+      };
+    }
+
+    function endSeqGame() {
+      mc.classList.remove('fullscreen-game');
+      hideGameExitButton && hideGameExitButton();
+      var shell = document.getElementById('seq-shell');
+      if (!shell) return;
+      var total=state.questions.length, correct=state.correct, acc=total?Math.round((correct/total)*100):0;
+      var level='מתחיל',lc='badge-warning';
+      if(acc>=85){level='מומחה';lc='badge-success';}else if(acc>=65){level='מתקדם';lc='badge-info';}
+      var r={id:'r'+Date.now(),userId:currentUser.username,userName:currentUser.name,score:state.score,correct:correct,total:total,accuracy:acc,level:level,date:new Date().toISOString(),gameType:game.id,answerSpeeds:'',avgAnswerTime:'',mode:state.studyMode?'study':'challenge'};
+      var res=getGameResults(game.id); res.unshift(r); persistGameResults(game.id,res); saveDB();
+      sendToSheets(Object.assign({},r,{gameType:game.id}));
+      shell.innerHTML='<div class="results-card" style="padding:32px"><div class="result-score">'+r.score+'</div><div class="result-label">נקודות סה"כ</div><div><span class="level-badge '+lc+'">'+level+'</span></div><div class="result-stats"><div class="stat-box"><div class="stat-val">'+correct+'/'+total+'</div><div class="stat-lbl">תרחישים נכונים</div></div><div class="stat-box"><div class="stat-val">'+acc+'%</div><div class="stat-lbl">דיוק</div></div></div><div class="flex gap2 center" style="flex-wrap:wrap;gap:8px;margin-top:16px"><button class="btn-primary" onclick="GAME_REGISTRY.sequence_order.startGame(getGame(\''+game.id+'\'))" style="padding:10px 24px">שחק שוב</button><button class="btn-ghost" onclick="goBackFromGame()" style="padding:10px 24px">← חזרה לנושא</button></div></div>';
+    }
+
+    renderSeqQuestion();
+  }
+
+  function renderSequenceAdmin(container, game) {
+    var questions = game.seqQuestions || [];
+    container.innerHTML =
+      '<div style="margin-bottom:16px;padding:10px 14px;background:#e0f2fe;border-radius:8px;font-size:13px;color:#0369a1">' +
+        '💡 כל תרחיש = רשימת שלבים שהנהג צריך לסדר. ניתן לצרף תמונה לכל שלב.' +
+      '</div>' +
+      '<button onclick="window._seqAddQ(\'' + game.id + '\')" style="padding:9px 18px;background:#0284c7;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:14px">➕ הוסף תרחיש</button>' +
+      (questions.length === 0 ? '<p style="color:#aaa;font-size:13px">אין תרחישים עדיין</p>' :
+        questions.map(function(q, qi) {
+          return '<div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:12px 14px;margin-bottom:12px">' +
+            '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">' +
+              '<span style="font-size:13px;font-weight:700;color:#0284c7">תרחיש ' + (qi+1) + '</span>' +
+              '<button onclick="window._seqDelQ(\'' + game.id + '\',' + qi + ')" style="background:none;border:none;cursor:pointer;color:#e63946;font-size:16px">🗑</button>' +
+            '</div>' +
+            '<input value="' + (q.prompt||'') + '" placeholder="הנחיה (למשל: סדר את שלבי בדיקת הטרום יציאה)" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.seqQuestions[' + qi + '].prompt=v;var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})(this.value)" style="width:100%;padding:7px 10px;border:1px solid #bae6fd;border-radius:7px;font-size:13px;margin-bottom:8px">' +
+            '<textarea placeholder="הסבר (יוצג בסיום — אופציונלי)" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.seqQuestions[' + qi + '].explanation=v;var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})(this.value)" style="width:100%;padding:6px 10px;border:1px solid #bae6fd;border-radius:7px;font-size:12px;resize:vertical;font-family:inherit;margin-bottom:8px">' + (q.explanation||'') + '</textarea>' +
+            '<div style="font-size:12px;font-weight:600;color:#0369a1;margin-bottom:6px">שלבים (בסדר הנכון):</div>' +
+            (q.steps||[]).map(function(step, si) {
+              return '<div style="display:flex;gap:6px;align-items:center;margin-bottom:5px">' +
+                '<span style="background:#0284c7;color:#fff;font-size:11px;padding:2px 6px;border-radius:5px;flex-shrink:0">' + (si+1) + '</span>' +
+                '<input value="' + (step.text||'') + '" placeholder="טקסט השלב" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.seqQuestions[' + qi + '].steps[' + si + '].text=v;var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})(this.value)" style="flex:3;padding:5px 8px;border:1px solid #ddd;border-radius:6px;font-size:12px">' +
+                '<input value="' + (step.image||'') + '" placeholder="URL תמונה (אופציונלי)" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.seqQuestions[' + qi + '].steps[' + si + '].image=v;var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})(this.value)" style="flex:2;padding:5px 8px;border:1px solid #ddd;border-radius:6px;font-size:12px">' +
+                '<button onclick="window._seqDelStep(\'' + game.id + '\',' + qi + ',' + si + ')" style="background:none;border:none;cursor:pointer;color:#e63946;font-size:14px;flex-shrink:0">✕</button>' +
+              '</div>';
+            }).join('') +
+            '<button onclick="window._seqAddStep(\'' + game.id + '\',' + qi + ')" style="font-size:12px;color:#0284c7;background:none;border:none;cursor:pointer;padding:3px 0">+ הוסף שלב</button>' +
+          '</div>';
+        }).join('')
+      );
+
+    window._seqAddQ = function(gid) {
+      var g=getGame(gid); if(!g.seqQuestions) g.seqQuestions=[];
+      g.seqQuestions.push({id:'sq_'+Date.now(),prompt:'',explanation:'',steps:[{text:'',image:''},{text:'',image:''},{text:'',image:''}]});
+      var idx=DB.games.findIndex(function(x){return x.id===gid;}); if(idx>=0) DB.games[idx]=g; saveDB();
+      renderSequenceAdmin(container,g);
+    };
+    window._seqDelQ = function(gid, qi) {
+      var g=getGame(gid); g.seqQuestions.splice(qi,1);
+      var idx=DB.games.findIndex(function(x){return x.id===gid;}); if(idx>=0) DB.games[idx]=g; saveDB();
+      renderSequenceAdmin(container,g);
+    };
+    window._seqAddStep = function(gid, qi) {
+      var g=getGame(gid); g.seqQuestions[qi].steps.push({text:'',image:''});
+      var idx=DB.games.findIndex(function(x){return x.id===gid;}); if(idx>=0) DB.games[idx]=g; saveDB();
+      renderSequenceAdmin(container,g);
+    };
+    window._seqDelStep = function(gid, qi, si) {
+      var g=getGame(gid); g.seqQuestions[qi].steps.splice(si,1);
+      var idx=DB.games.findIndex(function(x){return x.id===gid;}); if(idx>=0) DB.games[idx]=g; saveDB();
+      renderSequenceAdmin(container,g);
+    };
+  }
+
+  var SEQUENCE_ORDER = {
+    renderLobby: renderSequenceLobby,
+    startGame: function(game) { if(!game) return; startSequenceGame(game); },
+    startAdminDemo: function() { alert('דמו לא זמין לסוג זה עדיין'); },
+    renderQuestionsAdmin: function(container, game) { renderSequenceAdmin(container, game); }
+  };
+
+  // ── IMAGE_HOTSPOT Template ───────────────────────────────────────────────────
+  // משחק נקודות לחיצה על תמונה (point & click / drag & drop / identify / find-wrong)
+
+  function renderHotspotLobby(mc, game) {
+    var label = getGameLabel(game);
+    var qs = (game.hotspots || []).length;
+    var accent = (game.color || '#4361ee');
+    mc.innerHTML = '<div class="game-wrapper"><div class="card" style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:40px 48px;max-width:760px;width:100%;margin:0 auto;text-align:center">' +
+      '<div style="font-size:72px;margin-bottom:16px">' + (game.icon || '🎯') + '</div>' +
+      '<h2 style="font-size:28px;font-weight:800;margin-bottom:8px">' + label + '</h2>' +
+      '<p style="color:#777;font-size:15px;margin-bottom:8px">' + (game.description || 'זהה ולחץ על המיקום הנכון בתמונה') + '</p>' +
+      '<p style="font-size:13px;color:#999;margin-bottom:24px">' + qs + ' נקודות מוגדרות</p>' +
+      '<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">' +
+      '<button onclick="window._studyMode=true;GAME_REGISTRY.image_hotspot.startGame(getGame(\'' + game.id + '\'))" style="padding:12px 28px;background:#059669;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer">📚 מצב לימוד</button>' +
+      '<button onclick="window._studyMode=false;GAME_REGISTRY.image_hotspot.startGame(getGame(\'' + game.id + '\'))" style="padding:12px 28px;background:' + accent + ';color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer">▶ מצב אתגר</button>' +
+      '</div></div></div>';
+  }
+
+  function startHotspotGame(game) {
+    var mc = document.getElementById('mc');
+    if (!mc) return;
+    mc.classList.add('fullscreen-game');
+    var hotspots = game.hotspots || [];
+    var questions = game.hotspotQuestions || [];
+    if (!hotspots.length) { alert('אין נקודות מוגדרות במשחק זה! הגדר נקודות בממשק המנהל.'); return; }
+
+    // Build question list: each question references a target hotspot
+    var sessionQs = questions.length ? questions.slice() : hotspots.map(function(hs) {
+      return { id: 'auto_' + hs.id, prompt: 'לחץ על: ' + hs.label, targetId: hs.id, type: 'click' };
+    });
+    sessionQs = sessionQs.sort(function() { return Math.random() - 0.5; });
+    var s = getGameSettings(game);
+    var maxQ = s.questionsPerSession || 10;
+    sessionQs = sessionQs.slice(0, Math.min(maxQ, sessionQs.length));
+
+    var state = {
+      gameId: game.id, game: game,
+      questions: sessionQs, current: 0,
+      score: 0, correct: 0,
+      studyMode: !!window._studyMode,
+      startTime: Date.now(),
+      log: []
+    };
+
+    mc.innerHTML = '<div class="game-wrapper"><div class="card" id="hs-shell" style="padding:0;overflow:hidden;max-width:900px;margin:0 auto;width:100%"></div></div>';
+    showGameExitButton && showGameExitButton();
+
+    var exitBtn = document.getElementById('game-exit-btn');
+    if (exitBtn) exitBtn.onclick = function() {
+      mc.classList.remove('fullscreen-game');
+      hideGameExitButton && hideGameExitButton();
+      GAME_REGISTRY.image_hotspot.renderLobby(mc, game);
+    };
+
+    function renderHSQuestion() {
+      var shell = document.getElementById('hs-shell');
+      if (!shell) return;
+      if (state.current >= state.questions.length) { endHSGame(); return; }
+      var q = state.questions[state.current];
+      var targetHs = hotspots.find(function(h) { return h.id === q.targetId; });
+      if (!targetHs) { state.current++; renderHSQuestion(); return; }
+      var total = state.questions.length;
+      var pct = Math.round((state.current / total) * 100);
+      var answerTime = state.studyMode ? 999 : (s.answerTime || 30);
+      var imgSrc = game.hotspotImage || '';
+      var studyBadge = state.studyMode ? '<span style="background:#d1fae5;color:#065f46;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:8px">מצב לימוד</span>' : '';
+
+      shell.innerHTML =
+        '<div style="padding:14px 16px;border-bottom:1px solid #eee">' +
+          '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">' +
+            '<span style="font-size:13px;color:#666">שאלה ' + (state.current+1) + '/' + total + studyBadge + '</span>' +
+            '<span style="font-size:13px;font-weight:700;color:#4361ee">⭐ ' + state.score + '</span>' +
+          '</div>' +
+          '<div style="height:5px;background:#eee;border-radius:3px"><div style="width:' + pct + '%;height:100%;background:#4361ee;border-radius:3px;transition:width .3s"></div></div>' +
+        '</div>' +
+        '<div style="padding:12px 16px 8px">' +
+          '<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:0 0 10px;text-align:center">' + q.prompt + '</p>' +
+        '</div>' +
+        '<div style="position:relative;cursor:crosshair;user-select:none" id="hs-img-wrap">' +
+          (imgSrc ? '<img src="' + imgSrc + '" style="width:100%;display:block;border-radius:0" id="hs-img" draggable="false">' : '<div style="width:100%;height:320px;background:#f0f2f5;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:14px">אין תמונה מוגדרת</div>') +
+          '<canvas id="hs-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none"></canvas>' +
+          '<div id="hs-feedback-dot" style="display:none;position:absolute;width:28px;height:28px;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.3)"></div>' +
+        '</div>' +
+        '<div id="hs-result" style="padding:12px 16px;min-height:48px"></div>';
+
+      // Timer
+      var timeLeft = answerTime;
+      var timerEl = null;
+      var answered = false;
+      var timerInterval = null;
+
+      if (!state.studyMode) {
+        var resultDiv = document.getElementById('hs-result');
+        resultDiv.innerHTML = '<div style="text-align:center;font-size:13px;color:#888">⏱️ <span id="hs-timer">' + timeLeft + '</span> שניות</div>';
+        timerEl = document.getElementById('hs-timer');
+        timerInterval = setInterval(function() {
+          timeLeft--;
+          if (timerEl) timerEl.textContent = timeLeft;
+          if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            if (!answered) handleHSAnswer(null, targetHs, q, state, renderHSQuestion, timerInterval);
+          }
+        }, 1000);
+      }
+
+      // Click handler
+      var imgWrap = document.getElementById('hs-img-wrap');
+      if (imgWrap) {
+        imgWrap.onclick = function(e) {
+          if (answered) return;
+          var rect = imgWrap.getBoundingClientRect();
+          var xPct = ((e.clientX - rect.left) / rect.width) * 100;
+          var yPct = ((e.clientY - rect.top) / rect.height) * 100;
+          clearInterval(timerInterval);
+          handleHSAnswer({ xPct: xPct, yPct: yPct }, targetHs, q, state, renderHSQuestion, timerInterval);
+          answered = true;
+
+          // Show click dot
+          var dot = document.getElementById('hs-feedback-dot');
+          if (dot) {
+            dot.style.left = xPct + '%';
+            dot.style.top = yPct + '%';
+            dot.style.display = 'block';
+          }
+        };
+      }
+
+      // In study mode — show all hotspot markers
+      if (state.studyMode && imgSrc) {
+        var img = document.getElementById('hs-img');
+        if (img) {
+          img.onload = function() { drawHotspotMarkers(hotspots, targetHs); };
+          if (img.complete) drawHotspotMarkers(hotspots, targetHs);
+        }
+      }
+    }
+
+    function drawHotspotMarkers(allHs, targetHs) {
+      var wrap = document.getElementById('hs-img-wrap');
+      var canvas = document.getElementById('hs-canvas');
+      if (!wrap || !canvas) return;
+      canvas.width = wrap.offsetWidth;
+      canvas.height = wrap.offsetHeight;
+      var ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      allHs.forEach(function(hs) {
+        var cx = (hs.x / 100) * canvas.width;
+        var cy = (hs.y / 100) * canvas.height;
+        var isTarget = hs.id === targetHs.id;
+        ctx.beginPath();
+        ctx.arc(cx, cy, isTarget ? 18 : 10, 0, Math.PI * 2);
+        ctx.fillStyle = isTarget ? 'rgba(67,97,238,0.25)' : 'rgba(0,0,0,0.12)';
+        ctx.fill();
+        ctx.strokeStyle = isTarget ? '#4361ee' : '#888';
+        ctx.lineWidth = isTarget ? 2.5 : 1.5;
+        ctx.stroke();
+        if (state.studyMode) {
+          ctx.fillStyle = isTarget ? '#1a1a2e' : '#555';
+          ctx.font = (isTarget ? '700 ' : '') + '11px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(hs.label, cx, cy + 26);
+        }
+      });
+    }
+
+    function handleHSAnswer(click, targetHs, q, state, nextFn, timerInterval) {
+      clearInterval(timerInterval);
+      var resultDiv = document.getElementById('hs-result');
+      var imgWrap = document.getElementById('hs-img-wrap');
+      if (imgWrap) imgWrap.style.cursor = 'default';
+
+      var isCorrect = false;
+      var dist = 999;
+      if (click) {
+        var dx = click.xPct - targetHs.x;
+        var dy = click.yPct - targetHs.y;
+        dist = Math.sqrt(dx*dx + dy*dy);
+        isCorrect = dist <= (targetHs.radius || 8);
+      }
+
+      // Show target location
+      var canvas = document.getElementById('hs-canvas');
+      var wrap = document.getElementById('hs-img-wrap');
+      if (canvas && wrap) {
+        canvas.width = wrap.offsetWidth;
+        canvas.height = wrap.offsetHeight;
+        var ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        var tx = (targetHs.x / 100) * canvas.width;
+        var ty = (targetHs.y / 100) * canvas.height;
+        ctx.beginPath();
+        ctx.arc(tx, ty, 22, 0, Math.PI * 2);
+        ctx.fillStyle = isCorrect ? 'rgba(45,198,83,0.25)' : 'rgba(230,57,70,0.2)';
+        ctx.fill();
+        ctx.strokeStyle = isCorrect ? '#2dc653' : '#e63946';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+        // crosshair lines
+        ctx.strokeStyle = isCorrect ? '#2dc653' : '#e63946';
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([4, 3]);
+        ctx.beginPath(); ctx.moveTo(tx - 30, ty); ctx.lineTo(tx + 30, ty); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(tx, ty - 30); ctx.lineTo(tx, ty + 30); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#1a1a2e';
+        ctx.font = '700 12px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(targetHs.label, tx, ty + 38);
+      }
+
+      var points = 0;
+      if (isCorrect && !state.studyMode) {
+        points = 10;
+        state.score += points;
+        state.correct++;
+      } else if (isCorrect) {
+        state.correct++;
+      }
+
+      state.log.push({ prompt: q.prompt, ok: isCorrect, targetLabel: targetHs.label });
+
+      var explanation = targetHs.explanation || '';
+      if (!click) {
+        resultDiv.innerHTML = '<div style="background:#fff8e1;border-radius:8px;padding:10px 14px;text-align:center"><span style="color:#92400e;font-weight:700">⏰ הזמן נגמר! </span><span style="color:#555;font-size:13px">המיקום הנכון מסומן בתמונה</span>' + (explanation ? '<br><span style="font-size:12px;color:#666;margin-top:4px;display:block">' + explanation + '</span>' : '') + '</div>';
+      } else if (isCorrect) {
+        resultDiv.innerHTML = '<div style="background:#d1fae5;border-radius:8px;padding:10px 14px;text-align:center"><span style="color:#065f46;font-weight:700">✅ נכון! </span>' + (points ? '<span style="color:#059669;font-size:13px">+' + points + ' נקודות</span>' : '') + (explanation ? '<br><span style="font-size:12px;color:#065f46;margin-top:4px;display:block">' + explanation + '</span>' : '') + '</div>';
+      } else {
+        resultDiv.innerHTML = '<div style="background:#fee2e2;border-radius:8px;padding:10px 14px;text-align:center"><span style="color:#991b1b;font-weight:700">❌ לא מדויק. </span><span style="color:#555;font-size:13px">המיקום הנכון מסומן</span>' + (explanation ? '<br><span style="font-size:12px;color:#7f1d1d;margin-top:4px;display:block">' + explanation + '</span>' : '') + '</div>';
+      }
+
+      setTimeout(function() {
+        state.current++;
+        nextFn();
+      }, state.studyMode ? 2200 : 1600);
+    }
+
+    function endHSGame() {
+      mc.classList.remove('fullscreen-game');
+      hideGameExitButton && hideGameExitButton();
+      var shell = document.getElementById('hs-shell');
+      if (!shell) return;
+      var total = state.questions.length;
+      var correct = state.correct;
+      var acc = total ? Math.round((correct / total) * 100) : 0;
+      var level = 'מתחיל', lc = 'badge-warning';
+      if (acc >= 85) { level = 'מומחה'; lc = 'badge-success'; }
+      else if (acc >= 65) { level = 'מתקדם'; lc = 'badge-info'; }
+      var r = {
+        id: 'r' + Date.now(), userId: currentUser.username, userName: currentUser.name,
+        score: state.score, correct: correct, total: total, accuracy: acc, level: level,
+        date: new Date().toISOString(), gameType: game.id, answerSpeeds: '', avgAnswerTime: '',
+        mode: state.studyMode ? 'study' : 'challenge'
+      };
+      var res = getGameResults(game.id); res.unshift(r); persistGameResults(game.id, res); saveDB();
+      sendToSheets(Object.assign({}, r, { gameType: game.id }));
+      shell.innerHTML = '<div class="results-card" style="padding:32px">' +
+        '<div class="result-score">' + r.score + '</div>' +
+        '<div class="result-label">נקודות סה"כ</div>' +
+        '<div><span class="level-badge ' + lc + '">' + level + '</span></div>' +
+        '<div class="result-stats">' +
+          '<div class="stat-box"><div class="stat-val">' + correct + '/' + total + '</div><div class="stat-lbl">תשובות נכונות</div></div>' +
+          '<div class="stat-box"><div class="stat-val">' + acc + '%</div><div class="stat-lbl">דיוק</div></div>' +
+          '<div class="stat-box"><div class="stat-val">' + r.score + '</div><div class="stat-lbl">ניקוד</div></div>' +
+        '</div>' +
+        '<div class="flex gap2 center" style="flex-wrap:wrap;gap:8px;margin-top:16px">' +
+          '<button class="btn-primary" onclick="GAME_REGISTRY.image_hotspot.startGame(getGame(\'' + game.id + '\'))" style="padding:10px 24px">שחק שוב</button>' +
+          '<button class="btn-ghost" onclick="goBackFromGame()" style="padding:10px 24px">← חזרה לנושא</button>' +
+        '</div></div>';
+    }
+
+    renderHSQuestion();
+  }
+
+  // Admin: editor for hotspot image + points
+  function renderHotspotAdmin(container, game) {
+    var hotspots = game.hotspots || [];
+    var imgSrc = game.hotspotImage || '';
+
+    function saveHS() {
+      game.hotspots = hotspots;
+      game.hotspotImage = document.getElementById('hs-admin-img-url') ? document.getElementById('hs-admin-img-url').value.trim() : imgSrc;
+      // rebuild auto questions
+      game.hotspotQuestions = hotspots.map(function(hs) {
+        return { id: 'auto_' + hs.id, prompt: 'לחץ על: ' + hs.label, targetId: hs.id, type: 'click' };
+      });
+      var idx = DB.games.findIndex(function(g) { return g.id === game.id; });
+      if (idx >= 0) DB.games[idx] = game;
+      saveDB();
+      renderHotspotAdmin(container, game);
+    }
+
+    container.innerHTML =
+      '<div style="margin-bottom:16px">' +
+        '<label style="font-size:13px;font-weight:600;color:#555;display:block;margin-bottom:5px">כתובת תמונה (URL)</label>' +
+        '<div style="display:flex;gap:8px">' +
+          '<input id="hs-admin-img-url" value="' + (imgSrc || '') + '" placeholder="https://... או העלה ל-Google Drive והדבק קישור" style="flex:1;padding:9px 12px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:13px">' +
+          '<button onclick="document.getElementById(\'hs-admin-img-url\').value&&(function(){var g=getGame(\'' + game.id + '\');g.hotspotImage=document.getElementById(\'hs-admin-img-url\').value.trim();var idx=DB.games.findIndex(function(x){return x.id===g.id;});if(idx>=0)DB.games[idx]=g;saveDB();renderHotspotAdmin(document.getElementById(\'q-content\'),g);})()" style="padding:9px 16px;background:#4361ee;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer">✓ עדכן</button>' +
+        '</div>' +
+      '</div>' +
+      (imgSrc ?
+        '<div style="margin-bottom:16px;padding:10px;background:#f0f4ff;border-radius:8px;font-size:13px;color:#4361ee">' +
+          '🖱️ <strong>לחץ על התמונה</strong> כדי להוסיף נקודה חדשה' +
+        '</div>' +
+        '<div style="position:relative;cursor:crosshair;margin-bottom:16px;border:1.5px solid #e0e0e0;border-radius:10px;overflow:hidden" id="hs-admin-wrap">' +
+          '<img src="' + imgSrc + '" style="width:100%;display:block" id="hs-admin-img" draggable="false">' +
+          hotspots.map(function(hs) {
+            return '<div style="position:absolute;left:' + hs.x + '%;top:' + hs.y + '%;transform:translate(-50%,-50%);pointer-events:none">' +
+              '<div style="width:24px;height:24px;border-radius:50%;background:rgba(67,97,238,0.85);border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center">' +
+                '<span style="color:#fff;font-size:9px;font-weight:700">●</span>' +
+              '</div>' +
+              '<div style="background:#1a1a2e;color:#fff;font-size:10px;padding:2px 5px;border-radius:4px;margin-top:3px;white-space:nowrap;text-align:center;max-width:80px;overflow:hidden;text-overflow:ellipsis">' + hs.label + '</div>' +
+            '</div>';
+          }).join('') +
+        '</div>'
+      : '<div style="height:180px;background:#f0f2f5;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:14px;margin-bottom:16px">הזן כתובת תמונה למעלה כדי להתחיל</div>') +
+      '<div style="margin-bottom:12px">' +
+        '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">' +
+          '<span style="font-size:14px;font-weight:700;color:#1a1a2e">נקודות מוגדרות (' + hotspots.length + ')</span>' +
+          '<button onclick="(function(){var g=getGame(\'' + game.id + '\');g.hotspots=[];g.hotspotQuestions=[];var idx=DB.games.findIndex(function(x){return x.id===g.id;});if(idx>=0)DB.games[idx]=g;saveDB();renderHotspotAdmin(document.getElementById(\'q-content\'),g);})()" style="font-size:12px;color:#e63946;background:none;border:none;cursor:pointer;padding:4px 8px">🗑 נקה הכל</button>' +
+        '</div>' +
+        (hotspots.length === 0 ? '<p style="color:#aaa;font-size:13px;padding:12px 0">אין נקודות עדיין — לחץ על התמונה כדי להוסיף</p>' :
+          hotspots.map(function(hs, idx) {
+            return '<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f8f9ff;border-radius:8px;margin-bottom:6px">' +
+              '<span style="background:#4361ee;color:#fff;font-size:11px;font-weight:700;padding:2px 7px;border-radius:10px;white-space:nowrap">' + Math.round(hs.x) + '%, ' + Math.round(hs.y) + '%</span>' +
+              '<input value="' + hs.label + '" placeholder="שם הנקודה" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.hotspots[' + idx + '].label=v;var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})(this.value)" style="flex:1;padding:5px 8px;border:1px solid #e0e0e0;border-radius:6px;font-size:12px">' +
+              '<input value="' + (hs.explanation || '') + '" placeholder="הסבר (אופציונלי)" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.hotspots[' + idx + '].explanation=v;var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})(this.value)" style="flex:2;padding:5px 8px;border:1px solid #e0e0e0;border-radius:6px;font-size:12px">' +
+              '<button onclick="(function(){var g=getGame(\'' + game.id + '\');g.hotspots.splice(' + idx + ',1);var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();renderHotspotAdmin(document.getElementById(\'q-content\'),g);})()" style="background:none;border:none;cursor:pointer;color:#e63946;font-size:16px;padding:0 4px">🗑</button>' +
+            '</div>';
+          }).join('')
+        ) +
+      '</div>';
+
+    // Click on image to add hotspot
+    var adminWrap = document.getElementById('hs-admin-wrap');
+    if (adminWrap) {
+      adminWrap.onclick = function(e) {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
+        var rect = adminWrap.getBoundingClientRect();
+        var xPct = Math.round(((e.clientX - rect.left) / rect.width) * 100 * 10) / 10;
+        var yPct = Math.round(((e.clientY - rect.top) / rect.height) * 100 * 10) / 10;
+        var label = prompt('שם לנקודה זו (למשל: "רמזור", "כפתור חירום"):');
+        if (!label) return;
+        var explanation = prompt('הסבר לנקודה (אופציונלי — השאר ריק לדילוג):') || '';
+        var g = getGame(game.id);
+        if (!g.hotspots) g.hotspots = [];
+        g.hotspots.push({ id: 'hs_' + Date.now(), x: xPct, y: yPct, label: label, explanation: explanation, radius: 8 });
+        // rebuild auto questions
+        g.hotspotQuestions = g.hotspots.map(function(hs) {
+          return { id: 'auto_' + hs.id, prompt: 'לחץ על: ' + hs.label, targetId: hs.id, type: 'click' };
+        });
+        var idx2 = DB.games.findIndex(function(x) { return x.id === g.id; });
+        if (idx2 >= 0) DB.games[idx2] = g;
+        saveDB();
+        renderHotspotAdmin(container, g);
+      };
+    }
+  }
+
+  var IMAGE_HOTSPOT = {
+    renderLobby: renderHotspotLobby,
+    startGame: function(game) {
+      if (!game) return;
+      startHotspotGame(game);
+    },
+    startAdminDemo: function() { alert('דמו לא זמין לסוג משחק זה עדיין'); },
+    renderQuestionsAdmin: function(container, game) {
+      renderHotspotAdmin(container, game);
+    }
+  };
+
+  window.GAME_REGISTRY = { image_timed: IMAGE_TIMED, text_quiz: TEXT_QUIZ, multi_stream: MULTI_STREAM, drag_drop: DRAG_DROP, sequence_order: SEQUENCE_ORDER, image_hotspot: IMAGE_HOTSPOT };
   window.getGameAccent = window.getGameAccent || function(id){ return '#4361ee'; };
   window.migrateDBPlatform = migrateDBPlatform;
   window.syncLegacyAliases = syncLegacyAliases;
@@ -4370,6 +6281,10 @@ function exportFullHTML(){
       '<div class="form-group"><label>סוג שאלה</label><select id="gw-template" onchange="renderWizardOptFields()">' +
       '<option value="image_timed">תמונה + טיימר</option>' +
       '<option value="text_quiz">שאלת טקסט (ללא תמונה)</option>' +
+      '<option value="image_hotspot">נקודות לחיצה על תמונה</option>' +
+      '<option value="drag_drop">גרירה — התאמה / מיקום על תמונה</option>' +
+      '<option value="sequence_order">רצף פעולות — סידור שלבים</option>' +
+      '<option value="multi_stream">חלוקת קשב — זרמים מקבילים</option>' +
       '<option value="video" disabled>וידאו (בקרוב)</option></select></div>' +
       '<div class="form-group"><label>מספר תשובות</label><select id="gw-optcount" onchange="renderWizardOptFields()">' +
       [2, 3, 4, 5, 6].map(function (n) { return '<option value="' + n + '"' + (n === 4 ? ' selected' : '') + '>' + n + '</option>'; }).join('') +
@@ -4672,6 +6587,18 @@ window.showExplanationBubble = function(explanation, isCorrect, onDismiss) {
 };
 // ── End Explanation Bubble ──────────────────────────────────────
 
+// ── Rail SVG icon picker ─────────────────────────────────────────
+window._RAIL_SVG_RED   = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="36" height="36"><rect x="15" y="1" width="3" height="38" rx="1" fill="#cc2222"/><rect x="22" y="1" width="3" height="38" rx="1" fill="#cc2222"/><rect x="10" y="5" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="12" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="19" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="26" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="33" width="20" height="3" rx="1" fill="#a0785a"/></svg>';
+window._RAIL_SVG_GREEN = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="36" height="36"><rect x="15" y="1" width="3" height="38" rx="1" fill="#2a9d2a"/><rect x="22" y="1" width="3" height="38" rx="1" fill="#2a9d2a"/><rect x="10" y="5" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="12" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="19" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="26" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="33" width="20" height="3" rx="1" fill="#a0785a"/></svg>';
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('[data-rail-target]');
+  if (!btn) return;
+  var targetId = btn.getAttribute('data-rail-target');
+  var color    = btn.getAttribute('data-rail-color');
+  var el = document.getElementById(targetId);
+  if (el) el.value = (color === 'red' ? window._RAIL_SVG_RED : window._RAIL_SVG_GREEN);
+});
+// ─────────────────────────────────────────────────────────────────
 window.renameTopic = function(topicId) {
   var topics = typeof window.getTopics === 'function' ? window.getTopics() : [];
   var topic = topics.find(function(t){ return t.id === topicId; });
@@ -4691,6 +6618,7 @@ window.renameTopic = function(topicId) {
     '<div class="form-group"><label>אייקון</label>' +
       '<input id="rt-icon" value="' + esc(topic.icon||'📁') + '" style="width:80px;font-size:22px;text-align:center;margin-bottom:8px">' +
       pickerHtml +
+      '<div style="display:flex;gap:6px;align-items:center;margin-top:6px;padding-top:6px;border-top:1px solid #eee"><span style="font-size:11px;color:#aaa">מסילה:</span><button type="button" title="מסילה אדומה" data-rail-target="rt-icon" data-rail-color="red" style="width:36px;height:36px;border:1.5px solid #e0e0e0;border-radius:7px;background:#fff;cursor:pointer;padding:2px;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="28" height="28"><rect x="15" y="1" width="3" height="38" rx="1" fill="#cc2222"/><rect x="22" y="1" width="3" height="38" rx="1" fill="#cc2222"/><rect x="10" y="5" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="12" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="19" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="26" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="33" width="20" height="3" rx="1" fill="#a0785a"/></svg></button><button type="button" title="מסילה ירוקה" data-rail-target="rt-icon" data-rail-color="green" style="width:36px;height:36px;border:1.5px solid #e0e0e0;border-radius:7px;background:#fff;cursor:pointer;padding:2px;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="28" height="28"><rect x="15" y="1" width="3" height="38" rx="1" fill="#2a9d2a"/><rect x="22" y="1" width="3" height="38" rx="1" fill="#2a9d2a"/><rect x="10" y="5" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="12" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="19" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="26" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="33" width="20" height="3" rx="1" fill="#a0785a"/></svg></button></div>' +
     '</div>' +
     '<div class="form-group"><label>שם הנושא</label><input id="rt-name" value="' + esc(topic.name||'') + '" placeholder="שם הנושא"></div>' +
     '<div class="form-group"><label>תיאור קצר</label><input id="rt-desc" value="' + esc(topic.description||'') + '" placeholder="תיאור הנושא"></div>' +
@@ -4739,6 +6667,7 @@ window.renameGame = function(gameId) {
     '<div class="form-group"><label>אייקון</label>' +
       '<input id="rg-icon" value="' + esc(currentIcon) + '" style="width:80px;font-size:22px;text-align:center;margin-bottom:6px">' +
       pickerHtml +
+      '<div style="display:flex;gap:6px;align-items:center;margin-top:6px;padding-top:6px;border-top:1px solid #eee"><span style="font-size:11px;color:#aaa">מסילה:</span><button type="button" title="מסילה אדומה" data-rail-target="rg-icon" data-rail-color="red" style="width:32px;height:32px;border:1.5px solid #e0e0e0;border-radius:7px;background:#fff;cursor:pointer;padding:2px;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="24" height="24"><rect x="15" y="1" width="3" height="38" rx="1" fill="#cc2222"/><rect x="22" y="1" width="3" height="38" rx="1" fill="#cc2222"/><rect x="10" y="5" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="12" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="19" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="26" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="33" width="20" height="3" rx="1" fill="#a0785a"/></svg></button><button type="button" title="מסילה ירוקה" data-rail-target="rg-icon" data-rail-color="green" style="width:32px;height:32px;border:1.5px solid #e0e0e0;border-radius:7px;background:#fff;cursor:pointer;padding:2px;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="24" height="24"><rect x="15" y="1" width="3" height="38" rx="1" fill="#2a9d2a"/><rect x="22" y="1" width="3" height="38" rx="1" fill="#2a9d2a"/><rect x="10" y="5" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="12" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="19" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="26" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="33" width="20" height="3" rx="1" fill="#a0785a"/></svg></button></div>' +
     '</div>' +
     '<div class="form-group"><label>שם המשחק</label><input id="rg-name" value="' + esc(currentName) + '" placeholder="שם המשחק"></div>' +
     '<button class="btn-primary w100" onclick="saveGameRename(\'' + gameId + '\')" style="padding:11px;margin-top:8px">שמור</button>'
@@ -4836,6 +6765,7 @@ window.openNewTopicDialog = function() {
     '<div class="form-group"><label>אייקון</label>' +
       '<input id="nt-icon" value="📁" style="width:80px;font-size:22px;text-align:center;margin-bottom:6px">' +
       pickerHtml +
+      '<div style="display:flex;gap:6px;align-items:center;margin-top:6px;padding-top:6px;border-top:1px solid #eee"><span style="font-size:11px;color:#aaa">מסילה:</span><button type="button" title="מסילה אדומה" data-rail-target="nt-icon" data-rail-color="red" style="width:32px;height:32px;border:1.5px solid #e0e0e0;border-radius:7px;background:#fff;cursor:pointer;padding:2px;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="24" height="24"><rect x="15" y="1" width="3" height="38" rx="1" fill="#cc2222"/><rect x="22" y="1" width="3" height="38" rx="1" fill="#cc2222"/><rect x="10" y="5" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="12" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="19" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="26" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="33" width="20" height="3" rx="1" fill="#a0785a"/></svg></button><button type="button" title="מסילה ירוקה" data-rail-target="nt-icon" data-rail-color="green" style="width:32px;height:32px;border:1.5px solid #e0e0e0;border-radius:7px;background:#fff;cursor:pointer;padding:2px;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="24" height="24"><rect x="15" y="1" width="3" height="38" rx="1" fill="#2a9d2a"/><rect x="22" y="1" width="3" height="38" rx="1" fill="#2a9d2a"/><rect x="10" y="5" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="12" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="19" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="26" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="33" width="20" height="3" rx="1" fill="#a0785a"/></svg></button></div>' +
     '</div>' +
     '<div class="form-group"><label>שם התיקייה</label><input id="nt-name" placeholder="למשל: בטיחות בדרכים" autofocus></div>' +
     '<div class="form-group"><label>תיאור קצר (אופציונלי)</label><input id="nt-desc" placeholder="תיאור קצר"></div>' +
@@ -4851,7 +6781,7 @@ window.submitNewTopic = function() {
   var color = (document.getElementById('nt-color')||{}).value || '#4361ee';
   if (!name.trim()) { alert('נא להזין שם לתיקייה'); return; }
   var id = 'topic_' + Date.now();
-  window.addTopic({ id: id, name: name.trim(), icon: ([...icon.trim()][0]||'📁'), description: desc.trim(), color: color, gameIds: [] });
+  window.addTopic({ id: id, name: name.trim(), icon: ([...icon.trim()][0]||'📁'), description: desc.trim(), color: color, gameIds: [], _keepEmpty: true });
   saveDB();
   closeModal();
   var el = document.getElementById('unified-topics-list');
