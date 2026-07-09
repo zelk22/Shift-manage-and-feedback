@@ -435,10 +435,9 @@ function loadStoredDB() {
   try { saved = JSON.parse(localStorage.getItem('igDB')||'null'); } catch(e) {}
   if(!saved) { try { saved = JSON.parse(sessionStorage.getItem('igDB')||'null'); } catch(e) {} }
 
-  // בדיקת schema
+  // בדיקת schema — השווה לגרסת DB_VERSION המלאה
   if(saved) {
-    const savedSchema = (saved._version||'').split('.')[0];
-    if(savedSchema !== SCHEMA_VERSION) {
+    if(saved._version !== DB_VERSION) {
       try{localStorage.removeItem('igDB');}catch(e){}
       try{sessionStorage.removeItem('igDB');}catch(e){}
       saved = null;
@@ -500,7 +499,7 @@ if(_rawDB && _rawDB._fromCookie) {
   // נמשיך לאתחל DB עם ברירות מחדל, ולאחר מכן נמזג
   window._pendingCookieSettings = _cookieSettings;
 }
-let DB={"_version": "3.16", "gameOrder": ["safety", "game"], "gameNames": {"game": "🎮 משחק דמו", "safety": "🦺 בטיחות"}, "gameHidden": {"game": false, "safety": false}, "settings": {"imageDisplayTime": 2, "answerTime": 20, "questionsPerSession": 50, "pointsPerCorrect": 10, "bonusForSpeed": false, "showCountdown": false, "showAnswerWithImage": false, "requireName": false}, "questions": [{"id": "q1", "text": "איזה פרי מופיע בתמונה?", "options": ["תפוח", "בננה", "תפוז", "ענב"], "correct": 0, "img": "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=600&h=400&fit=crop", "cat": "פירות", "diff": "easy", "active": true}, {"id": "q2", "text": "מה צבע השמיים?", "options": ["כחול", "אפור", "כתום", "ירוק"], "correct": 0, "img": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop", "cat": "טבע", "diff": "easy", "active": true}, {"id": "q3", "text": "כמה חיות מופיעות?", "options": ["1", "2", "3", "4"], "correct": 1, "img": "https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=600&h=400&fit=crop", "cat": "חיות", "diff": "medium", "active": true}, {"id": "q4", "text": "מה סוג הסביבה?", "options": ["יער", "מדבר", "עיר", "חוף ים"], "correct": 3, "img": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop", "cat": "סביבה", "diff": "medium", "active": true}, {"id": "q5", "text": "מה הצבע הדומיננטי?", "options": ["ירוק", "אדום", "כחול", "צהוב"], "correct": 0, "img": "https://images.unsplash.com/photo-1448375240586-882707db888b?w=600&h=400&fit=crop", "cat": "צבעים", "diff": "easy", "active": true}, {"id": "q6", "text": "איזו עונת שנה?", "options": ["קיץ", "חורף", "אביב", "סתיו"], "correct": 1, "img": "https://images.unsplash.com/photo-1491002052546-bf38f186af56?w=600&h=400&fit=crop", "cat": "עונות", "diff": "hard", "active": true}, {"id": "q7", "text": "מה מוצג במרכז?", "options": ["הר", "אגם", "שדה", "עץ"], "correct": 0, "img": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop", "cat": "טבע", "diff": "medium", "active": true}], "results": [], "safetySettings": {"imageDisplayTime": 2, "answerTime": 5, "questionsPerSession": 50, "pointsPerCorrect": 10, "bonusForSpeed": false, "showCountdown": false, "showAnswerWithImage": false, "filterLocation": "הכל", "filterDiff": "הכל", "requireName": false}, "safetyQuestions": [{"id": "sq1", "img": "https://lh3.googleusercontent.com/d/19jyS24fWyIG24Z1abOpeESZwoX6YaKtE", "correct": "עוצר", "diff": "בינוני", "loc": "כביש 1", "active": true}, {"id": "sq2", "img": "https://lh3.googleusercontent.com/d/1w_zZ41MpbnZhWi5KA4VsARJ5c2S-IDjM", "correct": "עוצר", "diff": "בינוני", "loc": "כביש 1", "active": true}, {"id": "sq3", "img": "https://lh3.googleusercontent.com/d/1b8DKGG-I0Ho_FKg6v9B--unJrOCLzPC5", "correct": "עוצר", "diff": "קל", "loc": "כביש 1", "active": true}, {"id": "sq4", "img": "https://lh3.googleusercontent.com/d/1Eq-LnKC9zzhPNqgQNfl0S1sqnolxG2iz", "correct": "עוצר", "diff": "בינוני", "loc": "כביש 1", "active": true}, {"id": "sq5", "img": "https://lh3.googleusercontent.com/d/1sjUI89DIvZvdwPP98y3H5W3YFkHibK6p", "correct": "עוצר", "diff": "קל", "loc": "כללי", "active": true}, {"id": "sq6", "img": "https://lh3.googleusercontent.com/d/1J-nL06lFxHX_QM6fE2Szk2Ts3PJ5x6Hf", "correct": "עוצר", "diff": "קל", "loc": "הארכה צפונית", "active": true}, {"id": "sq7", "img": "https://lh3.googleusercontent.com/d/1MtBghY7llX41CiCAYfB_pIb9gWTmRB8N", "correct": "נוסע", "diff": "קל", "loc": "הארכה צפונית", "active": true}, {"id": "sq8", "img": "https://lh3.googleusercontent.com/d/1xCXDk5xwCGX95Oad-CyTNG_e4S2YJ8Ej", "correct": "עוצר", "diff": "קל", "loc": "הארכה צפונית", "active": true}, {"id": "sq9", "img": "https://lh3.googleusercontent.com/d/1FPm8f19R1KrFGnvTN5QvLz5vwHKGlYQJ", "correct": "עוצר", "diff": "קל", "loc": "הארכה צפונית", "active": true}, {"id": "sq10", "img": "https://lh3.googleusercontent.com/d/1UwZjVKvzgauciOYcS8iSlO6QPdm7Cjbf", "correct": "עוצר", "diff": "קל", "loc": "הארכה צפונית", "active": true}, {"id": "sq11", "img": "https://lh3.googleusercontent.com/d/1tDO5Z5qWCv0L_L-dNS5FhtTROc8NKvTg", "correct": "עוצר", "diff": "בינוני", "loc": "הארכה צפונית", "active": true}, {"id": "sq12", "img": "https://lh3.googleusercontent.com/d/12dMCzl4VdKakpUTi-sNReqbBlMWJqDYS", "correct": "נוסע", "diff": "קל", "loc": "צפון", "active": true}, {"id": "sq13", "img": "https://lh3.googleusercontent.com/d/1pwYMYOZ0TI-ZYH7hKQ5rUK6MPNIjPhno", "correct": "עוצר", "diff": "קל", "loc": "הארכה צפונית", "active": true}, {"id": "sq14", "img": "https://lh3.googleusercontent.com/d/193SggiGzLQW7Ya5kCm7-4Ia6i-cN-hiw", "correct": "עוצר", "diff": "קל", "loc": "הארכה דרומית", "active": true}, {"id": "sq15", "img": "https://lh3.googleusercontent.com/d/1OumHj1xvK7-KjGaEuXFgtD-wJfuAwkVY", "correct": "עוצר", "diff": "קל", "loc": "צפון", "active": true}, {"id": "sq16", "img": "https://lh3.googleusercontent.com/d/1-b1k3BJiga4DSwrGBF5jSBMTNPxtgvZP", "correct": "נוסע", "diff": "קל", "loc": "הארכה דרומית", "active": true}, {"id": "sq17", "img": "https://lh3.googleusercontent.com/d/1noCZ-67CH9TOnsdASEvsRcWOPbXP518Y", "correct": "נוסע", "diff": "קל", "loc": "צפון", "active": true}, {"id": "sq18", "img": "https://lh3.googleusercontent.com/d/1zvFN18Xp906pnRplMeLVozthbuNL-tEb", "correct": "נוסע", "diff": "קל", "loc": "צפון", "active": true}, {"id": "sq19", "img": "https://lh3.googleusercontent.com/d/1LjnUPdYoAiy7XP6QU7Kba2P0ad3AK9rm", "correct": "נוסע", "diff": "קל", "loc": "צפון", "active": true}, {"id": "sq20", "img": "https://lh3.googleusercontent.com/d/1Cbufabe9kwr8z03_0O7Tq9jpyBf3dkzL", "correct": "עוצר", "diff": "קל", "loc": "כביש 1", "active": true}, {"id": "sq21", "img": "https://lh3.googleusercontent.com/d/1ccG7Xd2sRgLgIBR7vN_mZ_iLkGBtx_Iu", "correct": "נוסע", "diff": "קל", "loc": "הארכה צפונית", "active": true}, {"id": "sq22", "img": "https://lh3.googleusercontent.com/d/1Py8GEGBY0BKEp9mydzV2B7s5OMSGYy2F", "correct": "נוסע", "diff": "קל", "loc": "כביש 1", "active": true}, {"id": "sq23", "img": "https://lh3.googleusercontent.com/d/1MkgBIS8Fa9k02QGjGH0H865-7AXr47uE", "correct": "עוצר", "diff": "קל", "loc": "כביש 1", "active": true}, {"id": "sq24", "img": "https://lh3.googleusercontent.com/d/1W2f4qjwL10sH_OS568C6FmuSD7t22XUy", "correct": "עוצר", "diff": "קל", "loc": "כללי", "active": true}, {"id": "sq25", "img": "https://lh3.googleusercontent.com/d/1i-8J0fH5XIfXKEkFi6cJW9dzT1bnxH1s", "correct": "עוצר", "diff": "קל", "loc": "הארכה צפונית", "active": true}, {"id": "sq26", "img": "https://lh3.googleusercontent.com/d/1_zUaaHjOMeRvao22YKMizCfPzoJIQWLU", "correct": "עוצר", "diff": "בינוני", "loc": "צפון", "active": true}, {"id": "sq27", "img": "https://lh3.googleusercontent.com/d/1s2FFTicIR8RGhteaKpPwgSJCLYly7T6x", "correct": "נוסע", "diff": "בינוני", "loc": "מרכז העיר", "active": true}, {"id": "sq28", "img": "https://lh3.googleusercontent.com/d/1NY6uVZPKYPZpxKFqD-GERVS9iUGTi9x_", "correct": "עוצר", "diff": "קל", "loc": "הארכה צפונית", "active": true}, {"id": "sq29", "img": "https://lh3.googleusercontent.com/d/1WMU3yqzHTBNRcwSgqBQlpBSbVxjhFFg1", "correct": "נוסע", "diff": "בינוני", "loc": "מרכז העיר", "active": true}, {"id": "sq30", "img": "https://lh3.googleusercontent.com/d/1TibcfuFEifJoMDAwK3VfE0MAkmiTz1Cc", "correct": "עוצר", "diff": "בינוני", "loc": "מרכז העיר", "active": true}, {"id": "sq31", "img": "https://lh3.googleusercontent.com/d/1CTi_zz1-28NoluYnufUWjZhu6iXkmkqR", "correct": "נוסע", "diff": "קל", "loc": "כביש 1", "active": true}, {"id": "sq32", "img": "https://lh3.googleusercontent.com/d/1PM_t3VlLqH7xYDhCnxiLQL43RaIuWyna", "correct": "עוצר", "diff": "קל", "loc": "מרכז העיר", "active": true}, {"id": "sq33", "img": "https://lh3.googleusercontent.com/d/1yVDL316A8xV6YpAg3pkTtD7u-FTuAiEp", "correct": "עוצר", "diff": "קל", "loc": "מרכז העיר", "active": true}, {"id": "sq34", "img": "https://lh3.googleusercontent.com/d/1VZnIF7GmLQaYmyFXqZlkFXcUfEENKz-e", "correct": "נוסע", "diff": "קל", "loc": "הארכה דרומית", "active": true}, {"id": "sq35", "img": "https://lh3.googleusercontent.com/d/1Y6g6gF1mBU8gPuQbwZN14ktbA9iwMNTd", "correct": "עוצר", "diff": "קל", "loc": "מרכז העיר", "active": true}, {"id": "sq36", "img": "https://lh3.googleusercontent.com/d/14RdVnngoZGTAokl9fqhfYcVrTBh4ZW-z", "correct": "עוצר", "diff": "בינוני", "loc": "הארכה דרומית", "active": true}, {"id": "sq37", "img": "https://lh3.googleusercontent.com/d/1lBPJX3e7PZh14cTZgECC1t4TITGZXVOm", "correct": "עוצר", "diff": "קל", "loc": "דרום", "active": true}, {"id": "sq38", "img": "https://lh3.googleusercontent.com/d/1fat4qyCDOQZ19nsvHmqVfWg9YC0Q02O_", "correct": "עוצר", "diff": "בינוני", "loc": "דרום", "active": true}, {"id": "sq39", "img": "https://lh3.googleusercontent.com/d/1MdJ52tojPLJGhJAXVaj4Wovo8EBP1Atg", "correct": "עוצר", "diff": "קל", "loc": "דרום", "active": true}, {"id": "sq40", "img": "https://lh3.googleusercontent.com/d/1tk8f_BC5f4Lm1L1FmkJ-rUvBvEcmcd6I", "correct": "עוצר", "diff": "קל", "loc": "הארכה דרומית", "active": true}, {"id": "sq41", "img": "https://lh3.googleusercontent.com/d/1uSpnGMLZRdMEW4ThwmVex0PZF8QrT9eF", "correct": "עוצר", "diff": "קל", "loc": "הארכה צפונית", "active": true}, {"id": "sq42", "img": "https://lh3.googleusercontent.com/d/1d5EYM90NGcKzoUUPxe3QUthZH3glVT7q", "correct": "עוצר", "diff": "קל", "loc": "הארכה צפונית", "active": true}, {"id": "sq43", "img": "https://lh3.googleusercontent.com/d/1vmRxtKsAJ8lGeuF9zTgPqLBYGvFKMcnD", "correct": "נוסע", "diff": "קל", "loc": "הארכה דרומית", "active": true}, {"id": "sq44", "img": "https://lh3.googleusercontent.com/d/1KQ-THYZEs8eZIgxrye5rmNmoYaDxG0yl", "correct": "עוצר", "diff": "קל", "loc": "הארכה צפונית", "active": true}, {"id": "sq45", "img": "https://lh3.googleusercontent.com/d/1zN1zJyhIUeZO8muQOIJKZSFy2H1VE0Ao", "correct": "עוצר", "diff": "קשה", "loc": "הארכה דרומית", "active": true}, {"id": "sq46", "img": "https://lh3.googleusercontent.com/d/1veXIA6WqCaHpnpcjcRbxfx5pmQkPbmM7", "correct": "עוצר", "diff": "קל", "loc": "הארכה דרומית", "active": true}, {"id": "sq47", "img": "https://lh3.googleusercontent.com/d/1mHJU92N-4GYto8z9ys48H-DHWb5nDR9G", "correct": "עוצר", "diff": "בינוני", "loc": "הארכה דרומית", "active": true}, {"id": "sq48", "img": "https://lh3.googleusercontent.com/d/1TlUIbWCN1jCsT6XgMtY9uN1eigunVllv", "correct": "נוסע", "diff": "בינוני", "loc": "הארכה דרומית", "active": true}, {"id": "sq49", "img": "https://lh3.googleusercontent.com/d/1kuEdJxvTHbdHIWaswqDkH1_XnSYmSGKO", "correct": "עוצר", "diff": "בינוני", "loc": "כביש 1", "active": true}, {"id": "sq50", "img": "https://lh3.googleusercontent.com/d/1mKCcqSGELWKdXlFjhm01Con684dPqGrc", "correct": "נוסע", "diff": "קל", "loc": "הארכה דרומית", "active": true}, {"id": "sq51", "img": "https://lh3.googleusercontent.com/d/1fbQ2yM2RxczkD4m9fKGVKp34XCJE5JhV", "correct": "עוצר", "diff": "בינוני", "loc": "כביש 1", "active": true}, {"id": "sq52", "img": "https://lh3.googleusercontent.com/d/145uG5bkiCfxVl5Q3vxMf5rFJd-aIAbAR", "correct": "עוצר", "diff": "בינוני", "loc": "כביש 1", "active": true}, {"id": "sq53", "img": "https://lh3.googleusercontent.com/d/1ND3yDGclz5EwYHvU4dNi2NN-ctviuA3a", "correct": "עוצר", "diff": "בינוני", "loc": "כביש 1", "active": true}, {"id": "sq54", "img": "https://lh3.googleusercontent.com/d/1elsIUG2ijBrxkkpqHyd3n9NfkK7d2ynT", "correct": "עוצר", "diff": "קל", "loc": "כביש 1", "active": true}, {"id": "sq55", "img": "https://lh3.googleusercontent.com/d/1xaC1yP13xJ6lVPZ5iWTrZVqzPLa3TMJ1", "correct": "נוסע", "diff": "קל", "loc": "הארכה צפונית", "active": true}, {"id": "sq56", "img": "https://lh3.googleusercontent.com/d/187f8TpehxZhzzKnKDT-Zu3_aLjLqMH93", "correct": "נוסע", "diff": "קל", "loc": "צפון", "active": true}, {"id": "sq57", "img": "https://lh3.googleusercontent.com/d/1-5Kwmm2xBX8l6fIlsM_wFXWBbSywHAz8", "correct": "נוסע", "diff": "קל", "loc": "כללי", "active": true}, {"id": "sq58", "img": "https://lh3.googleusercontent.com/d/1BelZjlsBwhSWc_k4E2aXVNv8HM8ZTx-d", "correct": "נוסע", "diff": "קל", "loc": "צפון", "active": true}, {"id": "sq59", "img": "https://lh3.googleusercontent.com/d/10YlV4rHQGHUdGw2lL33baWtfO1TE4pHQ", "correct": "נוסע", "diff": "קל", "loc": "הארכה צפונית", "active": true}, {"id": "sq60", "img": "https://lh3.googleusercontent.com/d/1RSbG0DR1ZWv-F7gn17ot1vLN3uTYlnqv", "correct": "נוסע", "diff": "קל", "loc": "הארכה צפונית", "active": true}, {"id": "sq61", "img": "https://lh3.googleusercontent.com/d/1rm5sVJo03yvQRMYBJazWWJA4mQipFh2a", "correct": "נוסע", "diff": "קל", "loc": "צפון", "active": true}, {"id": "sq62", "img": "https://lh3.googleusercontent.com/d/1M_8OwAwh0-Nrti_HlF_nmttNyDeBRnb9", "correct": "נוסע", "diff": "קל", "loc": "צפון", "active": true}, {"id": "sq63", "img": "https://lh3.googleusercontent.com/d/1phAO0zlKox9ikBCAN79dtIicDOhA-I5M", "correct": "נוסע", "diff": "קל", "loc": "צפון", "active": true}, {"id": "sq64", "img": "https://lh3.googleusercontent.com/d/1_c6inorNiFM12j7cGZsmhPtG02cTu2z9", "correct": "נוסע", "diff": "קל", "loc": "מרכז העיר", "active": true}, {"id": "sq65", "img": "https://lh3.googleusercontent.com/d/1cJCA6Py_FWYpt6Isl8AxmnGQ6ildwNTn", "correct": "נוסע", "diff": "בינוני", "loc": "מרכז העיר", "active": true}, {"id": "sq66", "img": "https://lh3.googleusercontent.com/d/1XKOrzq1dAP0HKr5pQtRXjJFesG27e6By", "correct": "נוסע", "diff": "קל", "loc": "מרכז העיר", "active": true}, {"id": "sq67", "img": "https://lh3.googleusercontent.com/d/1Yb3r3FlX5KAvGwvkSdgICva3Fo51TST7", "correct": "נוסע", "diff": "קל", "loc": "הארכה דרומית", "active": true}, {"id": "sq68", "img": "https://lh3.googleusercontent.com/d/1uEPTyu9FBgFF-CGB_yodiW08GBJkq0F5", "correct": "נוסע", "diff": "קל", "loc": "הארכה דרומית", "active": true}, {"id": "sq69", "img": "https://lh3.googleusercontent.com/d/1MXPp0T9ldsFk1NGFx0TRjZRhcks_AjzZ", "correct": "נוסע", "diff": "קל", "loc": "הארכה דרומית", "active": true}, {"id": "sq70", "img": "https://lh3.googleusercontent.com/d/1KhAzRp1kU4mQODEaDkhj9c9bmzevd2Vy", "correct": "נוסע", "diff": "קל", "loc": "הארכה דרומית", "active": true}, {"id": "sq71", "img": "https://lh3.googleusercontent.com/d/1K5dhMILYKGCV5KbAQCzlQIhPXyxR3LYV", "correct": "נוסע", "diff": "קל", "loc": "הארכה דרומית", "active": true}, {"id": "sq72", "img": "https://lh3.googleusercontent.com/d/1yoZMShVKgwiO8Ro731r3o4jG2LNB7s56", "correct": "נוסע", "diff": "קל", "loc": "הארכה דרומית", "active": true}, {"id": "sq73", "img": "https://lh3.googleusercontent.com/d/1IvuFx3Scs-HSa_R4azbxRg-ws4fIyxOu", "correct": "נוסע", "diff": "קל", "loc": "הארכה דרומית", "active": true}, {"id": "sq74", "img": "https://lh3.googleusercontent.com/d/1fdJ2eb8ZJG41guey-8SAvBKQLULasAC1", "correct": "נוסע", "diff": "קל", "loc": "כביש 1", "active": true}, {"id": "sq75", "img": "https://lh3.googleusercontent.com/d/1T145yu7SPh53RXFQlyzXkMFvqg_G3ZeM", "correct": "עוצר", "diff": "קל", "loc": "כללי", "active": true}, {"id": "sq76", "img": "https://lh3.googleusercontent.com/d/1SshCDFhNvyJxj1QgVD39liBRmxAv5igD", "correct": "עוצר", "diff": "קל", "loc": "כללי", "active": true}, {"id": "sq77", "img": "https://lh3.googleusercontent.com/d/1xXS3sNl5o0ydRE8a65p9FsjV6VQvZhk7", "correct": "עוצר", "diff": "קל", "loc": "הארכה צפונית", "active": true}, {"id": "sq78", "img": "https://lh3.googleusercontent.com/d/1CgF9mLSdLOykLwYyWfQfx6Hnijp9ms_r", "correct": "עוצר", "diff": "קל", "loc": "הארכה צפונית", "active": true}, {"id": "sq79", "img": "https://lh3.googleusercontent.com/d/1vr5rMIOTIvt1XPJsnOSNumHnzq2NS0I1", "correct": "עוצר", "diff": "קל", "loc": "הארכה צפונית", "active": true}, {"id": "sq80", "img": "https://lh3.googleusercontent.com/d/1Irb4Mb6DhbPXw57cv5cNGnkW7aIjR8o9", "correct": "עוצר", "diff": "בינוני", "loc": "הארכה צפונית", "active": true}, {"id": "sq81", "img": "https://lh3.googleusercontent.com/d/1F-bBPIDnLVpLH0iyZRFVD5y2bNCE1olv", "correct": "עוצר", "diff": "קל", "loc": "הארכה דרומית", "active": true}, {"id": "sq82", "img": "https://lh3.googleusercontent.com/d/1W0cYidMW6uqxJNgzsIDYPhOklybJVqyU", "correct": "עוצר", "diff": "קל", "loc": "צפון", "active": true}, {"id": "sq83", "img": "https://lh3.googleusercontent.com/d/1kiBQW4ZOfgAlchbj7TW6lPDzqi08f296", "correct": "עוצר", "diff": "בינוני", "loc": "צפון", "active": true}, {"id": "sq84", "img": "https://lh3.googleusercontent.com/d/1rYuRtV8W8afVZCuSfAui9grRpNx07jJI", "correct": "עוצר", "diff": "קל", "loc": "צפון", "active": true}, {"id": "sq85", "img": "https://lh3.googleusercontent.com/d/1zbs1qwRJGQqzs2rDYK-bH90DtZbo2K8O", "correct": "עוצר", "diff": "בינוני", "loc": "צפון", "active": true}, {"id": "sq86", "img": "https://lh3.googleusercontent.com/d/1RpBy5Yy_ZOC-5CSL6BijQUriCIGHKBql", "correct": "עוצר", "diff": "קל", "loc": "הארכה צפונית", "active": true}, {"id": "sq87", "img": "https://lh3.googleusercontent.com/d/1FpetoUluja_3LR-HAB225gZqc9jM_sB3", "correct": "עוצר", "diff": "קל", "loc": "צפון", "active": true}, {"id": "sq88", "img": "https://lh3.googleusercontent.com/d/1wzzD0mxMygM2q5ufHipiJWH8NdRwGivs", "correct": "עוצר", "diff": "קל", "loc": "כביש 1", "active": true}, {"id": "sq89", "img": "https://lh3.googleusercontent.com/d/1L0Sy2_eAYbU1s_ip0hggURL52N8P6xZ2", "correct": "עוצר", "diff": "קל", "loc": "מרכז העיר", "active": true}, {"id": "sq90", "img": "https://lh3.googleusercontent.com/d/1v_ZACN6sH1kqV3xJTZMCXFpq5yEFGcRn", "correct": "עוצר", "diff": "קל", "loc": "מרכז העיר", "active": true}, {"id": "sq91", "img": "https://lh3.googleusercontent.com/d/1aF56cntIzAc6KimLoKG_kdpme1yj8Bm2", "correct": "עוצר", "diff": "קל", "loc": "דרום", "active": true}, {"id": "sq92", "img": "https://lh3.googleusercontent.com/d/1QdpVzeA-9eNyyEqX4cxLKxhJ5RP36Czz", "correct": "עוצר", "diff": "קל", "loc": "דרום", "active": true}, {"id": "sq93", "img": "https://lh3.googleusercontent.com/d/1urQ_7xkF1Kxl24RUiDPz5SwNtcXuNGx2", "correct": "עוצר", "diff": "קל", "loc": "דרום", "active": true}, {"id": "sq94", "img": "https://lh3.googleusercontent.com/d/1l4WYs7YKskI7El9gd6roik2ObpM9Wb08", "correct": "עוצר", "diff": "קל", "loc": "דרום", "active": true}, {"id": "sq95", "img": "https://lh3.googleusercontent.com/d/1M7kvY-wlkdPgZ3_QZRaZ6RezqucW89np", "correct": "עוצר", "diff": "בינוני", "loc": "דרום", "active": true}, {"id": "sq96", "img": "https://lh3.googleusercontent.com/d/1E6R8d-ohiXY8veYTjSiWSMGGbSclYAYg", "correct": "עוצר", "diff": "בינוני", "loc": "דרום", "active": true}, {"id": "sq97", "img": "https://lh3.googleusercontent.com/d/1kDqnU6c2XmhgYFSRXRvyOhfDLpLYmKy1", "correct": "עוצר", "diff": "קשה", "loc": "הארכה דרומית", "active": true}, {"id": "sq98", "img": "https://lh3.googleusercontent.com/d/1x4D5Tx-iEBq470nIxRgYdVqtFo_PCYqv", "correct": "עוצר", "diff": "בינוני", "loc": "הארכה דרומית", "active": true}, {"id": "sq99", "img": "https://lh3.googleusercontent.com/d/16aAj580j3_6Kvl003RIshQCwVMf3ZDrN", "correct": "עוצר", "diff": "בינוני", "loc": "הארכה דרומית", "active": true}, {"id": "sq100", "img": "https://lh3.googleusercontent.com/d/1b7ZHD9mdQD57tZAuK0WzQVi8U2IaiM5n", "correct": "עוצר", "diff": "קל", "loc": "הארכה דרומית", "active": true}, {"id": "sq101", "img": "https://lh3.googleusercontent.com/d/1ckf_9oqtyEAN6arbu6jhQlh8dbt5VJUa", "correct": "עוצר", "diff": "קל", "loc": "מרכז העיר", "active": true}, {"id": "sq102", "img": "https://lh3.googleusercontent.com/d/14Rv2yq8Nrnv0MvEsKJ79VMSUVmco1JhV", "correct": "עוצר", "diff": "קל", "loc": "מרכז העיר", "active": true}, {"id": "sq103", "img": "https://lh3.googleusercontent.com/d/1cs0Xt0UV9p_WSExhqJnCMKyT5aOr9NWh", "correct": "עוצר", "diff": "קל", "loc": "כביש 1", "active": true}, {"id": "sq104", "img": "https://lh3.googleusercontent.com/d/1-_JWg8qJBGJ_iowzXe2OHL-s4gSyszx0", "correct": "עוצר", "diff": "קל", "loc": "כביש 1", "active": true}, {"id": "sq105", "img": "https://lh3.googleusercontent.com/d/1Agb_DFw3QGRQjkqnlYYv0q_d40iUsMzw", "correct": "עוצר", "diff": "בינוני", "loc": "כביש 1", "active": true}, {"id": "sq106", "img": "https://lh3.googleusercontent.com/d/1lqZV8LyQmcIkX--376_sXyaRdb-YVcqr", "correct": "עוצר", "diff": "קל", "loc": "כביש 1", "active": true}, {"id": "sq107", "img": "https://lh3.googleusercontent.com/d/12tBzOBO4-Vgdl_KLg8H4TGqGlkFFhHAa", "correct": "עוצר", "diff": "קל", "loc": "כביש 1", "active": true}, {"id": "sq108", "img": "https://lh3.googleusercontent.com/d/1qaCDrjRhkDHpdf0fMr4zlCMMbzaRVZMu", "correct": "עוצר", "diff": "קל", "loc": "כביש 1", "active": true}, {"id": "sq109", "img": "https://lh3.googleusercontent.com/d/1U3bhIs43fOnC69UZEvAOPalYiSJcRXZb", "correct": "עוצר", "diff": "קל", "loc": "כביש 1", "active": true}, {"id": "sq110", "img": "https://lh3.googleusercontent.com/d/1LPbXtCc0gdlXM5MTVpc_cYf16L_i-eIw", "correct": "עוצר", "diff": "בינוני", "loc": "כביש 1", "active": true}, {"id": "sq111", "img": "https://lh3.googleusercontent.com/d/1lkO0mafyVNasOAUcRuuMIIolDJ351ONE", "correct": "עוצר", "diff": "בינוני", "loc": "כביש 1", "active": true}, {"id": "sq112", "img": "https://lh3.googleusercontent.com/d/149_dEBF8wHYasS98_WnPDV682D9fKAHv", "correct": "עוצר", "diff": "קל", "loc": "הארכה דרומית", "active": true}, {"id": "sq113", "img": "https://lh3.googleusercontent.com/d/1fZXFbPYffagdR6trD9ophKoIBjq7T6I0", "correct": "עוצר", "diff": "קל", "loc": "מרכז העיר", "active": true}, {"id": "sq114", "img": "https://lh3.googleusercontent.com/d/1BmaU5DGl5G5RGArC6-9DNe27mE0iED3c", "correct": "עוצר", "diff": "קל", "loc": "צפון", "active": true}], "safetyResults": []};
+let DB = _rawDB || /*__DB_DEFAULT_START__*/{"_version":"3.16","gameOrder":["safety","game","hours","load","vehicle","weather","documents","custom_1782967043816"],"gameNames":{"safety":"🦺 בטיחות","game":"🎮 משחק דמו","hours":"⏱ שעות נהיגה ומנוחה","load":"📦 העמסה ואבטחת משא","vehicle":"🔧 בדיקות טרם-נסיעה","weather":"🌧 נהיגה בתנאים קיצוניים","documents":"📄 מסמכים ורגולציה","custom_1782967043816":"🚏 התמצאות בתחנות"},"gameHidden":{"safety":false,"game":false,"hours":false,"load":false,"vehicle":false,"weather":false,"documents":false,"custom_1782967043816":false},"settings":{"imageDisplayTime":2,"answerTime":20,"questionsPerSession":50,"pointsPerCorrect":10,"bonusForSpeed":false,"showCountdown":false,"showAnswerWithImage":false,"requireName":false,"filterLocation":"הכל","filterDiff":"הכל"},"questions":[{"id":"q1","text":"איזה פרי מופיע בתמונה?","options":["תפוח","בננה","תפוז","ענב"],"correct":0,"img":"https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=600&h=400&fit=crop","cat":"פירות","diff":"easy","active":true},{"id":"q2","text":"מה צבע השמיים?","options":["כחול","אפור","כתום","ירוק"],"correct":0,"img":"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop","cat":"טבע","diff":"easy","active":true},{"id":"q3","text":"כמה חיות מופיעות?","options":["1","2","3","4"],"correct":1,"img":"https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=600&h=400&fit=crop","cat":"חיות","diff":"medium","active":true},{"id":"q4","text":"מה סוג הסביבה?","options":["יער","מדבר","עיר","חוף ים"],"correct":3,"img":"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop","cat":"סביבה","diff":"medium","active":true},{"id":"q5","text":"מה הצבע הדומיננטי?","options":["ירוק","אדום","כחול","צהוב"],"correct":0,"img":"https://images.unsplash.com/photo-1448375240586-882707db888b?w=600&h=400&fit=crop","cat":"צבעים","diff":"easy","active":true},{"id":"q6","text":"איזו עונת שנה?","options":["קיץ","חורף","אביב","סתיו"],"correct":1,"img":"https://images.unsplash.com/photo-1491002052546-bf38f186af56?w=600&h=400&fit=crop","cat":"עונות","diff":"hard","active":true},{"id":"q7","text":"מה מוצג במרכז?","options":["הר","אגם","שדה","עץ"],"correct":0,"img":"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop","cat":"טבע","diff":"medium","active":true}],"results":[],"safetySettings":{"imageDisplayTime":2,"answerTime":5,"questionsPerSession":50,"pointsPerCorrect":10,"bonusForSpeed":false,"showCountdown":false,"showAnswerWithImage":false,"requireName":false,"filterLocation":"הכל","filterDiff":"הכל"},"safetyQuestions":[{"id":"sq1","img":"https://lh3.googleusercontent.com/d/19jyS24fWyIG24Z1abOpeESZwoX6YaKtE","correct":"עוצר","diff":"בינוני","loc":"כביש 1","active":true},{"id":"sq2","img":"https://lh3.googleusercontent.com/d/1w_zZ41MpbnZhWi5KA4VsARJ5c2S-IDjM","correct":"עוצר","diff":"בינוני","loc":"כביש 1","active":true},{"id":"sq3","img":"https://lh3.googleusercontent.com/d/1b8DKGG-I0Ho_FKg6v9B--unJrOCLzPC5","correct":"עוצר","diff":"קל","loc":"כביש 1","active":true},{"id":"sq4","img":"https://lh3.googleusercontent.com/d/1Eq-LnKC9zzhPNqgQNfl0S1sqnolxG2iz","correct":"עוצר","diff":"בינוני","loc":"כביש 1","active":true},{"id":"sq5","img":"https://lh3.googleusercontent.com/d/1sjUI89DIvZvdwPP98y3H5W3YFkHibK6p","correct":"עוצר","diff":"קל","loc":"כללי","active":true},{"id":"sq6","img":"https://lh3.googleusercontent.com/d/1J-nL06lFxHX_QM6fE2Szk2Ts3PJ5x6Hf","correct":"עוצר","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq7","img":"https://lh3.googleusercontent.com/d/1MtBghY7llX41CiCAYfB_pIb9gWTmRB8N","correct":"נוסע","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq8","img":"https://lh3.googleusercontent.com/d/1xCXDk5xwCGX95Oad-CyTNG_e4S2YJ8Ej","correct":"עוצר","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq9","img":"https://lh3.googleusercontent.com/d/1FPm8f19R1KrFGnvTN5QvLz5vwHKGlYQJ","correct":"עוצר","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq10","img":"https://lh3.googleusercontent.com/d/1UwZjVKvzgauciOYcS8iSlO6QPdm7Cjbf","correct":"עוצר","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq11","img":"https://lh3.googleusercontent.com/d/1tDO5Z5qWCv0L_L-dNS5FhtTROc8NKvTg","correct":"עוצר","diff":"בינוני","loc":"הארכה צפונית","active":true},{"id":"sq12","img":"https://lh3.googleusercontent.com/d/12dMCzl4VdKakpUTi-sNReqbBlMWJqDYS","correct":"נוסע","diff":"קל","loc":"צפון","active":true},{"id":"sq13","img":"https://lh3.googleusercontent.com/d/1pwYMYOZ0TI-ZYH7hKQ5rUK6MPNIjPhno","correct":"עוצר","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq14","img":"https://lh3.googleusercontent.com/d/193SggiGzLQW7Ya5kCm7-4Ia6i-cN-hiw","correct":"עוצר","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq15","img":"https://lh3.googleusercontent.com/d/1OumHj1xvK7-KjGaEuXFgtD-wJfuAwkVY","correct":"עוצר","diff":"קל","loc":"צפון","active":true},{"id":"sq16","img":"https://lh3.googleusercontent.com/d/1-b1k3BJiga4DSwrGBF5jSBMTNPxtgvZP","correct":"נוסע","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq17","img":"https://lh3.googleusercontent.com/d/1noCZ-67CH9TOnsdASEvsRcWOPbXP518Y","correct":"נוסע","diff":"קל","loc":"צפון","active":true},{"id":"sq18","img":"https://lh3.googleusercontent.com/d/1zvFN18Xp906pnRplMeLVozthbuNL-tEb","correct":"נוסע","diff":"קל","loc":"צפון","active":true},{"id":"sq19","img":"https://lh3.googleusercontent.com/d/1LjnUPdYoAiy7XP6QU7Kba2P0ad3AK9rm","correct":"נוסע","diff":"קל","loc":"צפון","active":true},{"id":"sq20","img":"https://lh3.googleusercontent.com/d/1Cbufabe9kwr8z03_0O7Tq9jpyBf3dkzL","correct":"עוצר","diff":"קל","loc":"כביש 1","active":true},{"id":"sq21","img":"https://lh3.googleusercontent.com/d/1ccG7Xd2sRgLgIBR7vN_mZ_iLkGBtx_Iu","correct":"נוסע","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq22","img":"https://lh3.googleusercontent.com/d/1Py8GEGBY0BKEp9mydzV2B7s5OMSGYy2F","correct":"נוסע","diff":"קל","loc":"כביש 1","active":true},{"id":"sq23","img":"https://lh3.googleusercontent.com/d/1MkgBIS8Fa9k02QGjGH0H865-7AXr47uE","correct":"עוצר","diff":"קל","loc":"כביש 1","active":true},{"id":"sq24","img":"https://lh3.googleusercontent.com/d/1W2f4qjwL10sH_OS568C6FmuSD7t22XUy","correct":"עוצר","diff":"קל","loc":"כללי","active":true},{"id":"sq25","img":"https://lh3.googleusercontent.com/d/1i-8J0fH5XIfXKEkFi6cJW9dzT1bnxH1s","correct":"עוצר","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq26","img":"https://lh3.googleusercontent.com/d/1_zUaaHjOMeRvao22YKMizCfPzoJIQWLU","correct":"עוצר","diff":"בינוני","loc":"צפון","active":true},{"id":"sq27","img":"https://lh3.googleusercontent.com/d/1s2FFTicIR8RGhteaKpPwgSJCLYly7T6x","correct":"נוסע","diff":"בינוני","loc":"מרכז העיר","active":true},{"id":"sq28","img":"https://lh3.googleusercontent.com/d/1NY6uVZPKYPZpxKFqD-GERVS9iUGTi9x_","correct":"עוצר","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq29","img":"https://lh3.googleusercontent.com/d/1WMU3yqzHTBNRcwSgqBQlpBSbVxjhFFg1","correct":"נוסע","diff":"בינוני","loc":"מרכז העיר","active":true},{"id":"sq30","img":"https://lh3.googleusercontent.com/d/1TibcfuFEifJoMDAwK3VfE0MAkmiTz1Cc","correct":"עוצר","diff":"בינוני","loc":"מרכז העיר","active":true},{"id":"sq31","img":"https://lh3.googleusercontent.com/d/1CTi_zz1-28NoluYnufUWjZhu6iXkmkqR","correct":"נוסע","diff":"קל","loc":"כביש 1","active":true},{"id":"sq32","img":"https://lh3.googleusercontent.com/d/1PM_t3VlLqH7xYDhCnxiLQL43RaIuWyna","correct":"עוצר","diff":"קל","loc":"מרכז העיר","active":true},{"id":"sq33","img":"https://lh3.googleusercontent.com/d/1yVDL316A8xV6YpAg3pkTtD7u-FTuAiEp","correct":"עוצר","diff":"קל","loc":"מרכז העיר","active":true},{"id":"sq34","img":"https://lh3.googleusercontent.com/d/1VZnIF7GmLQaYmyFXqZlkFXcUfEENKz-e","correct":"נוסע","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq35","img":"https://lh3.googleusercontent.com/d/1Y6g6gF1mBU8gPuQbwZN14ktbA9iwMNTd","correct":"עוצר","diff":"קל","loc":"מרכז העיר","active":true},{"id":"sq36","img":"https://lh3.googleusercontent.com/d/14RdVnngoZGTAokl9fqhfYcVrTBh4ZW-z","correct":"עוצר","diff":"בינוני","loc":"הארכה דרומית","active":true},{"id":"sq37","img":"https://lh3.googleusercontent.com/d/1lBPJX3e7PZh14cTZgECC1t4TITGZXVOm","correct":"עוצר","diff":"קל","loc":"דרום","active":true},{"id":"sq38","img":"https://lh3.googleusercontent.com/d/1fat4qyCDOQZ19nsvHmqVfWg9YC0Q02O_","correct":"עוצר","diff":"בינוני","loc":"דרום","active":true},{"id":"sq39","img":"https://lh3.googleusercontent.com/d/1MdJ52tojPLJGhJAXVaj4Wovo8EBP1Atg","correct":"עוצר","diff":"קל","loc":"דרום","active":true},{"id":"sq40","img":"https://lh3.googleusercontent.com/d/1tk8f_BC5f4Lm1L1FmkJ-rUvBvEcmcd6I","correct":"עוצר","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq41","img":"https://lh3.googleusercontent.com/d/1uSpnGMLZRdMEW4ThwmVex0PZF8QrT9eF","correct":"עוצר","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq42","img":"https://lh3.googleusercontent.com/d/1d5EYM90NGcKzoUUPxe3QUthZH3glVT7q","correct":"עוצר","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq43","img":"https://lh3.googleusercontent.com/d/1vmRxtKsAJ8lGeuF9zTgPqLBYGvFKMcnD","correct":"נוסע","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq44","img":"https://lh3.googleusercontent.com/d/1KQ-THYZEs8eZIgxrye5rmNmoYaDxG0yl","correct":"עוצר","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq45","img":"https://lh3.googleusercontent.com/d/1zN1zJyhIUeZO8muQOIJKZSFy2H1VE0Ao","correct":"עוצר","diff":"קשה","loc":"הארכה דרומית","active":true},{"id":"sq46","img":"https://lh3.googleusercontent.com/d/1veXIA6WqCaHpnpcjcRbxfx5pmQkPbmM7","correct":"עוצר","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq47","img":"https://lh3.googleusercontent.com/d/1mHJU92N-4GYto8z9ys48H-DHWb5nDR9G","correct":"עוצר","diff":"בינוני","loc":"הארכה דרומית","active":true},{"id":"sq48","img":"https://lh3.googleusercontent.com/d/1TlUIbWCN1jCsT6XgMtY9uN1eigunVllv","correct":"נוסע","diff":"בינוני","loc":"הארכה דרומית","active":true},{"id":"sq49","img":"https://lh3.googleusercontent.com/d/1kuEdJxvTHbdHIWaswqDkH1_XnSYmSGKO","correct":"עוצר","diff":"בינוני","loc":"כביש 1","active":true},{"id":"sq50","img":"https://lh3.googleusercontent.com/d/1mKCcqSGELWKdXlFjhm01Con684dPqGrc","correct":"נוסע","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq51","img":"https://lh3.googleusercontent.com/d/1fbQ2yM2RxczkD4m9fKGVKp34XCJE5JhV","correct":"עוצר","diff":"בינוני","loc":"כביש 1","active":true},{"id":"sq52","img":"https://lh3.googleusercontent.com/d/145uG5bkiCfxVl5Q3vxMf5rFJd-aIAbAR","correct":"עוצר","diff":"בינוני","loc":"כביש 1","active":true},{"id":"sq53","img":"https://lh3.googleusercontent.com/d/1ND3yDGclz5EwYHvU4dNi2NN-ctviuA3a","correct":"עוצר","diff":"בינוני","loc":"כביש 1","active":true},{"id":"sq54","img":"https://lh3.googleusercontent.com/d/1elsIUG2ijBrxkkpqHyd3n9NfkK7d2ynT","correct":"עוצר","diff":"קל","loc":"כביש 1","active":true},{"id":"sq55","img":"https://lh3.googleusercontent.com/d/1xaC1yP13xJ6lVPZ5iWTrZVqzPLa3TMJ1","correct":"נוסע","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq56","img":"https://lh3.googleusercontent.com/d/187f8TpehxZhzzKnKDT-Zu3_aLjLqMH93","correct":"נוסע","diff":"קל","loc":"צפון","active":true},{"id":"sq57","img":"https://lh3.googleusercontent.com/d/1-5Kwmm2xBX8l6fIlsM_wFXWBbSywHAz8","correct":"נוסע","diff":"קל","loc":"כללי","active":true},{"id":"sq58","img":"https://lh3.googleusercontent.com/d/1BelZjlsBwhSWc_k4E2aXVNv8HM8ZTx-d","correct":"נוסע","diff":"קל","loc":"צפון","active":true},{"id":"sq59","img":"https://lh3.googleusercontent.com/d/10YlV4rHQGHUdGw2lL33baWtfO1TE4pHQ","correct":"נוסע","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq60","img":"https://lh3.googleusercontent.com/d/1RSbG0DR1ZWv-F7gn17ot1vLN3uTYlnqv","correct":"נוסע","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq61","img":"https://lh3.googleusercontent.com/d/1rm5sVJo03yvQRMYBJazWWJA4mQipFh2a","correct":"נוסע","diff":"קל","loc":"צפון","active":true},{"id":"sq62","img":"https://lh3.googleusercontent.com/d/1M_8OwAwh0-Nrti_HlF_nmttNyDeBRnb9","correct":"נוסע","diff":"קל","loc":"צפון","active":true},{"id":"sq63","img":"https://lh3.googleusercontent.com/d/1phAO0zlKox9ikBCAN79dtIicDOhA-I5M","correct":"נוסע","diff":"קל","loc":"צפון","active":true},{"id":"sq64","img":"https://lh3.googleusercontent.com/d/1_c6inorNiFM12j7cGZsmhPtG02cTu2z9","correct":"נוסע","diff":"קל","loc":"מרכז העיר","active":true},{"id":"sq65","img":"https://lh3.googleusercontent.com/d/1cJCA6Py_FWYpt6Isl8AxmnGQ6ildwNTn","correct":"נוסע","diff":"בינוני","loc":"מרכז העיר","active":true},{"id":"sq66","img":"https://lh3.googleusercontent.com/d/1XKOrzq1dAP0HKr5pQtRXjJFesG27e6By","correct":"נוסע","diff":"קל","loc":"מרכז העיר","active":true},{"id":"sq67","img":"https://lh3.googleusercontent.com/d/1Yb3r3FlX5KAvGwvkSdgICva3Fo51TST7","correct":"נוסע","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq68","img":"https://lh3.googleusercontent.com/d/1uEPTyu9FBgFF-CGB_yodiW08GBJkq0F5","correct":"נוסע","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq69","img":"https://lh3.googleusercontent.com/d/1MXPp0T9ldsFk1NGFx0TRjZRhcks_AjzZ","correct":"נוסע","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq70","img":"https://lh3.googleusercontent.com/d/1KhAzRp1kU4mQODEaDkhj9c9bmzevd2Vy","correct":"נוסע","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq71","img":"https://lh3.googleusercontent.com/d/1K5dhMILYKGCV5KbAQCzlQIhPXyxR3LYV","correct":"נוסע","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq72","img":"https://lh3.googleusercontent.com/d/1yoZMShVKgwiO8Ro731r3o4jG2LNB7s56","correct":"נוסע","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq73","img":"https://lh3.googleusercontent.com/d/1IvuFx3Scs-HSa_R4azbxRg-ws4fIyxOu","correct":"נוסע","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq74","img":"https://lh3.googleusercontent.com/d/1fdJ2eb8ZJG41guey-8SAvBKQLULasAC1","correct":"נוסע","diff":"קל","loc":"כביש 1","active":true},{"id":"sq75","img":"https://lh3.googleusercontent.com/d/1T145yu7SPh53RXFQlyzXkMFvqg_G3ZeM","correct":"עוצר","diff":"קל","loc":"כללי","active":true},{"id":"sq76","img":"https://lh3.googleusercontent.com/d/1SshCDFhNvyJxj1QgVD39liBRmxAv5igD","correct":"עוצר","diff":"קל","loc":"כללי","active":true},{"id":"sq77","img":"https://lh3.googleusercontent.com/d/1xXS3sNl5o0ydRE8a65p9FsjV6VQvZhk7","correct":"עוצר","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq78","img":"https://lh3.googleusercontent.com/d/1CgF9mLSdLOykLwYyWfQfx6Hnijp9ms_r","correct":"עוצר","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq79","img":"https://lh3.googleusercontent.com/d/1vr5rMIOTIvt1XPJsnOSNumHnzq2NS0I1","correct":"עוצר","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq80","img":"https://lh3.googleusercontent.com/d/1Irb4Mb6DhbPXw57cv5cNGnkW7aIjR8o9","correct":"עוצר","diff":"בינוני","loc":"הארכה צפונית","active":true},{"id":"sq81","img":"https://lh3.googleusercontent.com/d/1F-bBPIDnLVpLH0iyZRFVD5y2bNCE1olv","correct":"עוצר","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq82","img":"https://lh3.googleusercontent.com/d/1W0cYidMW6uqxJNgzsIDYPhOklybJVqyU","correct":"עוצר","diff":"קל","loc":"צפון","active":true},{"id":"sq83","img":"https://lh3.googleusercontent.com/d/1kiBQW4ZOfgAlchbj7TW6lPDzqi08f296","correct":"עוצר","diff":"בינוני","loc":"צפון","active":true},{"id":"sq84","img":"https://lh3.googleusercontent.com/d/1rYuRtV8W8afVZCuSfAui9grRpNx07jJI","correct":"עוצר","diff":"קל","loc":"צפון","active":true},{"id":"sq85","img":"https://lh3.googleusercontent.com/d/1zbs1qwRJGQqzs2rDYK-bH90DtZbo2K8O","correct":"עוצר","diff":"בינוני","loc":"צפון","active":true},{"id":"sq86","img":"https://lh3.googleusercontent.com/d/1RpBy5Yy_ZOC-5CSL6BijQUriCIGHKBql","correct":"עוצר","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq87","img":"https://lh3.googleusercontent.com/d/1FpetoUluja_3LR-HAB225gZqc9jM_sB3","correct":"עוצר","diff":"קל","loc":"צפון","active":true},{"id":"sq88","img":"https://lh3.googleusercontent.com/d/1wzzD0mxMygM2q5ufHipiJWH8NdRwGivs","correct":"עוצר","diff":"קל","loc":"כביש 1","active":true},{"id":"sq89","img":"https://lh3.googleusercontent.com/d/1L0Sy2_eAYbU1s_ip0hggURL52N8P6xZ2","correct":"עוצר","diff":"קל","loc":"מרכז העיר","active":true},{"id":"sq90","img":"https://lh3.googleusercontent.com/d/1v_ZACN6sH1kqV3xJTZMCXFpq5yEFGcRn","correct":"עוצר","diff":"קל","loc":"מרכז העיר","active":true},{"id":"sq91","img":"https://lh3.googleusercontent.com/d/1aF56cntIzAc6KimLoKG_kdpme1yj8Bm2","correct":"עוצר","diff":"קל","loc":"דרום","active":true},{"id":"sq92","img":"https://lh3.googleusercontent.com/d/1QdpVzeA-9eNyyEqX4cxLKxhJ5RP36Czz","correct":"עוצר","diff":"קל","loc":"דרום","active":true},{"id":"sq93","img":"https://lh3.googleusercontent.com/d/1urQ_7xkF1Kxl24RUiDPz5SwNtcXuNGx2","correct":"עוצר","diff":"קל","loc":"דרום","active":true},{"id":"sq94","img":"https://lh3.googleusercontent.com/d/1l4WYs7YKskI7El9gd6roik2ObpM9Wb08","correct":"עוצר","diff":"קל","loc":"דרום","active":true},{"id":"sq95","img":"https://lh3.googleusercontent.com/d/1M7kvY-wlkdPgZ3_QZRaZ6RezqucW89np","correct":"עוצר","diff":"בינוני","loc":"דרום","active":true},{"id":"sq96","img":"https://lh3.googleusercontent.com/d/1E6R8d-ohiXY8veYTjSiWSMGGbSclYAYg","correct":"עוצר","diff":"בינוני","loc":"דרום","active":true},{"id":"sq97","img":"https://lh3.googleusercontent.com/d/1kDqnU6c2XmhgYFSRXRvyOhfDLpLYmKy1","correct":"עוצר","diff":"קשה","loc":"הארכה דרומית","active":true},{"id":"sq98","img":"https://lh3.googleusercontent.com/d/1x4D5Tx-iEBq470nIxRgYdVqtFo_PCYqv","correct":"עוצר","diff":"בינוני","loc":"הארכה דרומית","active":true},{"id":"sq99","img":"https://lh3.googleusercontent.com/d/16aAj580j3_6Kvl003RIshQCwVMf3ZDrN","correct":"עוצר","diff":"בינוני","loc":"הארכה דרומית","active":true},{"id":"sq100","img":"https://lh3.googleusercontent.com/d/1b7ZHD9mdQD57tZAuK0WzQVi8U2IaiM5n","correct":"עוצר","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq101","img":"https://lh3.googleusercontent.com/d/1ckf_9oqtyEAN6arbu6jhQlh8dbt5VJUa","correct":"עוצר","diff":"קל","loc":"מרכז העיר","active":true},{"id":"sq102","img":"https://lh3.googleusercontent.com/d/14Rv2yq8Nrnv0MvEsKJ79VMSUVmco1JhV","correct":"עוצר","diff":"קל","loc":"מרכז העיר","active":true},{"id":"sq103","img":"https://lh3.googleusercontent.com/d/1cs0Xt0UV9p_WSExhqJnCMKyT5aOr9NWh","correct":"עוצר","diff":"קל","loc":"כביש 1","active":true},{"id":"sq104","img":"https://lh3.googleusercontent.com/d/1-_JWg8qJBGJ_iowzXe2OHL-s4gSyszx0","correct":"עוצר","diff":"קל","loc":"כביש 1","active":true},{"id":"sq105","img":"https://lh3.googleusercontent.com/d/1Agb_DFw3QGRQjkqnlYYv0q_d40iUsMzw","correct":"עוצר","diff":"בינוני","loc":"כביש 1","active":true},{"id":"sq106","img":"https://lh3.googleusercontent.com/d/1lqZV8LyQmcIkX--376_sXyaRdb-YVcqr","correct":"עוצר","diff":"קל","loc":"כביש 1","active":true},{"id":"sq107","img":"https://lh3.googleusercontent.com/d/12tBzOBO4-Vgdl_KLg8H4TGqGlkFFhHAa","correct":"עוצר","diff":"קל","loc":"כביש 1","active":true},{"id":"sq108","img":"https://lh3.googleusercontent.com/d/1qaCDrjRhkDHpdf0fMr4zlCMMbzaRVZMu","correct":"עוצר","diff":"קל","loc":"כביש 1","active":true},{"id":"sq109","img":"https://lh3.googleusercontent.com/d/1U3bhIs43fOnC69UZEvAOPalYiSJcRXZb","correct":"עוצר","diff":"קל","loc":"כביש 1","active":true},{"id":"sq110","img":"https://lh3.googleusercontent.com/d/1LPbXtCc0gdlXM5MTVpc_cYf16L_i-eIw","correct":"עוצר","diff":"בינוני","loc":"כביש 1","active":true},{"id":"sq111","img":"https://lh3.googleusercontent.com/d/1lkO0mafyVNasOAUcRuuMIIolDJ351ONE","correct":"עוצר","diff":"בינוני","loc":"כביש 1","active":true},{"id":"sq112","img":"https://lh3.googleusercontent.com/d/149_dEBF8wHYasS98_WnPDV682D9fKAHv","correct":"עוצר","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq113","img":"https://lh3.googleusercontent.com/d/1fZXFbPYffagdR6trD9ophKoIBjq7T6I0","correct":"עוצר","diff":"קל","loc":"מרכז העיר","active":true},{"id":"sq114","img":"https://lh3.googleusercontent.com/d/1BmaU5DGl5G5RGArC6-9DNe27mE0iED3c","correct":"עוצר","diff":"קל","loc":"צפון","active":true}],"safetyResults":[],"gameTemplates":{"image_timed":{"id":"image_timed","label":"תמונה + טיימר + תשובה","defaultSettings":{"imageDisplayTime":2,"answerTime":20,"questionsPerSession":50,"pointsPerCorrect":10,"bonusForSpeed":false,"showCountdown":false,"showAnswerWithImage":false,"requireName":false,"filterLocation":"הכל","filterDiff":"הכל"}},"text_quiz":{"id":"text_quiz","label":"שאלת טקסט (ללא תמונה)","defaultSettings":{"imageDisplayTime":0,"answerTime":20,"questionsPerSession":50,"pointsPerCorrect":10,"bonusForSpeed":false,"showCountdown":false,"showAnswerWithImage":true,"requireName":false,"filterLocation":"הכל","filterDiff":"הכל"}},"image_hotspot":{"id":"image_hotspot","label":"נקודות לחיצה על תמונה","defaultSettings":{"imageDisplayTime":0,"answerTime":30,"questionsPerSession":10,"pointsPerCorrect":10,"bonusForSpeed":false,"showCountdown":true,"showAnswerWithImage":false,"requireName":false,"filterLocation":"הכל","filterDiff":"הכל"}},"drag_drop":{"id":"drag_drop","label":"גרירה — התאמה / מיקום על תמונה","defaultSettings":{"imageDisplayTime":0,"answerTime":45,"questionsPerSession":10,"pointsPerCorrect":10,"bonusForSpeed":false,"showCountdown":true,"showAnswerWithImage":false,"requireName":false,"filterLocation":"הכל","filterDiff":"הכל"}},"sequence_order":{"id":"sequence_order","label":"רצף פעולות — סידור שלבים","defaultSettings":{"imageDisplayTime":0,"answerTime":60,"questionsPerSession":8,"pointsPerCorrect":10,"bonusForSpeed":false,"showCountdown":false,"showAnswerWithImage":false,"requireName":false,"filterLocation":"הכל","filterDiff":"הכל"}},"multi_stream":{"id":"multi_stream","label":"חלוקת קשב — זרמים מקבילים","defaultSettings":{"imageDisplayTime":0,"answerTime":35,"questionsPerSession":8,"pointsPerCorrect":10,"bonusForSpeed":false,"showCountdown":true,"showAnswerWithImage":false,"requireName":false,"filterLocation":"הכל","filterDiff":"הכל"}}},"questionsByGame":{"safety":[{"id":"sq1","img":"https://lh3.googleusercontent.com/d/19jyS24fWyIG24Z1abOpeESZwoX6YaKtE","correct":"עוצר","diff":"בינוני","loc":"כביש 1","active":true},{"id":"sq2","img":"https://lh3.googleusercontent.com/d/1w_zZ41MpbnZhWi5KA4VsARJ5c2S-IDjM","correct":"עוצר","diff":"בינוני","loc":"כביש 1","active":true},{"id":"sq3","img":"https://lh3.googleusercontent.com/d/1b8DKGG-I0Ho_FKg6v9B--unJrOCLzPC5","correct":"עוצר","diff":"קל","loc":"כביש 1","active":true},{"id":"sq4","img":"https://lh3.googleusercontent.com/d/1Eq-LnKC9zzhPNqgQNfl0S1sqnolxG2iz","correct":"עוצר","diff":"בינוני","loc":"כביש 1","active":true},{"id":"sq5","img":"https://lh3.googleusercontent.com/d/1sjUI89DIvZvdwPP98y3H5W3YFkHibK6p","correct":"עוצר","diff":"קל","loc":"כללי","active":true},{"id":"sq6","img":"https://lh3.googleusercontent.com/d/1J-nL06lFxHX_QM6fE2Szk2Ts3PJ5x6Hf","correct":"עוצר","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq7","img":"https://lh3.googleusercontent.com/d/1MtBghY7llX41CiCAYfB_pIb9gWTmRB8N","correct":"נוסע","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq8","img":"https://lh3.googleusercontent.com/d/1xCXDk5xwCGX95Oad-CyTNG_e4S2YJ8Ej","correct":"עוצר","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq9","img":"https://lh3.googleusercontent.com/d/1FPm8f19R1KrFGnvTN5QvLz5vwHKGlYQJ","correct":"עוצר","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq10","img":"https://lh3.googleusercontent.com/d/1UwZjVKvzgauciOYcS8iSlO6QPdm7Cjbf","correct":"עוצר","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq11","img":"https://lh3.googleusercontent.com/d/1tDO5Z5qWCv0L_L-dNS5FhtTROc8NKvTg","correct":"עוצר","diff":"בינוני","loc":"הארכה צפונית","active":true},{"id":"sq12","img":"https://lh3.googleusercontent.com/d/12dMCzl4VdKakpUTi-sNReqbBlMWJqDYS","correct":"נוסע","diff":"קל","loc":"צפון","active":true},{"id":"sq13","img":"https://lh3.googleusercontent.com/d/1pwYMYOZ0TI-ZYH7hKQ5rUK6MPNIjPhno","correct":"עוצר","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq14","img":"https://lh3.googleusercontent.com/d/193SggiGzLQW7Ya5kCm7-4Ia6i-cN-hiw","correct":"עוצר","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq15","img":"https://lh3.googleusercontent.com/d/1OumHj1xvK7-KjGaEuXFgtD-wJfuAwkVY","correct":"עוצר","diff":"קל","loc":"צפון","active":true},{"id":"sq16","img":"https://lh3.googleusercontent.com/d/1-b1k3BJiga4DSwrGBF5jSBMTNPxtgvZP","correct":"נוסע","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq17","img":"https://lh3.googleusercontent.com/d/1noCZ-67CH9TOnsdASEvsRcWOPbXP518Y","correct":"נוסע","diff":"קל","loc":"צפון","active":true},{"id":"sq18","img":"https://lh3.googleusercontent.com/d/1zvFN18Xp906pnRplMeLVozthbuNL-tEb","correct":"נוסע","diff":"קל","loc":"צפון","active":true},{"id":"sq19","img":"https://lh3.googleusercontent.com/d/1LjnUPdYoAiy7XP6QU7Kba2P0ad3AK9rm","correct":"נוסע","diff":"קל","loc":"צפון","active":true},{"id":"sq20","img":"https://lh3.googleusercontent.com/d/1Cbufabe9kwr8z03_0O7Tq9jpyBf3dkzL","correct":"עוצר","diff":"קל","loc":"כביש 1","active":true},{"id":"sq21","img":"https://lh3.googleusercontent.com/d/1ccG7Xd2sRgLgIBR7vN_mZ_iLkGBtx_Iu","correct":"נוסע","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq22","img":"https://lh3.googleusercontent.com/d/1Py8GEGBY0BKEp9mydzV2B7s5OMSGYy2F","correct":"נוסע","diff":"קל","loc":"כביש 1","active":true},{"id":"sq23","img":"https://lh3.googleusercontent.com/d/1MkgBIS8Fa9k02QGjGH0H865-7AXr47uE","correct":"עוצר","diff":"קל","loc":"כביש 1","active":true},{"id":"sq24","img":"https://lh3.googleusercontent.com/d/1W2f4qjwL10sH_OS568C6FmuSD7t22XUy","correct":"עוצר","diff":"קל","loc":"כללי","active":true},{"id":"sq25","img":"https://lh3.googleusercontent.com/d/1i-8J0fH5XIfXKEkFi6cJW9dzT1bnxH1s","correct":"עוצר","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq26","img":"https://lh3.googleusercontent.com/d/1_zUaaHjOMeRvao22YKMizCfPzoJIQWLU","correct":"עוצר","diff":"בינוני","loc":"צפון","active":true},{"id":"sq27","img":"https://lh3.googleusercontent.com/d/1s2FFTicIR8RGhteaKpPwgSJCLYly7T6x","correct":"נוסע","diff":"בינוני","loc":"מרכז העיר","active":true},{"id":"sq28","img":"https://lh3.googleusercontent.com/d/1NY6uVZPKYPZpxKFqD-GERVS9iUGTi9x_","correct":"עוצר","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq29","img":"https://lh3.googleusercontent.com/d/1WMU3yqzHTBNRcwSgqBQlpBSbVxjhFFg1","correct":"נוסע","diff":"בינוני","loc":"מרכז העיר","active":true},{"id":"sq30","img":"https://lh3.googleusercontent.com/d/1TibcfuFEifJoMDAwK3VfE0MAkmiTz1Cc","correct":"עוצר","diff":"בינוני","loc":"מרכז העיר","active":true},{"id":"sq31","img":"https://lh3.googleusercontent.com/d/1CTi_zz1-28NoluYnufUWjZhu6iXkmkqR","correct":"נוסע","diff":"קל","loc":"כביש 1","active":true},{"id":"sq32","img":"https://lh3.googleusercontent.com/d/1PM_t3VlLqH7xYDhCnxiLQL43RaIuWyna","correct":"עוצר","diff":"קל","loc":"מרכז העיר","active":true},{"id":"sq33","img":"https://lh3.googleusercontent.com/d/1yVDL316A8xV6YpAg3pkTtD7u-FTuAiEp","correct":"עוצר","diff":"קל","loc":"מרכז העיר","active":true},{"id":"sq34","img":"https://lh3.googleusercontent.com/d/1VZnIF7GmLQaYmyFXqZlkFXcUfEENKz-e","correct":"נוסע","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq35","img":"https://lh3.googleusercontent.com/d/1Y6g6gF1mBU8gPuQbwZN14ktbA9iwMNTd","correct":"עוצר","diff":"קל","loc":"מרכז העיר","active":true},{"id":"sq36","img":"https://lh3.googleusercontent.com/d/14RdVnngoZGTAokl9fqhfYcVrTBh4ZW-z","correct":"עוצר","diff":"בינוני","loc":"הארכה דרומית","active":true},{"id":"sq37","img":"https://lh3.googleusercontent.com/d/1lBPJX3e7PZh14cTZgECC1t4TITGZXVOm","correct":"עוצר","diff":"קל","loc":"דרום","active":true},{"id":"sq38","img":"https://lh3.googleusercontent.com/d/1fat4qyCDOQZ19nsvHmqVfWg9YC0Q02O_","correct":"עוצר","diff":"בינוני","loc":"דרום","active":true},{"id":"sq39","img":"https://lh3.googleusercontent.com/d/1MdJ52tojPLJGhJAXVaj4Wovo8EBP1Atg","correct":"עוצר","diff":"קל","loc":"דרום","active":true},{"id":"sq40","img":"https://lh3.googleusercontent.com/d/1tk8f_BC5f4Lm1L1FmkJ-rUvBvEcmcd6I","correct":"עוצר","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq41","img":"https://lh3.googleusercontent.com/d/1uSpnGMLZRdMEW4ThwmVex0PZF8QrT9eF","correct":"עוצר","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq42","img":"https://lh3.googleusercontent.com/d/1d5EYM90NGcKzoUUPxe3QUthZH3glVT7q","correct":"עוצר","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq43","img":"https://lh3.googleusercontent.com/d/1vmRxtKsAJ8lGeuF9zTgPqLBYGvFKMcnD","correct":"נוסע","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq44","img":"https://lh3.googleusercontent.com/d/1KQ-THYZEs8eZIgxrye5rmNmoYaDxG0yl","correct":"עוצר","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq45","img":"https://lh3.googleusercontent.com/d/1zN1zJyhIUeZO8muQOIJKZSFy2H1VE0Ao","correct":"עוצר","diff":"קשה","loc":"הארכה דרומית","active":true},{"id":"sq46","img":"https://lh3.googleusercontent.com/d/1veXIA6WqCaHpnpcjcRbxfx5pmQkPbmM7","correct":"עוצר","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq47","img":"https://lh3.googleusercontent.com/d/1mHJU92N-4GYto8z9ys48H-DHWb5nDR9G","correct":"עוצר","diff":"בינוני","loc":"הארכה דרומית","active":true},{"id":"sq48","img":"https://lh3.googleusercontent.com/d/1TlUIbWCN1jCsT6XgMtY9uN1eigunVllv","correct":"נוסע","diff":"בינוני","loc":"הארכה דרומית","active":true},{"id":"sq49","img":"https://lh3.googleusercontent.com/d/1kuEdJxvTHbdHIWaswqDkH1_XnSYmSGKO","correct":"עוצר","diff":"בינוני","loc":"כביש 1","active":true},{"id":"sq50","img":"https://lh3.googleusercontent.com/d/1mKCcqSGELWKdXlFjhm01Con684dPqGrc","correct":"נוסע","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq51","img":"https://lh3.googleusercontent.com/d/1fbQ2yM2RxczkD4m9fKGVKp34XCJE5JhV","correct":"עוצר","diff":"בינוני","loc":"כביש 1","active":true},{"id":"sq52","img":"https://lh3.googleusercontent.com/d/145uG5bkiCfxVl5Q3vxMf5rFJd-aIAbAR","correct":"עוצר","diff":"בינוני","loc":"כביש 1","active":true},{"id":"sq53","img":"https://lh3.googleusercontent.com/d/1ND3yDGclz5EwYHvU4dNi2NN-ctviuA3a","correct":"עוצר","diff":"בינוני","loc":"כביש 1","active":true},{"id":"sq54","img":"https://lh3.googleusercontent.com/d/1elsIUG2ijBrxkkpqHyd3n9NfkK7d2ynT","correct":"עוצר","diff":"קל","loc":"כביש 1","active":true},{"id":"sq55","img":"https://lh3.googleusercontent.com/d/1xaC1yP13xJ6lVPZ5iWTrZVqzPLa3TMJ1","correct":"נוסע","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq56","img":"https://lh3.googleusercontent.com/d/187f8TpehxZhzzKnKDT-Zu3_aLjLqMH93","correct":"נוסע","diff":"קל","loc":"צפון","active":true},{"id":"sq57","img":"https://lh3.googleusercontent.com/d/1-5Kwmm2xBX8l6fIlsM_wFXWBbSywHAz8","correct":"נוסע","diff":"קל","loc":"כללי","active":true},{"id":"sq58","img":"https://lh3.googleusercontent.com/d/1BelZjlsBwhSWc_k4E2aXVNv8HM8ZTx-d","correct":"נוסע","diff":"קל","loc":"צפון","active":true},{"id":"sq59","img":"https://lh3.googleusercontent.com/d/10YlV4rHQGHUdGw2lL33baWtfO1TE4pHQ","correct":"נוסע","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq60","img":"https://lh3.googleusercontent.com/d/1RSbG0DR1ZWv-F7gn17ot1vLN3uTYlnqv","correct":"נוסע","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq61","img":"https://lh3.googleusercontent.com/d/1rm5sVJo03yvQRMYBJazWWJA4mQipFh2a","correct":"נוסע","diff":"קל","loc":"צפון","active":true},{"id":"sq62","img":"https://lh3.googleusercontent.com/d/1M_8OwAwh0-Nrti_HlF_nmttNyDeBRnb9","correct":"נוסע","diff":"קל","loc":"צפון","active":true},{"id":"sq63","img":"https://lh3.googleusercontent.com/d/1phAO0zlKox9ikBCAN79dtIicDOhA-I5M","correct":"נוסע","diff":"קל","loc":"צפון","active":true},{"id":"sq64","img":"https://lh3.googleusercontent.com/d/1_c6inorNiFM12j7cGZsmhPtG02cTu2z9","correct":"נוסע","diff":"קל","loc":"מרכז העיר","active":true},{"id":"sq65","img":"https://lh3.googleusercontent.com/d/1cJCA6Py_FWYpt6Isl8AxmnGQ6ildwNTn","correct":"נוסע","diff":"בינוני","loc":"מרכז העיר","active":true},{"id":"sq66","img":"https://lh3.googleusercontent.com/d/1XKOrzq1dAP0HKr5pQtRXjJFesG27e6By","correct":"נוסע","diff":"קל","loc":"מרכז העיר","active":true},{"id":"sq67","img":"https://lh3.googleusercontent.com/d/1Yb3r3FlX5KAvGwvkSdgICva3Fo51TST7","correct":"נוסע","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq68","img":"https://lh3.googleusercontent.com/d/1uEPTyu9FBgFF-CGB_yodiW08GBJkq0F5","correct":"נוסע","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq69","img":"https://lh3.googleusercontent.com/d/1MXPp0T9ldsFk1NGFx0TRjZRhcks_AjzZ","correct":"נוסע","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq70","img":"https://lh3.googleusercontent.com/d/1KhAzRp1kU4mQODEaDkhj9c9bmzevd2Vy","correct":"נוסע","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq71","img":"https://lh3.googleusercontent.com/d/1K5dhMILYKGCV5KbAQCzlQIhPXyxR3LYV","correct":"נוסע","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq72","img":"https://lh3.googleusercontent.com/d/1yoZMShVKgwiO8Ro731r3o4jG2LNB7s56","correct":"נוסע","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq73","img":"https://lh3.googleusercontent.com/d/1IvuFx3Scs-HSa_R4azbxRg-ws4fIyxOu","correct":"נוסע","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq74","img":"https://lh3.googleusercontent.com/d/1fdJ2eb8ZJG41guey-8SAvBKQLULasAC1","correct":"נוסע","diff":"קל","loc":"כביש 1","active":true},{"id":"sq75","img":"https://lh3.googleusercontent.com/d/1T145yu7SPh53RXFQlyzXkMFvqg_G3ZeM","correct":"עוצר","diff":"קל","loc":"כללי","active":true},{"id":"sq76","img":"https://lh3.googleusercontent.com/d/1SshCDFhNvyJxj1QgVD39liBRmxAv5igD","correct":"עוצר","diff":"קל","loc":"כללי","active":true},{"id":"sq77","img":"https://lh3.googleusercontent.com/d/1xXS3sNl5o0ydRE8a65p9FsjV6VQvZhk7","correct":"עוצר","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq78","img":"https://lh3.googleusercontent.com/d/1CgF9mLSdLOykLwYyWfQfx6Hnijp9ms_r","correct":"עוצר","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq79","img":"https://lh3.googleusercontent.com/d/1vr5rMIOTIvt1XPJsnOSNumHnzq2NS0I1","correct":"עוצר","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq80","img":"https://lh3.googleusercontent.com/d/1Irb4Mb6DhbPXw57cv5cNGnkW7aIjR8o9","correct":"עוצר","diff":"בינוני","loc":"הארכה צפונית","active":true},{"id":"sq81","img":"https://lh3.googleusercontent.com/d/1F-bBPIDnLVpLH0iyZRFVD5y2bNCE1olv","correct":"עוצר","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq82","img":"https://lh3.googleusercontent.com/d/1W0cYidMW6uqxJNgzsIDYPhOklybJVqyU","correct":"עוצר","diff":"קל","loc":"צפון","active":true},{"id":"sq83","img":"https://lh3.googleusercontent.com/d/1kiBQW4ZOfgAlchbj7TW6lPDzqi08f296","correct":"עוצר","diff":"בינוני","loc":"צפון","active":true},{"id":"sq84","img":"https://lh3.googleusercontent.com/d/1rYuRtV8W8afVZCuSfAui9grRpNx07jJI","correct":"עוצר","diff":"קל","loc":"צפון","active":true},{"id":"sq85","img":"https://lh3.googleusercontent.com/d/1zbs1qwRJGQqzs2rDYK-bH90DtZbo2K8O","correct":"עוצר","diff":"בינוני","loc":"צפון","active":true},{"id":"sq86","img":"https://lh3.googleusercontent.com/d/1RpBy5Yy_ZOC-5CSL6BijQUriCIGHKBql","correct":"עוצר","diff":"קל","loc":"הארכה צפונית","active":true},{"id":"sq87","img":"https://lh3.googleusercontent.com/d/1FpetoUluja_3LR-HAB225gZqc9jM_sB3","correct":"עוצר","diff":"קל","loc":"צפון","active":true},{"id":"sq88","img":"https://lh3.googleusercontent.com/d/1wzzD0mxMygM2q5ufHipiJWH8NdRwGivs","correct":"עוצר","diff":"קל","loc":"כביש 1","active":true},{"id":"sq89","img":"https://lh3.googleusercontent.com/d/1L0Sy2_eAYbU1s_ip0hggURL52N8P6xZ2","correct":"עוצר","diff":"קל","loc":"מרכז העיר","active":true},{"id":"sq90","img":"https://lh3.googleusercontent.com/d/1v_ZACN6sH1kqV3xJTZMCXFpq5yEFGcRn","correct":"עוצר","diff":"קל","loc":"מרכז העיר","active":true},{"id":"sq91","img":"https://lh3.googleusercontent.com/d/1aF56cntIzAc6KimLoKG_kdpme1yj8Bm2","correct":"עוצר","diff":"קל","loc":"דרום","active":true},{"id":"sq92","img":"https://lh3.googleusercontent.com/d/1QdpVzeA-9eNyyEqX4cxLKxhJ5RP36Czz","correct":"עוצר","diff":"קל","loc":"דרום","active":true},{"id":"sq93","img":"https://lh3.googleusercontent.com/d/1urQ_7xkF1Kxl24RUiDPz5SwNtcXuNGx2","correct":"עוצר","diff":"קל","loc":"דרום","active":true},{"id":"sq94","img":"https://lh3.googleusercontent.com/d/1l4WYs7YKskI7El9gd6roik2ObpM9Wb08","correct":"עוצר","diff":"קל","loc":"דרום","active":true},{"id":"sq95","img":"https://lh3.googleusercontent.com/d/1M7kvY-wlkdPgZ3_QZRaZ6RezqucW89np","correct":"עוצר","diff":"בינוני","loc":"דרום","active":true},{"id":"sq96","img":"https://lh3.googleusercontent.com/d/1E6R8d-ohiXY8veYTjSiWSMGGbSclYAYg","correct":"עוצר","diff":"בינוני","loc":"דרום","active":true},{"id":"sq97","img":"https://lh3.googleusercontent.com/d/1kDqnU6c2XmhgYFSRXRvyOhfDLpLYmKy1","correct":"עוצר","diff":"קשה","loc":"הארכה דרומית","active":true},{"id":"sq98","img":"https://lh3.googleusercontent.com/d/1x4D5Tx-iEBq470nIxRgYdVqtFo_PCYqv","correct":"עוצר","diff":"בינוני","loc":"הארכה דרומית","active":true},{"id":"sq99","img":"https://lh3.googleusercontent.com/d/16aAj580j3_6Kvl003RIshQCwVMf3ZDrN","correct":"עוצר","diff":"בינוני","loc":"הארכה דרומית","active":true},{"id":"sq100","img":"https://lh3.googleusercontent.com/d/1b7ZHD9mdQD57tZAuK0WzQVi8U2IaiM5n","correct":"עוצר","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq101","img":"https://lh3.googleusercontent.com/d/1ckf_9oqtyEAN6arbu6jhQlh8dbt5VJUa","correct":"עוצר","diff":"קל","loc":"מרכז העיר","active":true},{"id":"sq102","img":"https://lh3.googleusercontent.com/d/14Rv2yq8Nrnv0MvEsKJ79VMSUVmco1JhV","correct":"עוצר","diff":"קל","loc":"מרכז העיר","active":true},{"id":"sq103","img":"https://lh3.googleusercontent.com/d/1cs0Xt0UV9p_WSExhqJnCMKyT5aOr9NWh","correct":"עוצר","diff":"קל","loc":"כביש 1","active":true},{"id":"sq104","img":"https://lh3.googleusercontent.com/d/1-_JWg8qJBGJ_iowzXe2OHL-s4gSyszx0","correct":"עוצר","diff":"קל","loc":"כביש 1","active":true},{"id":"sq105","img":"https://lh3.googleusercontent.com/d/1Agb_DFw3QGRQjkqnlYYv0q_d40iUsMzw","correct":"עוצר","diff":"בינוני","loc":"כביש 1","active":true},{"id":"sq106","img":"https://lh3.googleusercontent.com/d/1lqZV8LyQmcIkX--376_sXyaRdb-YVcqr","correct":"עוצר","diff":"קל","loc":"כביש 1","active":true},{"id":"sq107","img":"https://lh3.googleusercontent.com/d/12tBzOBO4-Vgdl_KLg8H4TGqGlkFFhHAa","correct":"עוצר","diff":"קל","loc":"כביש 1","active":true},{"id":"sq108","img":"https://lh3.googleusercontent.com/d/1qaCDrjRhkDHpdf0fMr4zlCMMbzaRVZMu","correct":"עוצר","diff":"קל","loc":"כביש 1","active":true},{"id":"sq109","img":"https://lh3.googleusercontent.com/d/1U3bhIs43fOnC69UZEvAOPalYiSJcRXZb","correct":"עוצר","diff":"קל","loc":"כביש 1","active":true},{"id":"sq110","img":"https://lh3.googleusercontent.com/d/1LPbXtCc0gdlXM5MTVpc_cYf16L_i-eIw","correct":"עוצר","diff":"בינוני","loc":"כביש 1","active":true},{"id":"sq111","img":"https://lh3.googleusercontent.com/d/1lkO0mafyVNasOAUcRuuMIIolDJ351ONE","correct":"עוצר","diff":"בינוני","loc":"כביש 1","active":true},{"id":"sq112","img":"https://lh3.googleusercontent.com/d/149_dEBF8wHYasS98_WnPDV682D9fKAHv","correct":"עוצר","diff":"קל","loc":"הארכה דרומית","active":true},{"id":"sq113","img":"https://lh3.googleusercontent.com/d/1fZXFbPYffagdR6trD9ophKoIBjq7T6I0","correct":"עוצר","diff":"קל","loc":"מרכז העיר","active":true},{"id":"sq114","img":"https://lh3.googleusercontent.com/d/1BmaU5DGl5G5RGArC6-9DNe27mE0iED3c","correct":"עוצר","diff":"קל","loc":"צפון","active":true}],"game":[{"id":"q1","text":"איזה פרי מופיע בתמונה?","options":["תפוח","בננה","תפוז","ענב"],"correct":0,"img":"https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=600&h=400&fit=crop","cat":"פירות","diff":"easy","active":true},{"id":"q2","text":"מה צבע השמיים?","options":["כחול","אפור","כתום","ירוק"],"correct":0,"img":"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop","cat":"טבע","diff":"easy","active":true},{"id":"q3","text":"כמה חיות מופיעות?","options":["1","2","3","4"],"correct":1,"img":"https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=600&h=400&fit=crop","cat":"חיות","diff":"medium","active":true},{"id":"q4","text":"מה סוג הסביבה?","options":["יער","מדבר","עיר","חוף ים"],"correct":3,"img":"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop","cat":"סביבה","diff":"medium","active":true},{"id":"q5","text":"מה הצבע הדומיננטי?","options":["ירוק","אדום","כחול","צהוב"],"correct":0,"img":"https://images.unsplash.com/photo-1448375240586-882707db888b?w=600&h=400&fit=crop","cat":"צבעים","diff":"easy","active":true},{"id":"q6","text":"איזו עונת שנה?","options":["קיץ","חורף","אביב","סתיו"],"correct":1,"img":"https://images.unsplash.com/photo-1491002052546-bf38f186af56?w=600&h=400&fit=crop","cat":"עונות","diff":"hard","active":true},{"id":"q7","text":"מה מוצג במרכז?","options":["הר","אגם","שדה","עץ"],"correct":0,"img":"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop","cat":"טבע","diff":"medium","active":true}],"hours":[{"id":"h1","text":"מהו מספר שעות הנהיגה המקסימלי ביממה לנהג מסחרי?","options":["8 שעות","10 שעות","11 שעות","12 שעות"],"correct":2,"cat":"כללי","diff":"easy","active":true,"explanation":"תקנות ה-FMCSA מגבילות נהג מסחרי ל-11 שעות נהיגה ביממה, לאחר 10 שעות מנוחה רצופות."},{"id":"h2","text":"מה משך תקופת הדיווח (duty cycle) הרגילה לנהג מסחרי?","options":["7 ימים","8 ימים","10 ימים","14 ימים"],"correct":1,"cat":"כללי","diff":"medium","active":true,"explanation":"תקופת הדיווח הסטנדרטית היא 8 ימים רצופים (60/8), עם אפשרות ל-7 ימים (70/7) עבור מפעילים מסוימים."},{"id":"h3","text":"מה הוא חלון ה-14 שעות לנהג מסחרי?","options":["שעות הנהיגה בלבד","סה\"כ מחלוף תחילת המשמרת","שעות ה-on-duty","שעות השינה"],"correct":1,"cat":"כללי","diff":"medium","active":true,"explanation":"חלון ה-14 שעות מתחיל מרגע הכניסה ל-duty. בתוך 14 שעות אלו מותר לנהוג עד 11 שעות. לאחר 14 שעות אין לנהוג, גם אם לא מוצו 11 שעות הנהיגה."},{"id":"h4","text":"מהו משך מנוחת ה-Short Haul Exception?","options":["8 שעות","10 שעות","11 שעות","12 שעות"],"correct":1,"cat":"short-haul","diff":"hard","active":true,"explanation":"ה-Short Haul Exception מאפשר פטור מיומן ELD לנהגים שחוזרים לנקודת מוצא תוך 14 שעות ולא נוסעים מעל 150 מייל."},{"id":"h5","text":"מה הדרישה המינימלית להפסקת סייב (rest break) כל 8 שעות?","options":["15 דקות","30 דקות","45 דקות","שעה"],"correct":1,"cat":"כללי","diff":"easy","active":true,"explanation":"יש לקחת הפסקה של לפחות 30 דקות לא מאוחר מ-8 שעות לאחר תחילת הנהיגה."},{"id":"h6","text":"מה ההפרש בין \"on-duty\" ל-\"driving\" בתיעוד ELD?","options":["אין הפרש, זה אותו דבר","On-duty כולל נהיגה + פעילויות אחרות","Driving כולל גם המתנה","רק on-duty נדרש לתיעוד"],"correct":1,"cat":"ELD","diff":"medium","active":true,"explanation":"On-duty כולל את כל הזמן שבו הנהג אחראי לרכב: טעינה/פריקה, בדיקות, ממתין בנמל וכו'. Driving הוא רק זמן הנהיגה בפועל."},{"id":"h7","text":"נהג הגיע ל-70 שעות תוך 8 ימים. מה הדרך להיכנס מחדש לשירות?","options":["מנוחה של 8 שעות","מנוחה של 10 שעות","מנוחה של 34 שעות רצופות","המתנה ל-24 שעות"],"correct":2,"cat":"כללי","diff":"hard","active":true,"explanation":"ה-34-Hour Restart מאפשר לנהג שמיצה את שעות ה-duty שלו לאפס את המניין לאחר מנוחה רצופה של 34 שעות."}],"load":[{"id":"l1","text":"מה המשקל המקסימלי המותר לרכב מסחרי על כביש פדרלי בארה\"ב (GVWR)?","options":["60,000 פאונד","80,000 פאונד","90,000 פאונד","100,000 פאונד"],"correct":1,"cat":"כללי","diff":"easy","active":true,"explanation":"המשקל הכולל המקסימלי (GVWR) לרכב מסחרי על כביש פדרלי הוא 80,000 פאונד (כ-36 טון)."},{"id":"l2","text":"היכן צריך להיות מרכז הכובד של העומס?","options":["קדימה ככל האפשר","נמוך ומרוכז מעל הצירים","אחורי ככל האפשר","אינו משנה"],"correct":1,"cat":"בטיחות","diff":"medium","active":true,"explanation":"מרכז כובד נמוך ומרוכז בין הצירים מבטיח יציבות בנהיגה ומפחית סיכון להתהפכות."},{"id":"l3","text":"מה הפונקציה העיקרית של ratchet straps?","options":["לאזן את המשא","להדק ולאבטח עומסים","לסמן עומסים מסוכנים","לעגן לרצפה בלבד"],"correct":1,"cat":"אביזרים","diff":"easy","active":true,"explanation":"רצועות ratchet מספקות הידוק פרוגרסיבי חזק לאבטחת עומסים. יש לבדוק מתח בכל עצירה."},{"id":"l4","text":"מה ה-Working Load Limit (WLL) ביחס ל-Breaking Strength של עגינה?","options":["שווה ל-Breaking Strength","חצי מה-Breaking Strength","שליש עד רבע מה-Breaking Strength","פי 2 מה-Breaking Strength"],"correct":2,"cat":"אביזרים","diff":"hard","active":true,"explanation":"ה-WLL הוא הטעינה המרבית המותרת בשימוש בטוח — בדרך כלל 1/3 עד 1/4 מחוזק השבירה כגורם ביטחון."},{"id":"l5","text":"כמה נקודות עיגון נדרשות לאבטחת עומס ארוך (מעל 10 רגל)?","options":["1","2","3 לפחות","תלוי במשקל בלבד"],"correct":2,"cat":"תקנות","diff":"medium","active":true,"explanation":"FMCSA מחייב לפחות 2 עיגונים לעומסים עד 10 רגל, ועיגון נוסף לכל 10 רגל נוסף."},{"id":"l6","text":"מה הסיכון העיקרי בהעמסת יתר על ציר אחורי?","options":["הגדלת צריכת דלק","הגבהת צמיגי הציר הקדמי ופגיעה בהגה","האטת הרכב","בלאי מהיר של הבלמים"],"correct":1,"cat":"בטיחות","diff":"hard","active":true,"explanation":"עומס עודף באחור מרים את הציר הקדמי, מפחית שליטה בהגה ומשפיע על יעילות הבלמים הקדמיים."}],"vehicle":[{"id":"v1","text":"מה ראשי התיבות DVIR?","options":["Daily Vehicle Inspection Record","Driver Vehicle Inspection Report","Department of Vehicle Internal Review","Driver Vehicle Internal Record"],"correct":1,"cat":"כללי","diff":"easy","active":true,"explanation":"DVIR = Driver Vehicle Inspection Report. מדובר בטופס חובה שנהג ממלא בתחילת ובסוף כל משמרת לתיעוד מצב הרכב."},{"id":"v2","text":"מהי ה-\"brake fade\" ולמה היא מסוכנת?","options":["בלימה חזקה מדי","ירידה ביעילות הבלמים עקב חום יתר","רעש מהבלמים","בלמי ABS לא פועלים"],"correct":1,"cat":"בלמים","diff":"medium","active":true,"explanation":"Brake fade קורה כשהבלמים מתחממים יתר על המידה (ירידות ארוכות, בלימות חוזרות) וחלקם מאבדים חיכוך. מסוכן מאוד."},{"id":"v3","text":"מה לחץ האוויר המינימלי לצמיגי ציר קדמי ברכב מסחרי?","options":["60 PSI","90 PSI","100 PSI","תלוי בדירוג היצרן"],"correct":3,"cat":"צמיגים","diff":"medium","active":true,"explanation":"הלחץ המינימלי תמיד לפי הדירוג המודפס על הצמיג ובמדריך הרכב. אין מספר אחיד לכל הרכבים."},{"id":"v4","text":"מה הדרך הנכונה לבדוק מערכת הידראולית לפני יציאה?","options":["הצתת הנגמ\"ש ובדיקת צבע הנוזל","בדיקת פרוסות הבלמים","בדיקת לחץ אוויר ב-air compressor","בדיקת מפלס נוזל הידראולי + בדיקת פעולה"],"correct":3,"cat":"הידראוליקה","diff":"medium","active":true,"explanation":"יש לבדוק מפלס, צבע (חום שרוף = בעיה) וסימני נזילה, ולאחר מכן לבצע פעולת הרמה/ירידה לוידוא תקינות."},{"id":"v5","text":"מה הסיכן בנסיעה עם \"worn king pins\"?","options":["צריכת דלק מוגברת","רעש בהגה","אובדן שליטה בציר קדמי ותנועת ציר לא צפויה","בלאי מואץ של צמיגים בלבד"],"correct":2,"cat":"מתלים","diff":"hard","active":true,"explanation":"King pins בלויים גורמים לציר קדמי לנוע בצורה לא צפויה, מה שעלול לגרום לאובדן שליטה, במיוחד בנסיעה בעיקול."},{"id":"v6","text":"מה ה-\"fifth wheel\" ומה חשיבותו??","options":["גלגל עזר","מנגנון הצימוד בין ראש הגרר לנגרר","גלגל ההגה","מנגנון בלמי חירום"],"correct":1,"cat":"גרירה","diff":"easy","active":true,"explanation":"ה-Fifth Wheel הוא מפרק הצימוד בין הגרר לנגרר. יש לבדוק נעילה, שמן ובלאי לפני כל נסיעה עם נגרר."}],"weather":[],"documents":[{"id":"d1","text":"מה כולל CMR bill of lading?","options":["פרטי נהג בלבד","שולח, מקבל, תיאור המשא, משקל, מחיר","פרטי רכב בלבד","פרטי חברת הביטוח"],"correct":1,"cat":"מסמכים","diff":"easy","active":true,"explanation":"טופס CMR (Convention on the Contract for the International Carriage of Goods by Road) כולל: שם שולח ומקבל, כתובות, תיאור ומשקל המשא, תנאי מסירה ואחריות."},{"id":"d2","text":"מתי נדרש Bill of Lading בין-לאומי?","options":["רק לסחורות מסוכנות","בכל הובלה בין-לאומית של סחורות","רק מעבר לאוקיינוס","רק לסחורות מעל טון"],"correct":1,"cat":"בינ\"ל","diff":"medium","active":true,"explanation":"בכל הובלה בין-לאומית על הדרכים של סחורות נדרש מסמך CMR/B.O.L שמהווה חוזה ההובלה ותעודת המשא."},{"id":"d3","text":"מה מסמך TIR Carnet?","options":["רישיון נהיגה בינ\"ל","מסמך מכס המאפשר מעבר ללא עצירות מכס","ביטוח רכב","מסמך רפואי לנהג"],"correct":1,"cat":"מכס","diff":"hard","active":true,"explanation":"TIR Carnet הוא מסמך מכס בינ\"ל המאפשר לרכב לעבור מספר גבולות בלי לשחרר ערובה בכל מדינה. תחת חסות ה-IRU."},{"id":"d4","text":"מה הסנקציה על נהיגה ללא ELD תקין בארה\"ב?","options":["אזהרה בלבד","קנס עד $16,000 וסגירת הרכב","פסילת רישיון","רק ציון שלילי בתיק"],"correct":1,"cat":"ELD","diff":"medium","active":true,"explanation":"הפרת תקנות ELD גוררת קנסות של עד $16,000 לכל הפרה, ואחרי מספר הפרות — הוצאת הרכב מהדרך."},{"id":"d5","text":"מה רישיון CDL Class A מאפשר לנהוג?","options":["כל רכב עד 26,001 פאונד","שילוב של כלי רכב מעל 26,001 פאונד עם נגרר מעל 10,000 פאונד","רכב מסחרי ללא נגרר","רק אוטובוסים"],"correct":1,"cat":"רישיון","diff":"easy","active":true,"explanation":"CDL Class A מאפשר נהיגה בשילובי רכב שמשקלם המשולב עולה על 26,001 פאונד כשהנגרר שוקל מעל 10,000 פאונד — כמו משאיות גרירה."}],"custom_1782967043816":[]},"resultsByGame":{"safety":[],"game":[],"hours":[],"load":[],"vehicle":[],"weather":[],"documents":[],"custom_1782967043816":[]},"games":[{"id":"safety","templateId":"image_timed","name":"בטיחות","icon":"🦺","hidden":false,"order":0,"builtin":true,"answerMode":"binary","answerConfig":{"prompt":"נוסע או עוצר?","options":[{"value":"נוסע","label":"נוסע","icon":"✅","tone":"success"},{"value":"עוצר","label":"עוצר","icon":"❌","tone":"danger"}]},"settings":{"imageDisplayTime":2,"answerTime":5,"questionsPerSession":50,"pointsPerCorrect":10,"bonusForSpeed":false,"showCountdown":false,"showAnswerWithImage":false,"requireName":false,"filterLocation":"הכל","filterDiff":"הכל"},"description":"זהה את מצב הבטיחות בתמונה","meta":{"filters":["loc","diff"],"progressLabel":"תמונה"}},{"id":"game","templateId":"image_timed","name":"משחק דמו","icon":"🎮","hidden":false,"order":1,"builtin":true,"answerMode":"multiple_choice","answerConfig":{"optionCount":4,"shuffle":true,"perQuestionPrompt":true},"settings":{"imageDisplayTime":2,"answerTime":20,"questionsPerSession":50,"pointsPerCorrect":10,"bonusForSpeed":false,"showCountdown":false,"showAnswerWithImage":false,"requireName":false,"filterLocation":"הכל","filterDiff":"הכל"},"description":"התבונן בתמונה ואחר כך ענה על השאלה","meta":{"filters":["cat","diff"],"progressLabel":"שאלה"}},{"id":"hours","templateId":"text_quiz","name":"שעות נהיגה ומנוחה","icon":"⏱","hidden":false,"order":2,"builtin":false,"answerMode":"multiple_choice","answerConfig":{"optionCount":4,"shuffle":true,"perQuestionPrompt":true,"options":[]},"settings":{"imageDisplayTime":0,"answerTime":20,"questionsPerSession":15,"pointsPerCorrect":10,"bonusForSpeed":false,"showCountdown":false,"showAnswerWithImage":true,"requireName":false},"description":"תקנות ELD, מגבלות שעות נהיגה ומנוחה חובה","meta":{"progressLabel":"שאלה","filters":[]}},{"id":"load","templateId":"text_quiz","name":"העמסה ואבטחת משא","icon":"📦","hidden":false,"order":3,"builtin":false,"answerMode":"multiple_choice","answerConfig":{"optionCount":4,"shuffle":true,"perQuestionPrompt":true,"options":[]},"settings":{"imageDisplayTime":0,"answerTime":20,"questionsPerSession":15,"pointsPerCorrect":10,"bonusForSpeed":false,"showCountdown":false,"showAnswerWithImage":true,"requireName":false},"description":"כלים ומשקלות, מרכז כובד, אבטחת עומסים","meta":{"progressLabel":"שאלה","filters":[]}},{"id":"vehicle","templateId":"text_quiz","name":"בדיקות טרם-נסיעה","icon":"🔧","hidden":false,"order":4,"builtin":false,"answerMode":"multiple_choice","answerConfig":{"optionCount":4,"shuffle":true,"perQuestionPrompt":true,"options":[]},"settings":{"imageDisplayTime":0,"answerTime":20,"questionsPerSession":15,"pointsPerCorrect":10,"bonusForSpeed":false,"showCountdown":false,"showAnswerWithImage":true,"requireName":false},"description":"בדיקות DVIR, מערכות בלמים, צמיגים ואורות","meta":{"progressLabel":"שאלה","filters":[]}},{"id":"weather","templateId":"image_timed","name":"נהיגה בתנאים קיצוניים","icon":"🌧","hidden":false,"order":5,"builtin":false,"answerMode":"multiple_choice","answerConfig":{"optionCount":4,"shuffle":true,"perQuestionPrompt":true,"options":[{"value":"א","label":"א"},{"value":"ב","label":"ב"},{"value":"ג","label":"ג"},{"value":"ד","label":"ד"}]},"settings":{"imageDisplayTime":3,"answerTime":20,"questionsPerSession":12,"pointsPerCorrect":10,"bonusForSpeed":false,"showCountdown":false,"showAnswerWithImage":true,"requireName":false},"description":"גשם, ערפל, קרח — זיהוי מצבים והתנהגות נכונה","meta":{"progressLabel":"שאלה","filters":[]}},{"id":"documents","templateId":"text_quiz","name":"מסמכים ורגולציה","icon":"📄","hidden":false,"order":6,"builtin":false,"answerMode":"multiple_choice","answerConfig":{"optionCount":4,"shuffle":true,"perQuestionPrompt":true,"options":[]},"settings":{"imageDisplayTime":0,"answerTime":20,"questionsPerSession":12,"pointsPerCorrect":10,"bonusForSpeed":false,"showCountdown":false,"showAnswerWithImage":true,"requireName":false},"description":"רישיונות, טפסי CMR, הצהרות מכס ותעודות","meta":{"progressLabel":"שאלה","filters":[]}},{"id":"custom_1782967043816","templateId":"image_hotspot","name":"התמצאות בתחנות","icon":"🚏","hidden":false,"order":8,"builtin":false,"answerMode":"multiple_choice","settings":{"imageDisplayTime":0,"answerTime":30,"questionsPerSession":10,"pointsPerCorrect":10,"bonusForSpeed":false,"showCountdown":true,"showAnswerWithImage":false,"requireName":false,"filterLocation":"הכל","filterDiff":"הכל"},"description":"התבונן בתמונה ואחר כך ענה על השאלה","meta":{"progressLabel":"שאלה","filters":["cat"]},"answerConfig":{"optionCount":4,"shuffle":true,"perQuestionPrompt":true,"options":[{"value":"תשובה 1","label":"תשובה 1"},{"value":"תשובה 2","label":"תשובה 2"},{"value":"תשובה 3","label":"תשובה 3"},{"value":"תשובה 4","label":"תשובה 4"}]},"hotspotImage":"https://lh3.googleusercontent.com/d/1LALn8-EeWG-sV7kMQZOCULYmPBB-Gz12","hotspots":[{"id":"hs_1782971184975","x":87.3,"y":8.1,"label":"תחנת נווה יעקב","explanation":"תחנת מוצא והתחנה הצפונית  ביותר בקו","radius":3.7},{"id":"hs_1782971236454","x":70.1,"y":8.4,"label":"תחנת יצחק טבנקין","explanation":"","radius":4.2},{"id":"hs_1782971287638","x":54.5,"y":8.3,"label":"תחנת מזל קשת","explanation":"תחנה מסוג מרכזית בה אותו רציף משמש את 2 המסילות","radius":4.4},{"id":"hs_1782971337381","x":36.9,"y":8.1,"label":"תחנת משה דיין","explanation":"התחנה הראשונה של המקטע הצפוני החדש","radius":4.5},{"id":"hs_1782971380420","x":9.5,"y":8,"label":"תחנת חיל האוויר","explanation":"התחנה האחרונה של הקו הישן","radius":4},{"id":"hs_1782971405844","x":94.2,"y":20.6,"label":"תחנת סיירת דוכיפת","explanation":"","radius":3.8},{"id":"hs_1782971445002","x":72.2,"y":20.1,"label":"תחנת פסגת זאב מרכז","explanation":"","radius":3.3},{"id":"hs_1782971463939","x":48.5,"y":20.6,"label":"תחנת יקותיאל אדם","explanation":"","radius":3.9},{"id":"hs_1782971511226","x":28.3,"y":20.6,"label":"תחנת בית חנינה","explanation":"בסמוך ממוקם המפלג הידני שנקרא על שם התחנה","radius":4},{"id":"hs_1782971534668","x":8.9,"y":20.7,"label":"תחנת שופעט מרכז","explanation":"","radius":3.7},{"id":"hs_1782971560122","x":91.5,"y":33.1,"label":"תחנת אסהל","explanation":"התחנה הראשונה של המקטע הצפוני","radius":3.8},{"id":"hs_1782971654009","x":58.5,"y":33.1,"label":"תחנת גבעת המבתר","explanation":"התחנה נמצאת במרחב של איזור הפיקוד הנקרא על שמה","radius":3.7},{"id":"hs_1782971694184","x":36.2,"y":33.3,"label":"תחנת גבעת התחמושת","explanation":"בסמוך לאיזור הפיקוד והמפלג הידני הנקראים עם שם התחנה","radius":3.9},{"id":"hs_1782971733888","x":8.4,"y":33.3,"label":"תחנת שמעון הצדיק","explanation":"","radius":4.1},{"id":"hs_1782971777632","x":94.5,"y":45.6,"label":"תחנת שבטי ישראל","explanation":"בסמוך לתחנה נמצאת מסילת הכיס","radius":4.1},{"id":"hs_1782971803720","x":72.2,"y":46.3,"label":"תחנת שער שכם","explanation":"נמצאת באיור הפיקוד הנקרא על שם התחנה","radius":4.3},{"id":"hs_1782971852640","x":52.4,"y":45.7,"label":"תחנת העירייה","explanation":"בסמוך ממוקם המפלג הנקרא על שם התחנה","radius":4},{"id":"hs_1782971869839","x":36.8,"y":46.2,"label":"תחנת יפו מרכז","explanation":"","radius":4},{"id":"hs_1782971905240","x":23.5,"y":46,"label":"תחנת הדוידקא","explanation":"בסמוך ממוקם המפלג הנקרא על שם התחנה","radius":3.8},{"id":"hs_1782971958863","x":7.8,"y":46,"label":"תחנת מחנה יהודה","explanation":"תחנה הנמצאת בשוק ומתאפיינת בעומסים בעיקר בדלתות האחוריות","radius":4},{"id":"hs_1782972034183","x":84.8,"y":58.3,"label":"תחנת הטורים","explanation":"תחנה מסוג מרכזית ששיש בה מסילת כיס ומיועדת לשמש גם את הקו הירוק","radius":3.8},{"id":"hs_1782972093759","x":66.3,"y":58.7,"label":"תחנת התחנה המרכזית","explanation":"תחנה המאופיינת בעומסים ובתנועת הולכי רגל מוגברת","radius":3.9},{"id":"hs_1782972141184","x":47.5,"y":58.3,"label":"תחנת קריית משה","explanation":"ממוקמת בבאיזור פיקוד הנקרא על שם התחנה ומהווה נקודת חיבור לקו הירוק","radius":3.5},{"id":"hs_1782972200720","x":28.4,"y":58.7,"label":"תחנת החלוץ","explanation":"ממוקם ליד מכללת דוד ילין ומאופיין בשעות מסויימות בנוכחות סטודנטים מוגברת","radius":3.9},{"id":"hs_1782972239655","x":8.9,"y":58.3,"label":"תחנת דניה","explanation":"בסמוך ממוקם המפלג הידני הנקרא עם שם התחנה","radius":3.8},{"id":"hs_1782972255264","x":94.2,"y":71.2,"label":"תחנת יפה נוף","explanation":"","radius":3.7},{"id":"hs_1782972299398","x":72.2,"y":71,"label":"תחנת הר הרצל","explanation":"התחנה הראשונה של הקו האדום הישן. בסמוך ממוקם המפלג הידני הלא קפיצי היחיד בקו","radius":4},{"id":"hs_1782972347151","x":48.5,"y":71,"label":"תחנת שמריהו לוין","explanation":"התחנה ראשונה לדרום של המקטע הדרומי החדש","radius":3.9},{"id":"hs_1782972358943","x":28,"y":71,"label":"תחנת קרית יובל מערב","explanation":"","radius":4},{"id":"hs_1782972372173","x":8.9,"y":71,"label":"תחנת גן המפלצת","explanation":"","radius":3.9},{"id":"hs_1782972394965","x":94.2,"y":83.9,"label":"תחנת הניירטה סולד","explanation":"","radius":3.8},{"id":"hs_1782972410238","x":72.6,"y":83.7,"label":"תחנת קריית מנחם","explanation":"","radius":3.8},{"id":"hs_1782972483843","x":48.3,"y":85.8,"label":"תחנת צומת אורה","explanation":"ממוקמת במרחב של איזור הפיקוד הנקרא על שם התחנה. יש בה 3 מיסלות ורציפים","radius":5.4},{"id":"hs_1782972501955","x":28.1,"y":84,"label":"תחנת בית ספר לרפואה","explanation":"","radius":3.8},{"id":"hs_1782972550217","x":8.8,"y":85.8,"label":"תחנת הדסה","explanation":"במרחב של איזור  הפיקוד הנקרא על שם התחנה והיא התחנה האחרונה בקו","radius":5.7}],"hotspotQuestions":[{"id":"auto_hs_1782971184975","prompt":"לחץ על: תחנת נווה יעקב","targetId":"hs_1782971184975","type":"click"},{"id":"auto_hs_1782971236454","prompt":"לחץ על: תחנת יצחק טבנקין","targetId":"hs_1782971236454","type":"click"},{"id":"auto_hs_1782971287638","prompt":"לחץ על: תחנת מזל קשת","targetId":"hs_1782971287638","type":"click"},{"id":"auto_hs_1782971337381","prompt":"לחץ על: תחנת משה דיין","targetId":"hs_1782971337381","type":"click"},{"id":"auto_hs_1782971380420","prompt":"לחץ על: תחנת חיל האוויר","targetId":"hs_1782971380420","type":"click"},{"id":"auto_hs_1782971405844","prompt":"לחץ על: תחנת סיירת דוכיפת","targetId":"hs_1782971405844","type":"click"},{"id":"auto_hs_1782971445002","prompt":"לחץ על: תחנת פסגת זאב מרכז","targetId":"hs_1782971445002","type":"click"},{"id":"auto_hs_1782971463939","prompt":"לחץ על: תחנת יקותיאל אדם","targetId":"hs_1782971463939","type":"click"},{"id":"auto_hs_1782971511226","prompt":"לחץ על: תחנת בית חנינה","targetId":"hs_1782971511226","type":"click"},{"id":"auto_hs_1782971534668","prompt":"לחץ על: תחנת שופעט מרכז","targetId":"hs_1782971534668","type":"click"},{"id":"auto_hs_1782971560122","prompt":"לחץ על: תחנת אסהל","targetId":"hs_1782971560122","type":"click"},{"id":"auto_hs_1782971654009","prompt":"לחץ על: תחנת גבעת המבתר","targetId":"hs_1782971654009","type":"click"},{"id":"auto_hs_1782971694184","prompt":"לחץ על: תחנת גבעת התחמושת","targetId":"hs_1782971694184","type":"click"},{"id":"auto_hs_1782971733888","prompt":"לחץ על: תחנת שמעון הצדיק","targetId":"hs_1782971733888","type":"click"},{"id":"auto_hs_1782971777632","prompt":"לחץ על: תחנת שבטי ישראל","targetId":"hs_1782971777632","type":"click"},{"id":"auto_hs_1782971803720","prompt":"לחץ על: תחנת שער שכם","targetId":"hs_1782971803720","type":"click"},{"id":"auto_hs_1782971852640","prompt":"לחץ על: תחנת העירייה","targetId":"hs_1782971852640","type":"click"},{"id":"auto_hs_1782971869839","prompt":"לחץ על: תחנת יפו מרכז","targetId":"hs_1782971869839","type":"click"},{"id":"auto_hs_1782971905240","prompt":"לחץ על: תחנת הדוידקא","targetId":"hs_1782971905240","type":"click"},{"id":"auto_hs_1782971958863","prompt":"לחץ על: תחנת מחנה יהודה","targetId":"hs_1782971958863","type":"click"},{"id":"auto_hs_1782972034183","prompt":"לחץ על: תחנת הטורים","targetId":"hs_1782972034183","type":"click"},{"id":"auto_hs_1782972093759","prompt":"לחץ על: תחנת התחנה המרכזית","targetId":"hs_1782972093759","type":"click"},{"id":"auto_hs_1782972141184","prompt":"לחץ על: תחנת קריית משה","targetId":"hs_1782972141184","type":"click"},{"id":"auto_hs_1782972200720","prompt":"לחץ על: תחנת החלוץ","targetId":"hs_1782972200720","type":"click"},{"id":"auto_hs_1782972239655","prompt":"לחץ על: תחנת דניה","targetId":"hs_1782972239655","type":"click"},{"id":"auto_hs_1782972255264","prompt":"לחץ על: תחנת יפה נוף","targetId":"hs_1782972255264","type":"click"},{"id":"auto_hs_1782972299398","prompt":"לחץ על: תחנת הר הרצל","targetId":"hs_1782972299398","type":"click"},{"id":"auto_hs_1782972347151","prompt":"לחץ על: תחנת שמריהו לוין","targetId":"hs_1782972347151","type":"click"},{"id":"auto_hs_1782972358943","prompt":"לחץ על: תחנת קרית יובל מערב","targetId":"hs_1782972358943","type":"click"},{"id":"auto_hs_1782972372173","prompt":"לחץ על: תחנת גן המפלצת","targetId":"hs_1782972372173","type":"click"},{"id":"auto_hs_1782972394965","prompt":"לחץ על: תחנת הניירטה סולד","targetId":"hs_1782972394965","type":"click"},{"id":"auto_hs_1782972410238","prompt":"לחץ על: תחנת קריית מנחם","targetId":"hs_1782972410238","type":"click"},{"id":"auto_hs_1782972483843","prompt":"לחץ על: תחנת צומת אורה","targetId":"hs_1782972483843","type":"click"},{"id":"auto_hs_1782972501955","prompt":"לחץ על: תחנת בית ספר לרפואה","targetId":"hs_1782972501955","type":"click"},{"id":"auto_hs_1782972550217","prompt":"לחץ על: תחנת הדסה","targetId":"hs_1782972550217","type":"click"}]}],"_platformVersion":"4.0","topics":[{"id":"safety","name":"בטיחות","icon":"🦺","color":"#f59e0b","description":"זיהוי מצבי בטיחות בדרך","gameIds":["safety"]},{"id":"hours","name":"רכבת סיטאדיס","icon":"🚇","color":"#7c3aed","description":"מבנה, תפעול תקלות ועוד.","gameIds":["hours"]},{"id":"documents","name":"רכבת אורבוס","icon":"🚆","color":"#d97706","description":"תפעול מערכות, תפעול תקלות נפוצות ועוד.","gameIds":["documents"]},{"id":"load","name":"מבנה הקו הירוק","icon":"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 40 40\" width=\"36\" height=\"36\"><rect x=\"15\" y=\"1\" width=\"3\" height=\"38\" rx=\"1\" fill=\"#2a9d2a\"/><rect x=\"22\" y=\"1\" width=\"3\" height=\"38\" rx=\"1\" fill=\"#2a9d2a\"/><rect x=\"10\" y=\"5\" width=\"20\" height=\"3\" rx=\"1\" fill=\"#a0785a\"/><rect x=\"10\" y=\"12\" width=\"20\" height=\"3\" rx=\"1\" fill=\"#a0785a\"/><rect x=\"10\" y=\"19\" width=\"20\" height=\"3\" rx=\"1\" fill=\"#a0785a\"/><rect x=\"10\" y=\"26\" width=\"20\" height=\"3\" rx=\"1\" fill=\"#a0785a\"/><rect x=\"10\" y=\"33\" width=\"20\" height=\"3\" rx=\"1\" fill=\"#a0785a\"/></svg>","color":"#059669","description":"מבנה קו, דיפו 25 ודגשים","gameIds":["load"]},{"id":"topic_1782895005662","name":"מבנה הקו האדום","icon":"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 40 40\" width=\"36\" height=\"36\"><rect x=\"15\" y=\"1\" width=\"3\" height=\"38\" rx=\"1\" fill=\"#cc2222\"/><rect x=\"22\" y=\"1\" width=\"3\" height=\"38\" rx=\"1\" fill=\"#cc2222\"/><rect x=\"10\" y=\"5\" width=\"20\" height=\"3\" rx=\"1\" fill=\"#a0785a\"/><rect x=\"10\" y=\"12\" width=\"20\" height=\"3\" rx=\"1\" fill=\"#a0785a\"/><rect x=\"10\" y=\"19\" width=\"20\" height=\"3\" rx=\"1\" fill=\"#a0785a\"/><rect x=\"10\" y=\"26\" width=\"20\" height=\"3\" rx=\"1\" fill=\"#a0785a\"/><rect x=\"10\" y=\"33\" width=\"20\" height=\"3\" rx=\"1\" fill=\"#a0785a\"/></svg>","description":"","color":"#e6200a","gameIds":["custom_1782967043816"]},{"id":"vehicle","name":"הודעות OTI","icon":"🔧","color":"#dc2626","description":"שינויים ועדכונים","gameIds":["vehicle"]},{"id":"weather","name":"קלסר הנהלים","icon":"📋","color":"#0284c7","description":"תקצירי נהלים לתפקוד בכל אירוע בשגרה או בחירום","gameIds":["weather"]},{"id":"game","name":"משחק דמו","icon":"🎮","color":"#6366f1","description":"משחק הדגמה","gameIds":["game"]}],"welcomeMsg":{"title":"על הפסים, חדים מתמיד. 🚈","body":"ברוכים הבאים למגרש המשחקים המקצועי של נהגי לביא. בפנים מחכים לכם משימות זיהוי תמונות, קוויזים מהירים ואתגרי חשיבה שישאירו אתכם תמיד צעד אחד קדימה.","cta":"נכנסים. משחקים. מובילים. 🏆","align":"center"}}/*__DB_DEFAULT_END__*/;
 // __DB_END__
 
 // מזג הגדרות שמורות מ-cookie
@@ -513,6 +512,105 @@ if(window._pendingCookieSettings){
   if(cs.gameHidden) DB.gameHidden=cs.gameHidden;
   delete window._pendingCookieSettings;
 }
+
+// ── ממיר קישורי Google Drive לכתובת תמונה ישירה שדפדפן יכול להציג ──
+function normalizeImageUrl(u) {
+  if (!u) return u;
+  u = String(u).trim();
+  var m = u.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
+  if (!m) m = u.match(/drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/);
+  if (!m) m = u.match(/drive\.google\.com\/uc\?(?:export=[a-zA-Z]+&)?id=([a-zA-Z0-9_-]+)/);
+  if (m && m[1]) return 'https://lh3.googleusercontent.com/d/' + m[1];
+  return u;
+}
+window.normalizeImageUrl = normalizeImageUrl;
+
+// ── בריחת HTML גנרית — למניעת שבירת מרכאות בערכי טופס דינמיים ──
+function escHtml(s) {
+  return (s == null ? '' : String(s)).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+window.escHtml = escHtml;
+
+// ── בדיקת "האם נקודה נמצאת בתוך צורה חופשית (מצולע)" — אלגוריתם ray-casting ──
+function pointInPolygon(px, py, points) {
+  var inside = false;
+  for (var i = 0, j = points.length - 1; i < points.length; j = i++) {
+    var xi = points[i].x, yi = points[i].y;
+    var xj = points[j].x, yj = points[j].y;
+    var intersect = ((yi > py) !== (yj > py)) && (px < (xj - xi) * (py - yi) / (yj - yi) + xi);
+    if (intersect) inside = !inside;
+  }
+  return inside;
+}
+// בודק פגיעה בנקודת-חיצה — תומך גם בצורה חופשית (points) וגם בפורמט הישן (עיגול לפי radius)
+function isPointInHotspot(px, py, hs) {
+  if (hs.points && hs.points.length >= 3) return pointInPolygon(px, py, hs.points);
+  var dx = px - hs.x, dy = py - hs.y;
+  return Math.sqrt(dx*dx + dy*dy) <= (hs.radius || 8);
+}
+function polygonCentroid(points) {
+  var sx = 0, sy = 0;
+  points.forEach(function(p){ sx += p.x; sy += p.y; });
+  return { x: sx / points.length, y: sy / points.length };
+}
+window.pointInPolygon = pointInPolygon;
+window.isPointInHotspot = isPointInHotspot;
+window.polygonCentroid = polygonCentroid;
+
+// ── ציור צורת נקודה (חופשית או עיגול-לגאסי) על קנבס — משותף לעורך ולמסך המשחק ──
+function drawHotspotShapeOutline(ctx, w, h, hs, fillStyle, strokeStyle, lineWidth) {
+  ctx.beginPath();
+  if (hs.points && hs.points.length >= 3) {
+    hs.points.forEach(function(p, i) {
+      var px = (p.x / 100) * w, py = (p.y / 100) * h;
+      if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    });
+    ctx.closePath();
+  } else {
+    var cx = (hs.x / 100) * w, cy = (hs.y / 100) * h;
+    var r = ((hs.radius != null ? hs.radius : 8) / 100) * w;
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  }
+  ctx.fillStyle = fillStyle;
+  ctx.fill();
+  ctx.strokeStyle = strokeStyle;
+  ctx.lineWidth = lineWidth || 2;
+  ctx.stroke();
+}
+// מרחק מקסימלי (בפיקסלים) בין המרכז לשפת הצורה — לצורך מיקום תווית מתחת/מעל הצורה
+function getHotspotVisualExtent(hs, w, h) {
+  if (hs.points && hs.points.length >= 3) {
+    var cx = (hs.x / 100) * w, cy = (hs.y / 100) * h;
+    var maxD = 0;
+    hs.points.forEach(function(p) {
+      var px = (p.x / 100) * w, py = (p.y / 100) * h;
+      var d = Math.sqrt((px - cx) * (px - cx) + (py - cy) * (py - cy));
+      if (d > maxD) maxD = d;
+    });
+    return maxD;
+  }
+  return ((hs.radius != null ? hs.radius : 8) / 100) * w;
+}
+window.drawHotspotShapeOutline = drawHotspotShapeOutline;
+window.getHotspotVisualExtent = getHotspotVisualExtent;
+
+// ── תמיכה במספר תמונות באותו משחק נקודות-חמות ──
+// משחקים ישנים (תמונה בודדת) ממשיכים לעבוד בלי שום שינוי — game.hotspotImage כרגיל.
+// רק כשמוסיפים תמונה שנייה בפועל, המשחק "עולה" למבנה game.hotspotImages (ראו renderHotspotAdmin).
+function getHotspotImageUrl(game, imageId) {
+  if (game.hotspotImages && game.hotspotImages.length) {
+    var found = imageId ? game.hotspotImages.find(function(im){ return im.id === imageId; }) : null;
+    return (found || game.hotspotImages[0]).url || '';
+  }
+  return game.hotspotImage || '';
+}
+function getEffectiveHotspotImages(game) {
+  if (game.hotspotImages && game.hotspotImages.length) return game.hotspotImages;
+  if (game.hotspotImage) return [{ id: '__legacy__', url: game.hotspotImage, label: '' }];
+  return [];
+}
+window.getHotspotImageUrl = getHotspotImageUrl;
+window.getEffectiveHotspotImages = getEffectiveHotspotImages;
 
 function saveDB(){
   if(typeof syncLegacyFromGames==='function') syncLegacyFromGames();
@@ -769,8 +867,13 @@ function initApp() {
         var g = typeof getGame==='function' ? getGame(gid) : null;
         return g && !g.hidden;
       }) || (t.gameIds||[])[0] || '';
-      if (!firstGid) return '';
-      return '<button class="nav-tab" data-tab="' + firstGid + '" onclick="showTab(\'' + firstGid + '\')">' + t.icon + ' ' + t.name + '</button>';
+      if (!firstGid && !t._keepEmpty) return '';
+      if (!firstGid && t._keepEmpty) {
+        // תיקייה חדשה ריקה — הצג טאב עם אינדיקציה
+        return '<button class="nav-tab" data-tab="config" onclick="showTab(\'config\')" title="תיקייה ריקה — הוסף משחק" style="display:inline-flex;align-items:center;gap:3px">' + (t.icon && t.icon.startsWith('<svg') ? '<span style="display:inline-flex;width:20px;height:20px;overflow:hidden;vertical-align:text-bottom;flex-shrink:0">' + t.icon + '</span>' : t.icon) + ' ' + t.name + ' <span style="font-size:10px;opacity:.6">+</span></button>';
+      }
+      var iconHtml = (t.icon && t.icon.startsWith('<svg')) ? '<span style="display:inline-flex;width:20px;height:20px;overflow:hidden;vertical-align:text-bottom;flex-shrink:0">' + t.icon + '</span>' : t.icon;
+      return '<button class="nav-tab" data-tab="' + firstGid + '" onclick="showTab(\'' + firstGid + '\')" style="display:inline-flex;align-items:center;gap:3px">' + iconHtml + ' ' + t.name + '</button>';
     }).filter(Boolean).join('');
   }
   const playerTabs = visibleGames.map(g=>[g.id||g, typeof getGameLabel==='function'&&g.id?getGameLabel(g):DB.gameNames[g.id||g]||g.label||g]);
@@ -2941,7 +3044,7 @@ function saveEditSQ(id, continueNext){
       return; // המשך async
     } else {
       const imgEl = document.getElementById('eq-img');
-      const newUrl = imgEl ? imgEl.value.trim() : '';
+      const newUrl = imgEl ? normalizeImageUrl(imgEl.value.trim()) : '';
       if(newUrl && !newUrl.startsWith('[')) q.img = newUrl;
       // אם שדה ריק — q.img נשאר כפי שהוא
     }
@@ -2983,7 +3086,7 @@ function selectSQAnswer(val,btn){
 }
 
 function submitSQ(){
-  const img=document.getElementById('sqi').value.trim(),correct=document.getElementById('sqcorrect').value;
+  const img=normalizeImageUrl(document.getElementById('sqi').value.trim()),correct=document.getElementById('sqcorrect').value;
   const diff=document.getElementById('sqdiff').value,loc=document.getElementById('sqloc').value.trim();
   if(!img){alert('הכנס URL תמונה');return;}
   if(!correct){alert('בחר תשובה נכונה');return;}
@@ -3384,7 +3487,7 @@ function buildUnifiedTopicList() {
       '<div style="display:flex;align-items:center;gap:8px;background:#f7f9ff;padding:10px 12px">' +
         '<span style="font-weight:700;color:#bbb;font-size:12px;min-width:18px">' + (i+1) + '</span>' +
         '<div style="display:flex;flex-direction:column;gap:2px">' + upBtn + dnBtn + '</div>' +
-        '<span style="font-size:18px">' + he(topic.icon||'📁') + '</span>' +
+        '<span style="font-size:18px">' + (topic.icon && topic.icon.trim().startsWith('<') ? topic.icon : he(topic.icon||'📁')) + '</span>' +
         '<span style="font-weight:700;flex:1;font-size:14px">' + he(topic.name||topic.id) + '</span>' +
         '<span style="font-size:11px;font-weight:600;color:' + he(visColor) + ';background:#fff;padding:2px 8px;border-radius:10px;border:1px solid #e0e0e0">' + visLabel + '</span>' +
         '<input type="checkbox" id="vis-topic-' + he(topic.id) + '" data-action="toggle-topic" data-id="' + he(topic.id) + '" ' + (allVisible?'checked':'') + ' title="הצג/הסתר" style="width:16px;height:16px;accent-color:' + he(accent) + ';cursor:pointer;flex-shrink:0">' +
@@ -3625,13 +3728,38 @@ function renderConfig(mc, tab) {
           <p style="font-size:11px;color:#aaa;margin-top:4px">השאר ריק לברירת מחדל לפי סוג המשחק</p>
         </div>
       </div>
-      <div class="settings-group"><h3>⏱️ זמנים</h3>
+      <div class="settings-group"><h3>⏱️ זמנים (מצב אתגר)</h3>
         <div class="form-group"><label>זמן הצגת תמונה (שניות)</label>
           <div class="range-row"><input type="range" min="1" max="10" value="${s.imageDisplayTime}" id="si" oninput="document.getElementById('vi').textContent=this.value"><span class="range-val" id="vi">${s.imageDisplayTime}</span></div></div>
         <div class="form-group"><label>זמן לתשובה (שניות)</label>
           <div class="range-row"><input type="range" min="1" max="120" value="${s.answerTime}" id="sa" oninput="document.getElementById('va').textContent=this.value"><span class="range-val" id="va">${s.answerTime}</span></div></div>
         <div class="form-group"><label>שאלות לסשן</label>
           <div class="range-row"><input type="range" min="1" max="100" value="${s.questionsPerSession}" id="sq" oninput="document.getElementById('vq').textContent=this.value"><span class="range-val" id="vq">${s.questionsPerSession}</span></div></div>
+      </div>
+      <div class="settings-group"><h3>🎓 מצב לימוד</h3>
+        <p style="font-size:11px;color:#888;margin:-4px 0 10px">ברירת מחדל משותפת לכל המשחקים, עם אפשרות להתאמה אישית למשחק הזה בלבד.</p>
+        <div class="form-group"><label>ברירת מחדל כללית — זמן לתשובה במצב לימוד (שניות)</label>
+          <div class="range-row"><input type="range" min="1" max="120" value="${(DB.studyModeDefaults&&DB.studyModeDefaults.answerTime)||30}" id="smd-answer" oninput="document.getElementById('vsmd-answer').textContent=this.value"><span class="range-val" id="vsmd-answer">${(DB.studyModeDefaults&&DB.studyModeDefaults.answerTime)||30}</span></div>
+        </div>
+        <div class="form-group"><label>ברירת מחדל כללית — זמן הצגת הסבר/תוצאה (שניות)</label>
+          <div class="range-row"><input type="range" min="1" max="15" step="0.5" value="${(DB.studyModeDefaults&&DB.studyModeDefaults.explanationDuration)||2.2}" id="smd-explain" oninput="document.getElementById('vsmd-explain').textContent=this.value"><span class="range-val" id="vsmd-explain">${(DB.studyModeDefaults&&DB.studyModeDefaults.explanationDuration)||2.2}</span></div>
+        </div>
+        <div style="margin-top:14px;padding-top:12px;border-top:1px dashed #e0e0e0">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;margin-bottom:10px">
+            <input type="checkbox" id="smd-answer-ov" ${s.studyAnswerTime!=null?'checked':''} onchange="document.getElementById('smd-answer-custom-wrap').style.opacity=this.checked?'1':'.4';document.getElementById('smd-answer-custom').disabled=!this.checked" style="width:auto;margin:0">
+            זמן תשובה מותאם למשחק "${(cfgGame&&cfgGame.name)||gameType}" (במקום ברירת המחדל)
+          </label>
+          <div id="smd-answer-custom-wrap" style="opacity:${s.studyAnswerTime!=null?'1':'.4'}">
+            <div class="range-row"><input type="range" min="1" max="120" ${s.studyAnswerTime!=null?'':'disabled'} value="${s.studyAnswerTime!=null?s.studyAnswerTime:((DB.studyModeDefaults&&DB.studyModeDefaults.answerTime)||30)}" id="smd-answer-custom" oninput="document.getElementById('vsmd-answer-custom').textContent=this.value"><span class="range-val" id="vsmd-answer-custom">${s.studyAnswerTime!=null?s.studyAnswerTime:((DB.studyModeDefaults&&DB.studyModeDefaults.answerTime)||30)}</span></div>
+          </div>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;margin:14px 0 10px">
+            <input type="checkbox" id="smd-explain-ov" ${s.studyExplanationDuration!=null?'checked':''} onchange="document.getElementById('smd-explain-custom-wrap').style.opacity=this.checked?'1':'.4';document.getElementById('smd-explain-custom').disabled=!this.checked" style="width:auto;margin:0">
+            זמן הצגת הסבר מותאם למשחק זה (במקום ברירת המחדל)
+          </label>
+          <div id="smd-explain-custom-wrap" style="opacity:${s.studyExplanationDuration!=null?'1':'.4'}">
+            <div class="range-row"><input type="range" min="1" max="15" step="0.5" ${s.studyExplanationDuration!=null?'':'disabled'} value="${s.studyExplanationDuration!=null?s.studyExplanationDuration:((DB.studyModeDefaults&&DB.studyModeDefaults.explanationDuration)||2.2)}" id="smd-explain-custom" oninput="document.getElementById('vsmd-explain-custom').textContent=this.value"><span class="range-val" id="vsmd-explain-custom">${s.studyExplanationDuration!=null?s.studyExplanationDuration:((DB.studyModeDefaults&&DB.studyModeDefaults.explanationDuration)||2.2)}</span></div>
+          </div>
+        </div>
       </div>
       <div class="settings-group"><h3>🏆 ניקוד ותצוגה</h3>
         <div class="form-group"><label>נקודות לתשובה נכונה</label>
@@ -3696,6 +3824,26 @@ function saveConfig(gameType){
   };
   const sawiEl=document.getElementById('sawi');
   if(sawiEl!==null) cfg.showAnswerWithImage=sawiEl.checked;
+  // ברירת מחדל למצב לימוד — ערך גלובלי משותף
+  const smdAnswerEl=document.getElementById('smd-answer');
+  const smdExplainEl=document.getElementById('smd-explain');
+  if(smdAnswerEl || smdExplainEl){
+    DB.studyModeDefaults = {
+      answerTime: smdAnswerEl ? Math.max(1,parseInt(smdAnswerEl.value)) : ((DB.studyModeDefaults&&DB.studyModeDefaults.answerTime)||30),
+      explanationDuration: smdExplainEl ? Math.max(0.5,parseFloat(smdExplainEl.value)) : ((DB.studyModeDefaults&&DB.studyModeDefaults.explanationDuration)||2.2)
+    };
+  }
+  // התאמה אישית למשחק זה — null מפורש כשהתיבה לא מסומנת, כדי שלא "יינעל" ערך בטעות
+  const smdAnswerOv=document.getElementById('smd-answer-ov');
+  if(smdAnswerOv){
+    const customEl=document.getElementById('smd-answer-custom');
+    cfg.studyAnswerTime = smdAnswerOv.checked ? Math.max(1,parseInt(customEl.value)) : null;
+  }
+  const smdExplainOv=document.getElementById('smd-explain-ov');
+  if(smdExplainOv){
+    const customEl2=document.getElementById('smd-explain-custom');
+    cfg.studyExplanationDuration = smdExplainOv.checked ? Math.max(0.5,parseFloat(customEl2.value)) : null;
+  }
   const g = typeof getGame==='function' ? getGame(gameType) : null;
   if(g && g.meta && g.meta.filters && g.meta.filters.indexOf('loc')>=0){
     cfg.filterLocation=document.getElementById('sf-loc')?document.getElementById('sf-loc').value:'הכל';
@@ -3898,14 +4046,15 @@ function exportFullHTML(){
       DB._version=DB_VERSION;
       var dbStr=JSON.stringify(DB);
       var html=document.documentElement.outerHTML;
-      var m1='let DB = _rawDB || {';
-      var m2='\n// __DB_END__';
+      // הסימונים בנויים בהרכבה (concat) בכוונה: כך המחרוזת המדויקת שלהם
+      // לא מופיעה כאן ברצף אחד, ולא עלולה "לתפוס את עצמה" ב-indexOf כמו שקרה בגרסה הקודמת
+      var m1='/*__DB_DEFAULT' + '_START__*/';
+      var m2='/*__DB_DEFAULT' + '_END__*/';
       var i1=html.indexOf(m1);
-      var i2=html.indexOf(m2);
+      var i2=html.indexOf(m2, i1 + m1.length);
       if(i1<0||i2<0){alert('export error: markers not found i1='+i1+' i2='+i2);return;}
-      var oldBlock=html.substring(i1,i2);
-      var newBlock='let DB='+dbStr+';';
-      html=html.replace(oldBlock,newBlock);
+      var innerStart=i1+m1.length;
+      html=html.slice(0,innerStart)+dbStr+html.slice(i2);
       var enc=new TextEncoder();
       var bytes=enc.encode('<!DOCTYPE html>\n'+html);
       var blob=new Blob([bytes],{type:'text/html;charset=utf-8'});
@@ -4933,7 +5082,7 @@ function exportFullHTML(){
             '<div style="margin-bottom:12px;padding:10px 12px;background:var(--color-background-primary);border-radius:8px;border:0.5px solid #fecaca">' +
               '<div style="font-size:11px;font-weight:700;color:#dc2626;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">זרם א — תמונה</div>' +
               '<input value="' + (q.streamA && q.streamA.label || 'סצנה') + '" placeholder="תווית (למשל: סצנה, מסלול)" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.msQuestions[' + qi + '].streamA.label=v;var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})(this.value)" style="width:100%;padding:6px 10px;border:1px solid var(--color-border-secondary);border-radius:6px;font-size:12px;margin-bottom:6px">' +
-              '<input value="' + (q.streamA && q.streamA.src || '') + '" placeholder="URL תמונה (Google Drive / lh3.googleusercontent...)" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.msQuestions[' + qi + '].streamA.src=v;var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})(this.value)" style="width:100%;padding:6px 10px;border:1px solid var(--color-border-secondary);border-radius:6px;font-size:12px">' +
+              '<input value="' + (q.streamA && q.streamA.src || '') + '" placeholder="URL תמונה (קישור שיתוף מ-Google Drive יומר אוטומטית)" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.msQuestions[' + qi + '].streamA.src=normalizeImageUrl(v);var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})(this.value)" style="width:100%;padding:6px 10px;border:1px solid var(--color-border-secondary);border-radius:6px;font-size:12px">' +
             '</div>' +
             // Stream B
             '<div style="margin-bottom:12px;padding:10px 12px;background:var(--color-background-primary);border-radius:8px;border:0.5px solid #bfdbfe">' +
@@ -5575,7 +5724,7 @@ function exportFullHTML(){
 
     // Build question list: each question references a target hotspot
     var sessionQs = questions.length ? questions.slice() : hotspots.map(function(hs) {
-      return { id: 'auto_' + hs.id, prompt: 'לחץ על: ' + hs.label, targetId: hs.id, type: 'click' };
+      return { id: 'auto_' + hs.id, prompt: 'לחץ על: ' + hs.label, targetId: hs.id, imageId: hs.imageId, type: 'click' };
     });
     sessionQs = sessionQs.sort(function() { return Math.random() - 0.5; });
     var s = getGameSettings(game);
@@ -5610,8 +5759,8 @@ function exportFullHTML(){
       if (!targetHs) { state.current++; renderHSQuestion(); return; }
       var total = state.questions.length;
       var pct = Math.round((state.current / total) * 100);
-      var answerTime = state.studyMode ? 999 : (s.answerTime || 30);
-      var imgSrc = game.hotspotImage || '';
+      var answerTime = state.studyMode ? (s.studyAnswerTime != null ? s.studyAnswerTime : ((DB.studyModeDefaults && DB.studyModeDefaults.answerTime) || s.answerTime || 30)) : (s.answerTime || 30);
+      var imgSrc = getHotspotImageUrl(game, targetHs.imageId);
       var studyBadge = state.studyMode ? '<span style="background:#d1fae5;color:#065f46;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:8px">מצב לימוד</span>' : '';
 
       shell.innerHTML =
@@ -5623,7 +5772,7 @@ function exportFullHTML(){
           '<div style="height:5px;background:#eee;border-radius:3px"><div style="width:' + pct + '%;height:100%;background:#4361ee;border-radius:3px;transition:width .3s"></div></div>' +
         '</div>' +
         '<div style="padding:12px 16px 8px">' +
-          '<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:0 0 10px;text-align:center">' + q.prompt + '</p>' +
+          '<p style="font-size:16px;font-weight:700;color:#1a1a2e;margin:0 0 10px;text-align:center">' + escHtml('לחץ על: ' + targetHs.label) + '</p>' +
         '</div>' +
         '<div style="position:relative;cursor:crosshair;user-select:none" id="hs-img-wrap">' +
           (imgSrc ? '<img src="' + imgSrc + '" style="width:100%;display:block;border-radius:0" id="hs-img" draggable="false">' : '<div style="width:100%;height:320px;background:#f0f2f5;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:14px">אין תמונה מוגדרת</div>') +
@@ -5638,19 +5787,17 @@ function exportFullHTML(){
       var answered = false;
       var timerInterval = null;
 
-      if (!state.studyMode) {
-        var resultDiv = document.getElementById('hs-result');
-        resultDiv.innerHTML = '<div style="text-align:center;font-size:13px;color:#888">⏱️ <span id="hs-timer">' + timeLeft + '</span> שניות</div>';
-        timerEl = document.getElementById('hs-timer');
-        timerInterval = setInterval(function() {
-          timeLeft--;
-          if (timerEl) timerEl.textContent = timeLeft;
-          if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            if (!answered) handleHSAnswer(null, targetHs, q, state, renderHSQuestion, timerInterval);
-          }
-        }, 1000);
-      }
+      var resultDiv0 = document.getElementById('hs-result');
+      resultDiv0.innerHTML = '<div style="text-align:center;font-size:13px;color:#888">⏱️ <span id="hs-timer">' + timeLeft + '</span> שניות</div>';
+      timerEl = document.getElementById('hs-timer');
+      timerInterval = setInterval(function() {
+        timeLeft--;
+        if (timerEl) timerEl.textContent = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          if (!answered) handleHSAnswer(null, targetHs, q, state, renderHSQuestion, timerInterval);
+        }
+      }, 1000);
 
       // Click handler
       var imgWrap = document.getElementById('hs-img-wrap');
@@ -5660,28 +5807,35 @@ function exportFullHTML(){
           var rect = imgWrap.getBoundingClientRect();
           var xPct = ((e.clientX - rect.left) / rect.width) * 100;
           var yPct = ((e.clientY - rect.top) / rect.height) * 100;
+          var isHit = isPointInHotspot(xPct, yPct, targetHs);
+          var dot = document.getElementById('hs-feedback-dot');
+
+          if (state.studyMode && !isHit) {
+            // ניסיון שגוי במצב לימוד — לא מתקדמים לשאלה הבאה, מאפשרים לנסות שוב
+            if (dot) {
+              dot.style.left = xPct + '%';
+              dot.style.top = yPct + '%';
+              dot.style.background = 'rgba(230,57,70,0.65)';
+              dot.style.display = 'block';
+            }
+            var resultDivRetry = document.getElementById('hs-result');
+            if (resultDivRetry) resultDivRetry.innerHTML = '<div style="background:#fff3cd;border-radius:8px;padding:10px 14px;text-align:center"><span style="color:#856404;font-weight:700">😊 נסה שוב!</span></div>';
+            return;
+          }
+
           clearInterval(timerInterval);
           handleHSAnswer({ xPct: xPct, yPct: yPct }, targetHs, q, state, renderHSQuestion, timerInterval);
           answered = true;
 
-          // Show click dot
-          var dot = document.getElementById('hs-feedback-dot');
           if (dot) {
             dot.style.left = xPct + '%';
             dot.style.top = yPct + '%';
+            dot.style.background = isHit ? 'rgba(45,198,83,0.7)' : 'rgba(230,57,70,0.65)';
             dot.style.display = 'block';
           }
         };
       }
 
-      // In study mode — show all hotspot markers
-      if (state.studyMode && imgSrc) {
-        var img = document.getElementById('hs-img');
-        if (img) {
-          img.onload = function() { drawHotspotMarkers(hotspots, targetHs); };
-          if (img.complete) drawHotspotMarkers(hotspots, targetHs);
-        }
-      }
     }
 
     function drawHotspotMarkers(allHs, targetHs) {
@@ -5693,21 +5847,18 @@ function exportFullHTML(){
       var ctx = canvas.getContext('2d');
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       allHs.forEach(function(hs) {
-        var cx = (hs.x / 100) * canvas.width;
-        var cy = (hs.y / 100) * canvas.height;
         var isTarget = hs.id === targetHs.id;
-        ctx.beginPath();
-        ctx.arc(cx, cy, isTarget ? 18 : 10, 0, Math.PI * 2);
-        ctx.fillStyle = isTarget ? 'rgba(67,97,238,0.25)' : 'rgba(0,0,0,0.12)';
-        ctx.fill();
-        ctx.strokeStyle = isTarget ? '#4361ee' : '#888';
-        ctx.lineWidth = isTarget ? 2.5 : 1.5;
-        ctx.stroke();
+        var fill = isTarget ? 'rgba(67,97,238,0.25)' : 'rgba(0,0,0,0.12)';
+        var stroke = isTarget ? '#4361ee' : '#888';
+        drawHotspotShapeOutline(ctx, canvas.width, canvas.height, hs, fill, stroke, isTarget ? 2.5 : 1.5);
         if (state.studyMode) {
+          var cx = (hs.x / 100) * canvas.width, cy = (hs.y / 100) * canvas.height;
+          var ext = getHotspotVisualExtent(hs, canvas.width, canvas.height);
+          var labelY = (cy + ext + 16 <= canvas.height) ? cy + ext + 16 : Math.max(10, cy - ext - 6);
           ctx.fillStyle = isTarget ? '#1a1a2e' : '#555';
           ctx.font = (isTarget ? '700 ' : '') + '11px sans-serif';
           ctx.textAlign = 'center';
-          ctx.fillText(hs.label, cx, cy + 26);
+          ctx.fillText(hs.label, cx, labelY);
         }
       });
     }
@@ -5719,42 +5870,39 @@ function exportFullHTML(){
       if (imgWrap) imgWrap.style.cursor = 'default';
 
       var isCorrect = false;
-      var dist = 999;
       if (click) {
-        var dx = click.xPct - targetHs.x;
-        var dy = click.yPct - targetHs.y;
-        dist = Math.sqrt(dx*dx + dy*dy);
-        isCorrect = dist <= (targetHs.radius || 8);
+        isCorrect = isPointInHotspot(click.xPct, click.yPct, targetHs);
       }
 
-      // Show target location
+      // Show target location — רק בתשובה נכונה או בתום הזמן; לא בלחיצה שגויה (כדי לא "לדלוף" שמות תחנות)
+      var revealTarget = isCorrect || !click;
       var canvas = document.getElementById('hs-canvas');
       var wrap = document.getElementById('hs-img-wrap');
-      if (canvas && wrap) {
+      if (revealTarget && canvas && wrap) {
         canvas.width = wrap.offsetWidth;
         canvas.height = wrap.offsetHeight;
         var ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        var fill = isCorrect ? 'rgba(45,198,83,0.25)' : 'rgba(230,57,70,0.2)';
+        var stroke = isCorrect ? '#2dc653' : '#e63946';
+        drawHotspotShapeOutline(ctx, canvas.width, canvas.height, targetHs, fill, stroke, 3);
         var tx = (targetHs.x / 100) * canvas.width;
         var ty = (targetHs.y / 100) * canvas.height;
         ctx.beginPath();
-        ctx.arc(tx, ty, 22, 0, Math.PI * 2);
-        ctx.fillStyle = isCorrect ? 'rgba(45,198,83,0.25)' : 'rgba(230,57,70,0.2)';
+        ctx.arc(tx, ty, 3, 0, Math.PI * 2);
+        ctx.fillStyle = stroke;
         ctx.fill();
-        ctx.strokeStyle = isCorrect ? '#2dc653' : '#e63946';
-        ctx.lineWidth = 3;
-        ctx.stroke();
-        // crosshair lines
-        ctx.strokeStyle = isCorrect ? '#2dc653' : '#e63946';
-        ctx.lineWidth = 1.5;
-        ctx.setLineDash([4, 3]);
-        ctx.beginPath(); ctx.moveTo(tx - 30, ty); ctx.lineTo(tx + 30, ty); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(tx, ty - 30); ctx.lineTo(tx, ty + 30); ctx.stroke();
-        ctx.setLineDash([]);
+        var ext = getHotspotVisualExtent(targetHs, canvas.width, canvas.height);
+        var labelY = (ty + ext + 18 <= canvas.height) ? ty + ext + 18 : Math.max(12, ty - ext - 8);
         ctx.fillStyle = '#1a1a2e';
         ctx.font = '700 12px sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText(targetHs.label, tx, ty + 38);
+        ctx.fillText(targetHs.label, tx, labelY);
+      } else if (canvas && wrap) {
+        // לחיצה שגויה — מנקים כל סימון קודם, לא מציגים כלום מעבר לנקודת הלחיצה של השחקן
+        canvas.width = wrap.offsetWidth;
+        canvas.height = wrap.offsetHeight;
+        canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
       }
 
       var points = 0;
@@ -5766,21 +5914,26 @@ function exportFullHTML(){
         state.correct++;
       }
 
-      state.log.push({ prompt: q.prompt, ok: isCorrect, targetLabel: targetHs.label });
+      state.log.push({ prompt: 'לחץ על: ' + targetHs.label, ok: isCorrect, targetLabel: targetHs.label });
 
       var explanation = targetHs.explanation || '';
       if (!click) {
-        resultDiv.innerHTML = '<div style="background:#fff8e1;border-radius:8px;padding:10px 14px;text-align:center"><span style="color:#92400e;font-weight:700">⏰ הזמן נגמר! </span><span style="color:#555;font-size:13px">המיקום הנכון מסומן בתמונה</span>' + (explanation ? '<br><span style="font-size:12px;color:#666;margin-top:4px;display:block">' + explanation + '</span>' : '') + '</div>';
+        var toStyle = state.studyMode
+          ? { bg: '#d1fae5', color: '#065f46' }
+          : { bg: '#fff8e1', color: '#92400e' };
+        resultDiv.innerHTML = '<div style="background:' + toStyle.bg + ';border-radius:8px;padding:10px 14px;text-align:center"><span style="color:' + toStyle.color + ';font-weight:700">⏰ הזמן נגמר! </span><span style="color:#555;font-size:13px">המיקום הנכון מסומן בתמונה</span>' + (state.studyMode && explanation ? '<br><span style="font-size:12px;color:#666;margin-top:4px;display:block">' + explanation + '</span>' : '') + '</div>';
       } else if (isCorrect) {
         resultDiv.innerHTML = '<div style="background:#d1fae5;border-radius:8px;padding:10px 14px;text-align:center"><span style="color:#065f46;font-weight:700">✅ נכון! </span>' + (points ? '<span style="color:#059669;font-size:13px">+' + points + ' נקודות</span>' : '') + (explanation ? '<br><span style="font-size:12px;color:#065f46;margin-top:4px;display:block">' + explanation + '</span>' : '') + '</div>';
       } else {
-        resultDiv.innerHTML = '<div style="background:#fee2e2;border-radius:8px;padding:10px 14px;text-align:center"><span style="color:#991b1b;font-weight:700">❌ לא מדויק. </span><span style="color:#555;font-size:13px">המיקום הנכון מסומן</span>' + (explanation ? '<br><span style="font-size:12px;color:#7f1d1d;margin-top:4px;display:block">' + explanation + '</span>' : '') + '</div>';
+        resultDiv.innerHTML = '<div style="background:#fee2e2;border-radius:8px;padding:10px 14px;text-align:center"><span style="color:#991b1b;font-weight:700">❌ תשובה שגויה</span></div>';
       }
 
+      var hsSettings = getGameSettings(state.game);
+      var studyDelayMs = Math.round((hsSettings.studyExplanationDuration != null ? hsSettings.studyExplanationDuration : ((DB.studyModeDefaults && DB.studyModeDefaults.explanationDuration != null) ? DB.studyModeDefaults.explanationDuration : 2.2)) * 1000);
       setTimeout(function() {
         state.current++;
         nextFn();
-      }, state.studyMode ? 2200 : 1600);
+      }, state.studyMode ? studyDelayMs : 1600);
     }
 
     function endHSGame() {
@@ -5821,87 +5974,181 @@ function exportFullHTML(){
   }
 
   // Admin: editor for hotspot image + points
-  function renderHotspotAdmin(container, game) {
-    var hotspots = game.hotspots || [];
-    var imgSrc = game.hotspotImage || '';
+  function renderHotspotAdmin(container, game, drawState, activeImageId) {
+    var images = getEffectiveHotspotImages(game);
+    if (!activeImageId) activeImageId = images.length ? images[0].id : null;
+    var activeImg = images.find(function(im) { return im.id === activeImageId; }) || images[0] || null;
+    var imgSrc = activeImg ? activeImg.url : '';
+    var allHotspots = game.hotspots || [];
+    // נקודות של התמונה הפעילה בלבד (לגאסי — בלי imageId כלל — נחשבות שייכות לתמונה היחידה)
+    var hotspots = allHotspots.filter(function(hs) {
+      return activeImg && ((hs.imageId || images[0] && images[0].id) === activeImg.id);
+    });
+    drawState = drawState || null; // { points: [{x,y}, ...] } בזמן ציור צורה חדשה
 
-    function saveHS() {
-      game.hotspots = hotspots;
-      game.hotspotImage = document.getElementById('hs-admin-img-url') ? document.getElementById('hs-admin-img-url').value.trim() : imgSrc;
-      // rebuild auto questions
-      game.hotspotQuestions = hotspots.map(function(hs) {
-        return { id: 'auto_' + hs.id, prompt: 'לחץ על: ' + hs.label, targetId: hs.id, type: 'click' };
-      });
-      var idx = DB.games.findIndex(function(g) { return g.id === game.id; });
-      if (idx >= 0) DB.games[idx] = game;
-      saveDB();
-      renderHotspotAdmin(container, game);
+    function countForImage(imId) {
+      return allHotspots.filter(function(hs) { return (hs.imageId || images[0] && images[0].id) === imId; }).length;
     }
 
-    container.innerHTML =
-      '<div style="margin-bottom:16px">' +
-        '<label style="font-size:13px;font-weight:600;color:#555;display:block;margin-bottom:5px">כתובת תמונה (URL)</label>' +
-        '<div style="display:flex;gap:8px">' +
-          '<input id="hs-admin-img-url" value="' + (imgSrc || '') + '" placeholder="https://... או העלה ל-Google Drive והדבק קישור" style="flex:1;padding:9px 12px;border:1.5px solid #e0e0e0;border-radius:8px;font-size:13px">' +
-          '<button onclick="document.getElementById(\'hs-admin-img-url\').value&&(function(){var g=getGame(\'' + game.id + '\');g.hotspotImage=document.getElementById(\'hs-admin-img-url\').value.trim();var idx=DB.games.findIndex(function(x){return x.id===g.id;});if(idx>=0)DB.games[idx]=g;saveDB();renderHotspotAdmin(document.getElementById(\'q-content\'),g);})()" style="padding:9px 16px;background:#4361ee;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer">✓ עדכן</button>' +
-        '</div>' +
+    // ── רצועת ניהול תמונות ──
+    var imagesStripHtml = '<div style="margin-bottom:14px">' +
+      '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">' +
+      images.map(function(im) {
+        var isActive = activeImg && im.id === activeImg.id;
+        var lbl = im.label ? escHtml(im.label) : ('תמונה ' + (images.indexOf(im) + 1));
+        return '<span style="display:inline-flex;align-items:center;gap:4px;padding:5px 6px 5px 10px;border-radius:8px;background:' + (isActive ? '#4361ee' : '#eef1ff') + ';color:' + (isActive ? '#fff' : '#4361ee') + ';font-size:12px;font-weight:600">' +
+          '<span style="cursor:pointer" onclick="renderHotspotAdmin(document.getElementById(\'q-content\'),getGame(\'' + game.id + '\'),null,\'' + im.id + '\')">🖼️ ' + lbl + ' (' + countForImage(im.id) + ')</span>' +
+          (images.length > 1 ? '<button onclick="(function(){if(!confirm(\'למחוק את התמונה הזו וכל הנקודות שעליה?\'))return;var g=getGame(\'' + game.id + '\');g.hotspotImages=(g.hotspotImages||[]).filter(function(x){return x.id!==\'' + im.id + '\';});g.hotspots=(g.hotspots||[]).filter(function(h){return (h.imageId||\'' + im.id + '\')!==\'' + im.id + '\';});g.hotspotQuestions=g.hotspots.map(function(h){return {id:\'auto_\'+h.id,prompt:\'לחץ על: \'+h.label,targetId:h.id,imageId:h.imageId,type:\'click\'};});var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();renderHotspotAdmin(document.getElementById(\'q-content\'),g);})()" style="background:none;border:none;cursor:pointer;color:' + (isActive ? '#fff' : '#e63946') + ';font-size:13px;padding:0">🗑</button>' : '') +
+        '</span>';
+      }).join('') +
+      '<button onclick="(function(){var url=prompt(\'כתובת התמונה החדשה (URL):\');if(!url)return;url=normalizeImageUrl(url.trim());var lbl=prompt(\'תווית קצרה לתמונה זו (אופציונלי — לדוגמה \\\'קטע 1\\\'):\')||\'\';var g=getGame(\'' + game.id + '\');if(!g.hotspotImages||!g.hotspotImages.length){g.hotspotImages=g.hotspotImage?[{id:\'__legacy__\',url:g.hotspotImage,label:\'\'}]:[];(g.hotspots||[]).forEach(function(h){if(!h.imageId)h.imageId=\'__legacy__\';});}var newId=\'img_\'+Date.now();g.hotspotImages.push({id:newId,url:url,label:lbl});var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();renderHotspotAdmin(document.getElementById(\'q-content\'),g,null,newId);})()" style="padding:5px 12px;background:#fff;border:1.5px dashed #4361ee;color:#4361ee;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer">+ הוסף תמונה</button>' +
       '</div>' +
+      (images.length > 1 ? '<p style="font-size:11px;color:#888;margin:0">💡 כל התמונות שייכות לאותו משחק — ניקוד ודיווח מאוחדים לכולן. לוחצים על תמונה כדי לעבור אליה ולערוך את הנקודות שלה.</p>' : '') +
+    '</div>';
+
+    container.innerHTML =
+      imagesStripHtml +
       (imgSrc ?
-        '<div style="margin-bottom:16px;padding:10px;background:#f0f4ff;border-radius:8px;font-size:13px;color:#4361ee">' +
-          '🖱️ <strong>לחץ על התמונה</strong> כדי להוסיף נקודה חדשה' +
-        '</div>' +
-        '<div style="position:relative;cursor:crosshair;margin-bottom:16px;border:1.5px solid #e0e0e0;border-radius:10px;overflow:hidden" id="hs-admin-wrap">' +
+        (drawState ?
+          '<div style="margin-bottom:16px;padding:10px;background:#fff8e1;border-radius:8px;font-size:13px;color:#92400e;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">' +
+            '<span>✏️ <strong>מציירת צורה</strong> — ' + drawState.points.length + ' פינות עד כה. לחצי על התמונה כדי להוסיף עוד פינה.</span>' +
+            '<span style="display:flex;gap:6px">' +
+              '<button onclick="window._hsFinishShape()" ' + (drawState.points.length < 3 ? 'disabled style="opacity:.5;padding:6px 14px;background:#16803a;color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:not-allowed"' : 'style="padding:6px 14px;background:#16803a;color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer"') + '>✓ סיום (לפחות 3 פינות)</button>' +
+              '<button onclick="window._hsCancelShape()" style="padding:6px 14px;background:#e63946;color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer">✕ ביטול</button>' +
+            '</span>' +
+          '</div>'
+        :
+          '<div style="margin-bottom:16px;padding:10px;background:#f0f4ff;border-radius:8px;font-size:13px;color:#4361ee">' +
+            '🖱️ <strong>לחצי על התמונה</strong> כדי להתחיל לצייר צורה חדשה — כל לחיצה מוסיפה פינה, בכל צורה שתרצי (מלבן, משולש, עיגול משוער וכו׳)' +
+          '</div>'
+        ) +
+        '<div style="position:relative;cursor:crosshair;margin-bottom:16px;border:1.5px solid #e0e0e0;border-radius:10px;overflow:hidden;user-select:none" id="hs-admin-wrap">' +
           '<img src="' + imgSrc + '" style="width:100%;display:block" id="hs-admin-img" draggable="false">' +
-          hotspots.map(function(hs) {
-            return '<div style="position:absolute;left:' + hs.x + '%;top:' + hs.y + '%;transform:translate(-50%,-50%);pointer-events:none">' +
-              '<div style="width:24px;height:24px;border-radius:50%;background:rgba(67,97,238,0.85);border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center">' +
-                '<span style="color:#fff;font-size:9px;font-weight:700">●</span>' +
-              '</div>' +
-              '<div style="background:#1a1a2e;color:#fff;font-size:10px;padding:2px 5px;border-radius:4px;margin-top:3px;white-space:nowrap;text-align:center;max-width:80px;overflow:hidden;text-overflow:ellipsis">' + hs.label + '</div>' +
-            '</div>';
-          }).join('') +
+          '<canvas id="hs-admin-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none"></canvas>' +
         '</div>'
-      : '<div style="height:180px;background:#f0f2f5;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:14px;margin-bottom:16px">הזן כתובת תמונה למעלה כדי להתחיל</div>') +
+      : '<div style="height:180px;background:#f0f2f5;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:14px;margin-bottom:16px">הוסיפי תמונה למעלה כדי להתחיל</div>') +
       '<div style="margin-bottom:12px">' +
         '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">' +
-          '<span style="font-size:14px;font-weight:700;color:#1a1a2e">נקודות מוגדרות (' + hotspots.length + ')</span>' +
-          '<button onclick="(function(){var g=getGame(\'' + game.id + '\');g.hotspots=[];g.hotspotQuestions=[];var idx=DB.games.findIndex(function(x){return x.id===g.id;});if(idx>=0)DB.games[idx]=g;saveDB();renderHotspotAdmin(document.getElementById(\'q-content\'),g);})()" style="font-size:12px;color:#e63946;background:none;border:none;cursor:pointer;padding:4px 8px">🗑 נקה הכל</button>' +
+          '<span style="font-size:14px;font-weight:700;color:#1a1a2e">נקודות בתמונה זו (' + hotspots.length + ')</span>' +
+          (hotspots.length ? '<button onclick="(function(){if(!confirm(\'למחוק את כל הנקודות בתמונה זו?\'))return;var g=getGame(\'' + game.id + '\');var kId=\'' + (activeImg ? activeImg.id : '') + '\';g.hotspots=(g.hotspots||[]).filter(function(h){return (h.imageId||kId)!==kId;});g.hotspotQuestions=g.hotspots.map(function(h){return {id:\'auto_\'+h.id,prompt:\'לחץ על: \'+h.label,targetId:h.id,imageId:h.imageId,type:\'click\'};});var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();renderHotspotAdmin(document.getElementById(\'q-content\'),g,null,kId);})()" style="font-size:12px;color:#e63946;background:none;border:none;cursor:pointer;padding:4px 8px">🗑 נקה הכל בתמונה זו</button>' : '') +
         '</div>' +
-        (hotspots.length === 0 ? '<p style="color:#aaa;font-size:13px;padding:12px 0">אין נקודות עדיין — לחץ על התמונה כדי להוסיף</p>' :
-          hotspots.map(function(hs, idx) {
+        (hotspots.length === 0 ? '<p style="color:#aaa;font-size:13px;padding:12px 0">אין נקודות עדיין בתמונה זו — לחצי על התמונה כדי להוסיף</p>' :
+          hotspots.map(function(hs) {
+            var idx = allHotspots.indexOf(hs);
+            var isPoly = hs.points && hs.points.length >= 3;
+            var shapeBadge = isPoly
+              ? '<span style="background:#7c3aed;color:#fff;font-size:11px;font-weight:700;padding:2px 7px;border-radius:10px;white-space:nowrap" title="צורה חופשית">🔺 ' + hs.points.length + ' פינות</span>'
+              : '<span style="display:flex;align-items:center;gap:3px;font-size:11px;color:#888;white-space:nowrap" title="טווח פגיעה (אחוז מרוחב התמונה) — ככל שגדול יותר, קל יותר לפגוע">טווח' +
+                  '<input type="number" min="2" max="40" step="0.5" value="' + (hs.radius != null ? hs.radius : 8) + '" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.hotspots[' + idx + '].radius=parseFloat(v)||8;var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();renderHotspotAdmin(document.getElementById(\'q-content\'),g,null,\'' + (activeImg ? activeImg.id : '') + '\');})(this.value)" style="width:48px;padding:4px;border:1px solid #e0e0e0;border-radius:6px;font-size:12px;text-align:center">' +
+                '</span>';
             return '<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f8f9ff;border-radius:8px;margin-bottom:6px">' +
               '<span style="background:#4361ee;color:#fff;font-size:11px;font-weight:700;padding:2px 7px;border-radius:10px;white-space:nowrap">' + Math.round(hs.x) + '%, ' + Math.round(hs.y) + '%</span>' +
-              '<input value="' + hs.label + '" placeholder="שם הנקודה" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.hotspots[' + idx + '].label=v;var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})(this.value)" style="flex:1;padding:5px 8px;border:1px solid #e0e0e0;border-radius:6px;font-size:12px">' +
-              '<input value="' + (hs.explanation || '') + '" placeholder="הסבר (אופציונלי)" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.hotspots[' + idx + '].explanation=v;var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})(this.value)" style="flex:2;padding:5px 8px;border:1px solid #e0e0e0;border-radius:6px;font-size:12px">' +
-              '<button onclick="(function(){var g=getGame(\'' + game.id + '\');g.hotspots.splice(' + idx + ',1);var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();renderHotspotAdmin(document.getElementById(\'q-content\'),g);})()" style="background:none;border:none;cursor:pointer;color:#e63946;font-size:16px;padding:0 4px">🗑</button>' +
+              shapeBadge +
+              '<input value="' + escHtml(hs.label) + '" placeholder="שם הנקודה" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.hotspots[' + idx + '].label=v;g.hotspotQuestions=g.hotspots.map(function(h){return {id:\'auto_\'+h.id,prompt:\'לחץ על: \'+h.label,targetId:h.id,imageId:h.imageId,type:\'click\'};});var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})(this.value)" style="flex:1;padding:5px 8px;border:1px solid #e0e0e0;border-radius:6px;font-size:12px">' +
+              '<input value="' + escHtml(hs.explanation || '') + '" placeholder="הסבר (אופציונלי)" onchange="(function(v){var g=getGame(\'' + game.id + '\');g.hotspots[' + idx + '].explanation=v;var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();})(this.value)" style="flex:2;padding:5px 8px;border:1px solid #e0e0e0;border-radius:6px;font-size:12px">' +
+              '<button onclick="(function(){var g=getGame(\'' + game.id + '\');g.hotspots.splice(' + idx + ',1);var i=DB.games.findIndex(function(x){return x.id===g.id;});if(i>=0)DB.games[i]=g;saveDB();renderHotspotAdmin(document.getElementById(\'q-content\'),g,null,\'' + (activeImg ? activeImg.id : '') + '\');})()" style="background:none;border:none;cursor:pointer;color:#e63946;font-size:16px;padding:0 4px">🗑</button>' +
             '</div>';
           }).join('')
         ) +
       '</div>';
 
-    // Click on image to add hotspot
+    // ── ציור על הקנבס: צורות קיימות (חופשיות או עיגול-לגאסי) + הצורה בתהליך ציור ──
     var adminWrap = document.getElementById('hs-admin-wrap');
+    var adminCanvas = document.getElementById('hs-admin-canvas');
+    var adminImg = document.getElementById('hs-admin-img');
+
+    function drawAdminCanvas(cursorPos) {
+      if (!adminCanvas || !adminWrap) return;
+      adminCanvas.width = adminWrap.offsetWidth;
+      adminCanvas.height = adminWrap.offsetHeight;
+      var ctx = adminCanvas.getContext('2d');
+      ctx.clearRect(0, 0, adminCanvas.width, adminCanvas.height);
+      hotspots.forEach(function(hs) {
+        drawHotspotShapeOutline(ctx, adminCanvas.width, adminCanvas.height, hs, 'rgba(67,97,238,0.22)', '#4361ee');
+        var cx = (hs.x / 100) * adminCanvas.width, cy = (hs.y / 100) * adminCanvas.height;
+        var ext = getHotspotVisualExtent(hs, adminCanvas.width, adminCanvas.height);
+        var labelY = (cy + ext + 14 <= adminCanvas.height) ? cy + ext + 14 : Math.max(10, cy - ext - 6);
+        ctx.beginPath();
+        ctx.arc(cx, cy, 3, 0, Math.PI * 2);
+        ctx.fillStyle = '#4361ee';
+        ctx.fill();
+        ctx.fillStyle = '#1a1a2e';
+        ctx.font = '700 11px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(hs.label, cx, labelY);
+      });
+      if (drawState && drawState.points.length) {
+        var pts = drawState.points;
+        ctx.beginPath();
+        pts.forEach(function(p, i) {
+          var px = (p.x / 100) * adminCanvas.width, py = (p.y / 100) * adminCanvas.height;
+          if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+        });
+        if (cursorPos) ctx.lineTo((cursorPos.x / 100) * adminCanvas.width, (cursorPos.y / 100) * adminCanvas.height);
+        ctx.strokeStyle = '#16803a';
+        ctx.lineWidth = 2;
+        ctx.setLineDash(cursorPos ? [5, 4] : []);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        pts.forEach(function(p) {
+          var px = (p.x / 100) * adminCanvas.width, py = (p.y / 100) * adminCanvas.height;
+          ctx.beginPath();
+          ctx.arc(px, py, 4, 0, Math.PI * 2);
+          ctx.fillStyle = '#16803a';
+          ctx.fill();
+        });
+      }
+    }
+
+    if (adminImg) {
+      if (adminImg.complete) drawAdminCanvas();
+      adminImg.onload = function() { drawAdminCanvas(); };
+    }
+
+    function finishPoint(xPct, yPct, label, explanation, pointsArr) {
+      var g = getGame(game.id);
+      if (!g.hotspots) g.hotspots = [];
+      var newHs = { id: 'hs_' + Date.now(), imageId: activeImg ? activeImg.id : undefined, x: xPct, y: yPct, label: label, explanation: explanation };
+      if (pointsArr) newHs.points = pointsArr; else newHs.radius = 8;
+      g.hotspots.push(newHs);
+      g.hotspotQuestions = g.hotspots.map(function(hs) {
+        return { id: 'auto_' + hs.id, prompt: 'לחץ על: ' + hs.label, targetId: hs.id, imageId: hs.imageId, type: 'click' };
+      });
+      var idx2 = DB.games.findIndex(function(x) { return x.id === g.id; });
+      if (idx2 >= 0) DB.games[idx2] = g;
+      saveDB();
+      renderHotspotAdmin(container, g, null, activeImg ? activeImg.id : null);
+    }
+
+    window._hsFinishShape = function() {
+      if (!drawState || drawState.points.length < 3) return;
+      var label = prompt('איך לקרוא לנקודה? כך תיראה השאלה לנהג: "לחץ על: ___" (למשל: "רמזור", "כפתור חירום"):');
+      if (!label) { renderHotspotAdmin(container, game, drawState, activeImg ? activeImg.id : null); return; }
+      var explanation = prompt('הסבר לנקודה (אופציונלי — השאר ריק לדילוג):') || '';
+      var center = polygonCentroid(drawState.points);
+      finishPoint(Math.round(center.x * 10) / 10, Math.round(center.y * 10) / 10, label, explanation, drawState.points);
+    };
+    window._hsCancelShape = function() {
+      renderHotspotAdmin(container, game, null, activeImg ? activeImg.id : null);
+    };
+
     if (adminWrap) {
       adminWrap.onclick = function(e) {
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
         var rect = adminWrap.getBoundingClientRect();
         var xPct = Math.round(((e.clientX - rect.left) / rect.width) * 100 * 10) / 10;
         var yPct = Math.round(((e.clientY - rect.top) / rect.height) * 100 * 10) / 10;
-        var label = prompt('שם לנקודה זו (למשל: "רמזור", "כפתור חירום"):');
-        if (!label) return;
-        var explanation = prompt('הסבר לנקודה (אופציונלי — השאר ריק לדילוג):') || '';
-        var g = getGame(game.id);
-        if (!g.hotspots) g.hotspots = [];
-        g.hotspots.push({ id: 'hs_' + Date.now(), x: xPct, y: yPct, label: label, explanation: explanation, radius: 8 });
-        // rebuild auto questions
-        g.hotspotQuestions = g.hotspots.map(function(hs) {
-          return { id: 'auto_' + hs.id, prompt: 'לחץ על: ' + hs.label, targetId: hs.id, type: 'click' };
-        });
-        var idx2 = DB.games.findIndex(function(x) { return x.id === g.id; });
-        if (idx2 >= 0) DB.games[idx2] = g;
-        saveDB();
-        renderHotspotAdmin(container, g);
+        var newDrawState = drawState ? { points: drawState.points.concat([{ x: xPct, y: yPct }]) } : { points: [{ x: xPct, y: yPct }] };
+        renderHotspotAdmin(container, game, newDrawState, activeImg ? activeImg.id : null);
       };
+      if (drawState) {
+        adminWrap.onmousemove = function(e) {
+          var rect = adminWrap.getBoundingClientRect();
+          var xPct = ((e.clientX - rect.left) / rect.width) * 100;
+          var yPct = ((e.clientY - rect.top) / rect.height) * 100;
+          drawAdminCanvas({ x: xPct, y: yPct });
+        };
+      }
     }
   }
 
@@ -5918,6 +6165,10 @@ function exportFullHTML(){
   };
 
   window.GAME_REGISTRY = { image_timed: IMAGE_TIMED, text_quiz: TEXT_QUIZ, multi_stream: MULTI_STREAM, drag_drop: DRAG_DROP, sequence_order: SEQUENCE_ORDER, image_hotspot: IMAGE_HOTSPOT };
+  // חשיפה גלובלית — נדרשת כי כפתורים בתוך renderHotspotAdmin/renderMultiStreamAdmin
+  // משתמשים ב-onclick מוטבע (inline), שרץ תמיד ב-scope הגלובלי ולא רואה פונקציות פנימיות
+  window.renderHotspotAdmin = renderHotspotAdmin;
+  window.renderMultiStreamAdmin = renderMultiStreamAdmin;
   window.getGameAccent = window.getGameAccent || function(id){ return '#4361ee'; };
   window.migrateDBPlatform = migrateDBPlatform;
   window.syncLegacyAliases = syncLegacyAliases;
@@ -6188,7 +6439,7 @@ function exportFullHTML(){
     qs[idx].explanation = explanation || '';
     if (!isText) {
       var imgEl = document.getElementById('epq-img');
-      if (imgEl && imgEl.value.trim()) qs[idx].img = imgEl.value.trim();
+      if (imgEl && imgEl.value.trim()) qs[idx].img = normalizeImageUrl(imgEl.value.trim());
     }
     persistGameQuestions(gameId, qs);
     saveDB();
@@ -6204,7 +6455,7 @@ function exportFullHTML(){
       '</select></div><button class="btn-primary w100" onclick="submitBinaryQ(\'' + gameId + '\')" style="padding:11px">שמור</button>');
   };
   window.submitBinaryQ = function (gameId) {
-    var img = document.getElementById('bqi').value.trim();
+    var img = normalizeImageUrl(document.getElementById('bqi').value.trim());
     var correct = document.getElementById('bqc').value;
     if (!img || !correct) { alert('מלא את כל השדות'); return; }
     var qs = getGameQuestions(gameId);
@@ -6232,7 +6483,7 @@ function exportFullHTML(){
     var n = getGameOptionCount(game);
     var isText = game && game.templateId === 'text_quiz';
     var imgEl = document.getElementById('pqi');
-    var img = imgEl ? imgEl.value.trim() : '';
+    var img = imgEl ? normalizeImageUrl(imgEl.value.trim()) : '';
     var txt = document.getElementById('pqt').value.trim();
     var opts = [0, 1, 2, 3, 4, 5].slice(0, n).map(function (i) { return document.getElementById('pqo' + i).value.trim(); });
     if ((!isText && !img) || !txt || opts.some(function (o) { return !o; })) { alert('מלא את כל השדות'); return; }
@@ -6252,17 +6503,28 @@ function exportFullHTML(){
   function renderWizardOptFields() {
     var n = parseInt(document.getElementById('gw-optcount').value, 10) || 2;
     var tpl = document.getElementById('gw-template').value;
+    var isOptionBased = (tpl === 'image_timed' || tpl === 'text_quiz');
     var promptWrap = document.getElementById('gw-prompt-wrap');
     if (promptWrap) {
       var showPrompt = tpl === 'image_timed' && n === 2;
       promptWrap.classList.toggle('hidden', !showPrompt);
     }
+    var optcountWrap = document.getElementById('gw-optcount-wrap');
+    if (optcountWrap) optcountWrap.classList.toggle('hidden', !isOptionBased);
     var box = document.getElementById('gw-opt-fields');
-    if (!box) return;
-    var defaults = ['נכון', 'לא נכון', 'אולי', 'לא יודע', 'אפשרות 5', 'אפשרות 6'];
-    box.innerHTML = [0, 1, 2, 3, 4, 5].slice(0, n).map(function (i) {
-      return '<div class="form-group"><label>תשובה ' + (i + 1) + '</label><input id="gw-opt' + i + '" value="' + (defaults[i] || ('תשובה ' + (i + 1))) + '"></div>';
-    }).join('');
+    if (box) {
+      box.classList.toggle('hidden', !isOptionBased);
+      if (isOptionBased) {
+        var defaults = ['נכון', 'לא נכון', 'אולי', 'לא יודע', 'אפשרות 5', 'אפשרות 6'];
+        box.innerHTML = [0, 1, 2, 3, 4, 5].slice(0, n).map(function (i) {
+          return '<div class="form-group"><label>תשובה ' + (i + 1) + '</label><input id="gw-opt' + i + '" value="' + (defaults[i] || ('תשובה ' + (i + 1))) + '"></div>';
+        }).join('');
+      } else {
+        box.innerHTML = '';
+      }
+    }
+    var infoBox = document.getElementById('gw-nonoption-info');
+    if (infoBox) infoBox.classList.toggle('hidden', isOptionBased);
   }
 
   window.openGameWizard = function (presetTopicId) {
@@ -6286,11 +6548,12 @@ function exportFullHTML(){
       '<option value="sequence_order">רצף פעולות — סידור שלבים</option>' +
       '<option value="multi_stream">חלוקת קשב — זרמים מקבילים</option>' +
       '<option value="video" disabled>וידאו (בקרוב)</option></select></div>' +
-      '<div class="form-group"><label>מספר תשובות</label><select id="gw-optcount" onchange="renderWizardOptFields()">' +
+      '<div id="gw-optcount-wrap" class="form-group"><label>מספר תשובות</label><select id="gw-optcount" onchange="renderWizardOptFields()">' +
       [2, 3, 4, 5, 6].map(function (n) { return '<option value="' + n + '"' + (n === 4 ? ' selected' : '') + '>' + n + '</option>'; }).join('') +
       '</select></div>' +
       '<div id="gw-prompt-wrap" class="hidden"><div class="form-group"><label>טקסט שאלה קבוע (לתמונה + 2 תשובות)</label><input id="gw-prompt" value="נכון או לא נכון?"></div></div>' +
       '<div id="gw-opt-fields"></div>' +
+      '<div id="gw-nonoption-info" class="hidden" style="background:#f0f4ff;border:1.5px solid #c7d2fe;border-radius:8px;padding:12px 14px;font-size:12.5px;color:#4361ee;margin-top:6px;line-height:1.5">💡 בסוג משחק זה התוכן (תמונה עם נקודות לחיצה / גרירה / שלבים / זרמים — בהתאם לסוג שנבחר) מתווסף במסך ייעודי, מיד לאחר יצירת המשחק, בלשונית "📚 ניהול שאלות".</div>' +
       '<button class="btn-primary w100" onclick="submitGameWizard()" style="padding:11px;margin-top:8px;background:#7c3aed">צור משחק</button>');
     renderWizardOptFields();
   };
@@ -6337,26 +6600,16 @@ function exportFullHTML(){
     DB.questionsByGame[id] = [];
     DB.resultsByGame[id] = [];
 
-    // Add to target topic's gameIds
-    var topics = typeof window.getTopics === 'function' ? window.getTopics() : [];
+
+    // שייך לתיקייה ישירות ב-DB.topics לפני קריאה ל-getTopics() כדי למנוע יצירת "כללי"
     if (targetTopicId) {
-      var targetTopic = topics.find(function(t){ return t.id === targetTopicId; });
+      if (!DB.topics) DB.topics = [];
+      var targetTopic = DB.topics.find(function(t){ return t.id === targetTopicId; });
       if (targetTopic) {
         if (!targetTopic.gameIds) targetTopic.gameIds = [];
-        targetTopic.gameIds.push(id);
-        DB.topics = topics;
+        if (targetTopic.gameIds.indexOf(id) < 0) targetTopic.gameIds.push(id);
+        delete targetTopic._keepEmpty;
       }
-    }
-    // If no topic chosen — create a standalone topic for it (or add to a "general" bucket)
-    // We create a minimal topic so it appears in the lobby
-    else {
-      var generalTopic = topics.find(function(t){ return t.id === 'general_games'; });
-      if (!generalTopic) {
-        generalTopic = { id: 'general_games', name: 'כללי', icon: '🎮', color: '#6366f1', description: 'משחקים נוספים', gameIds: [] };
-        topics.push(generalTopic);
-      }
-      generalTopic.gameIds.push(id);
-      DB.topics = topics;
     }
 
     syncLegacyFromGames();
@@ -6591,12 +6844,29 @@ window.showExplanationBubble = function(explanation, isCorrect, onDismiss) {
 window._RAIL_SVG_RED   = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="36" height="36"><rect x="15" y="1" width="3" height="38" rx="1" fill="#cc2222"/><rect x="22" y="1" width="3" height="38" rx="1" fill="#cc2222"/><rect x="10" y="5" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="12" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="19" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="26" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="33" width="20" height="3" rx="1" fill="#a0785a"/></svg>';
 window._RAIL_SVG_GREEN = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="36" height="36"><rect x="15" y="1" width="3" height="38" rx="1" fill="#2a9d2a"/><rect x="22" y="1" width="3" height="38" rx="1" fill="#2a9d2a"/><rect x="10" y="5" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="12" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="19" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="26" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="33" width="20" height="3" rx="1" fill="#a0785a"/></svg>';
 document.addEventListener('click', function(e) {
-  var btn = e.target.closest('[data-rail-target]');
-  if (!btn) return;
-  var targetId = btn.getAttribute('data-rail-target');
-  var color    = btn.getAttribute('data-rail-color');
-  var el = document.getElementById(targetId);
-  if (el) el.value = (color === 'red' ? window._RAIL_SVG_RED : window._RAIL_SVG_GREEN);
+  // Rail SVG buttons
+  var railBtn = e.target.closest('[data-rail-target]');
+  if (railBtn) {
+    var targetId = railBtn.getAttribute('data-rail-target');
+    var color    = railBtn.getAttribute('data-rail-color');
+    var svgVal   = color === 'red' ? window._RAIL_SVG_RED : window._RAIL_SVG_GREEN;
+    var el = document.getElementById(targetId);
+    if (el) el.value = svgVal;
+    var preview = document.getElementById(targetId + '-preview');
+    if (preview) preview.innerHTML = svgVal;
+    return;
+  }
+  // Emoji icon picker buttons
+  var iconBtn = e.target.closest('[data-icon-target]');
+  if (iconBtn) {
+    var iconTarget = iconBtn.getAttribute('data-icon-target');
+    var iconVal    = iconBtn.getAttribute('data-icon-val');
+    var iconEl = document.getElementById(iconTarget);
+    if (iconEl) iconEl.value = iconVal;
+    var iconPreview = document.getElementById(iconTarget + '-preview');
+    if (iconPreview) iconPreview.innerHTML = iconVal;
+    return;
+  }
 });
 // ─────────────────────────────────────────────────────────────────
 window.renameTopic = function(topicId) {
@@ -6607,16 +6877,18 @@ window.renameTopic = function(topicId) {
   var emojiList = [
     '🚋','🚃','🚞','🚝','🚄','🚅','🚆','🚇','🚈','🚉','🚊','🚌','🚍','🚎','🚐',
     '🛤️','🛣️','🚦','🚥','⛽','🅿️','🚧','⚠️','🛑','🔴','🟡','🟢',
+    '🏢','🏗️','🏭','🏛️','🌉','🏠','🏘️','🛗','🧱','🚪','🗼','🏙️','⚡','🔌','🚏',
     '🦺','🪖','🔧','🔩','🪛','🪚','⚙️','🛠️','📋','📦','📄','🗂️','📁','🗃️',
     '⏱️','⏰','🕐','📍','🗺️','🧭','📡','💡','🔦','🔔','🔕','✅','❌','❗','❓'
   ];
   var pickerHtml = '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">' +
     emojiList.map(function(e){
-      return '<button type="button" onclick="document.getElementById(\'rt-icon\').value=\''+e+'\'" style="font-size:20px;width:36px;height:36px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;padding:0;line-height:1" onmouseover="this.style.borderColor=\'var(--primary)\';this.style.background=\'#f0f4ff\'" onmouseout="this.style.borderColor=\'#e0e0e0\';this.style.background=\'#fff\'">' + e + '</button>';
+      return '<button type="button" data-icon-target="rt-icon" data-icon-val="'+e+'" style="font-size:20px;width:36px;height:36px;border:1.5px solid #e0e0e0;border-radius:8px;background:#fff;cursor:pointer;padding:0;line-height:1" onmouseover="this.style.borderColor=\'var(--primary)\';this.style.background=\'#f0f4ff\'" onmouseout="this.style.borderColor=\'#e0e0e0\';this.style.background=\'#fff\'">' + e + '</button>';
     }).join('') + '</div>';
   showModal('✏️ ערוך תיקיית נושא',
     '<div class="form-group"><label>אייקון</label>' +
-      '<input id="rt-icon" value="' + esc(topic.icon||'📁') + '" style="width:80px;font-size:22px;text-align:center;margin-bottom:8px">' +
+      '<input type="hidden" id="rt-icon" value="' + esc(topic.icon||'📁') + '">' +
+      '<div id="rt-icon-preview" onclick="(function(){document.getElementById(\'rt-icon\').value=\'📁\';document.getElementById(\'rt-icon-preview\').innerHTML=\'📁\';})()" title="לחץ לאיפוס" style="width:56px;height:56px;border:1.5px solid #e0e0e0;border-radius:10px;background:#f8f9ff;display:flex;align-items:center;justify-content:center;font-size:26px;cursor:pointer;margin-bottom:8px;overflow:hidden">' + (topic.icon && topic.icon.startsWith('<') ? topic.icon : esc(topic.icon||'📁')) + '</div>' +
       pickerHtml +
       '<div style="display:flex;gap:6px;align-items:center;margin-top:6px;padding-top:6px;border-top:1px solid #eee"><span style="font-size:11px;color:#aaa">מסילה:</span><button type="button" title="מסילה אדומה" data-rail-target="rt-icon" data-rail-color="red" style="width:36px;height:36px;border:1.5px solid #e0e0e0;border-radius:7px;background:#fff;cursor:pointer;padding:2px;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="28" height="28"><rect x="15" y="1" width="3" height="38" rx="1" fill="#cc2222"/><rect x="22" y="1" width="3" height="38" rx="1" fill="#cc2222"/><rect x="10" y="5" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="12" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="19" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="26" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="33" width="20" height="3" rx="1" fill="#a0785a"/></svg></button><button type="button" title="מסילה ירוקה" data-rail-target="rt-icon" data-rail-color="green" style="width:36px;height:36px;border:1.5px solid #e0e0e0;border-radius:7px;background:#fff;cursor:pointer;padding:2px;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="28" height="28"><rect x="15" y="1" width="3" height="38" rx="1" fill="#2a9d2a"/><rect x="22" y="1" width="3" height="38" rx="1" fill="#2a9d2a"/><rect x="10" y="5" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="12" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="19" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="26" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="33" width="20" height="3" rx="1" fill="#a0785a"/></svg></button></div>' +
     '</div>' +
@@ -6637,7 +6909,7 @@ window.saveTopicRename = function(topicId) {
   var newColor = (document.getElementById('rt-color')||{}).value;
   if (!newName || !newName.trim()) { alert('הכנס שם'); return; }
   topic.name = newName.trim();
-  topic.icon = (newIcon ? [...newIcon.trim()].slice(0,2).join('') : '📁') || '📁';
+  topic.icon = (newIcon ? (newIcon.trim().startsWith('<svg') ? newIcon.trim() : ([...newIcon.trim()].slice(0,2).join('') || '📁')) : '📁') || '📁';
   topic.description = newDesc ? newDesc.trim() : topic.description;
   topic.color = newColor || topic.color;
   DB.topics = topics;
@@ -6656,16 +6928,18 @@ window.renameGame = function(gameId) {
   var emojiList = [
     '🚋','🚃','🚞','🚝','🚄','🚅','🚆','🚇','🚈','🚉','🚊','🚌','🚍','🚎','🚐',
     '🛤️','🛣️','🚦','🚥','⛽','🅿️','🚧','⚠️','🛑','🔴','🟡','🟢',
+    '🏢','🏗️','🏭','🏛️','🌉','🏠','🏘️','🛗','🧱','🚪','🗼','🏙️','⚡','🔌','🚏',
     '🦺','🪖','🔧','🔩','🪛','🪚','⚙️','🛠️','📋','📦','📄','🗂️','📁','🗃️',
     '⏱️','⏰','🕐','📍','🗺️','🧭','📡','💡','🔦','🔔','🔕','✅','❌','❗','❓','🎮'
   ];
   var pickerHtml = '<div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px">' +
     emojiList.map(function(e){
-      return '<button type="button" onclick="document.getElementById(\'rg-icon\').value=\''+e+'\'" style="font-size:18px;width:32px;height:32px;border:1.5px solid #e0e0e0;border-radius:7px;background:#fff;cursor:pointer;padding:0;line-height:1" onmouseover="this.style.borderColor=\'var(--primary)\';this.style.background=\'#f0f4ff\'" onmouseout="this.style.borderColor=\'#e0e0e0\';this.style.background=\'#fff\'">' + e + '</button>';
+      return '<button type="button" data-icon-target="rg-icon" data-icon-val="'+e+'" style="font-size:18px;width:32px;height:32px;border:1.5px solid #e0e0e0;border-radius:7px;background:#fff;cursor:pointer;padding:0;line-height:1" onmouseover="this.style.borderColor=\'var(--primary)\';this.style.background=\'#f0f4ff\'" onmouseout="this.style.borderColor=\'#e0e0e0\';this.style.background=\'#fff\'">' + e + '</button>';
     }).join('') + '</div>';
   showModal('✏️ ערוך משחק',
     '<div class="form-group"><label>אייקון</label>' +
-      '<input id="rg-icon" value="' + esc(currentIcon) + '" style="width:80px;font-size:22px;text-align:center;margin-bottom:6px">' +
+      '<input type="hidden" id="rg-icon" value="' + esc(currentIcon) + '">' +
+      '<div id="rg-icon-preview" onclick="(function(){document.getElementById(\'rg-icon\').value=\'🎮\';document.getElementById(\'rg-icon-preview\').innerHTML=\'🎮\';})()" title="לחץ לאיפוס" style="width:48px;height:48px;border:1.5px solid #e0e0e0;border-radius:10px;background:#f8f9ff;display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;margin-bottom:6px;overflow:hidden">' + (currentIcon && currentIcon.startsWith('<') ? currentIcon : esc(currentIcon||'🎮')) + '</div>' +
       pickerHtml +
       '<div style="display:flex;gap:6px;align-items:center;margin-top:6px;padding-top:6px;border-top:1px solid #eee"><span style="font-size:11px;color:#aaa">מסילה:</span><button type="button" title="מסילה אדומה" data-rail-target="rg-icon" data-rail-color="red" style="width:32px;height:32px;border:1.5px solid #e0e0e0;border-radius:7px;background:#fff;cursor:pointer;padding:2px;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="24" height="24"><rect x="15" y="1" width="3" height="38" rx="1" fill="#cc2222"/><rect x="22" y="1" width="3" height="38" rx="1" fill="#cc2222"/><rect x="10" y="5" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="12" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="19" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="26" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="33" width="20" height="3" rx="1" fill="#a0785a"/></svg></button><button type="button" title="מסילה ירוקה" data-rail-target="rg-icon" data-rail-color="green" style="width:32px;height:32px;border:1.5px solid #e0e0e0;border-radius:7px;background:#fff;cursor:pointer;padding:2px;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="24" height="24"><rect x="15" y="1" width="3" height="38" rx="1" fill="#2a9d2a"/><rect x="22" y="1" width="3" height="38" rx="1" fill="#2a9d2a"/><rect x="10" y="5" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="12" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="19" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="26" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="33" width="20" height="3" rx="1" fill="#a0785a"/></svg></button></div>' +
     '</div>' +
@@ -6753,17 +7027,18 @@ window.getTopics = function() {
 
 // Add/remove topic helpers
 window.openNewTopicDialog = function() {
-  var emojiList = ['🚋','🚃','🚞','🚝','🚄','🚅','🚆','🚇','🚈','🚉','🚊','🚌','🚍','🚦','🚥','🛤️','🛣️','🚧','⚠️','🛑','🦺','🪖','🔧','⚙️','🛠️','📋','📦','📄','📁','⏱️','🔔'];
+  var emojiList = ['🚋','🚃','🚞','🚝','🚄','🚅','🚆','🚇','🚈','🚉','🚊','🚌','🚍','🚦','🚥','🛤️','🛣️','🚧','⚠️','🛑','🏢','🏗️','🏭','🏛️','🌉','🏠','🏘️','🛗','🧱','🚪','🗼','🏙️','⚡','🔌','🚏','🦺','🪖','🔧','⚙️','🛠️','📋','📦','📄','📁','⏱️','🔔'];
   var pickerHtml = '<div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px">' +
     emojiList.map(function(e){
-      return '<button type="button" onclick="document.getElementById(\'nt-icon\').value=\'' + e + '\'" ' +
+      return '<button type="button" data-icon-target="nt-icon" data-icon-val="' + e + '" ' +
         'style="font-size:18px;width:32px;height:32px;border:1.5px solid #e0e0e0;border-radius:7px;background:#fff;cursor:pointer;padding:0;line-height:1" ' +
         'onmouseover="this.style.borderColor=\'var(--primary)\';this.style.background=\'#f0f4ff\'" ' +
         'onmouseout="this.style.borderColor=\'#e0e0e0\';this.style.background=\'#fff\'">' + e + '</button>';
     }).join('') + '</div>';
   showModal('📁 צור תיקייה חדשה',
     '<div class="form-group"><label>אייקון</label>' +
-      '<input id="nt-icon" value="📁" style="width:80px;font-size:22px;text-align:center;margin-bottom:6px">' +
+      '<input type="hidden" id="nt-icon" value="📁">' +
+      '<div id="nt-icon-preview" onclick="(function(){document.getElementById(\'nt-icon\').value=\'📁\';document.getElementById(\'nt-icon-preview\').innerHTML=\'📁\';})()" title="לחץ לאיפוס" style="width:48px;height:48px;border:1.5px solid #e0e0e0;border-radius:10px;background:#f8f9ff;display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;margin-bottom:6px;overflow:hidden">📁</div>' +
       pickerHtml +
       '<div style="display:flex;gap:6px;align-items:center;margin-top:6px;padding-top:6px;border-top:1px solid #eee"><span style="font-size:11px;color:#aaa">מסילה:</span><button type="button" title="מסילה אדומה" data-rail-target="nt-icon" data-rail-color="red" style="width:32px;height:32px;border:1.5px solid #e0e0e0;border-radius:7px;background:#fff;cursor:pointer;padding:2px;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="24" height="24"><rect x="15" y="1" width="3" height="38" rx="1" fill="#cc2222"/><rect x="22" y="1" width="3" height="38" rx="1" fill="#cc2222"/><rect x="10" y="5" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="12" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="19" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="26" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="33" width="20" height="3" rx="1" fill="#a0785a"/></svg></button><button type="button" title="מסילה ירוקה" data-rail-target="nt-icon" data-rail-color="green" style="width:32px;height:32px;border:1.5px solid #e0e0e0;border-radius:7px;background:#fff;cursor:pointer;padding:2px;vertical-align:middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="24" height="24"><rect x="15" y="1" width="3" height="38" rx="1" fill="#2a9d2a"/><rect x="22" y="1" width="3" height="38" rx="1" fill="#2a9d2a"/><rect x="10" y="5" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="12" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="19" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="26" width="20" height="3" rx="1" fill="#a0785a"/><rect x="10" y="33" width="20" height="3" rx="1" fill="#a0785a"/></svg></button></div>' +
     '</div>' +
@@ -6781,18 +7056,35 @@ window.submitNewTopic = function() {
   var color = (document.getElementById('nt-color')||{}).value || '#4361ee';
   if (!name.trim()) { alert('נא להזין שם לתיקייה'); return; }
   var id = 'topic_' + Date.now();
-  window.addTopic({ id: id, name: name.trim(), icon: ([...icon.trim()][0]||'📁'), description: desc.trim(), color: color, gameIds: [], _keepEmpty: true });
+  window.addTopic({ id: id, name: name.trim(), icon: (icon.trim().startsWith('<svg') ? icon.trim() : ([...icon.trim()][0]||'📁')), description: desc.trim(), color: color, gameIds: [], _keepEmpty: true });
   saveDB();
   closeModal();
+  // רענן טאבים ורשימה בלבד — ללא showPlatformLobby שמפעיל getTopics ויוצר "כללי"
+  var navTopics = window.getTopics ? window.getTopics({_keepEmpty:true}) : [];
+  var topicTabsHtml = navTopics.map(function(t){
+    var firstGid = (t.gameIds||[]).find(function(gid){ var g = typeof getGame==='function'?getGame(gid):null; return g&&!g.hidden; }) || (t.gameIds||[])[0] || '';
+    var iconHtml = (t.icon && t.icon.startsWith('<svg')) ? '<span style="display:inline-flex;width:20px;height:20px;overflow:hidden;vertical-align:text-bottom;flex-shrink:0">' + t.icon + '</span>' : t.icon;
+    if (!firstGid) return '<button class="nav-tab" data-tab="config" onclick="showTab(\'config\')" style="display:inline-flex;align-items:center;gap:3px">' + iconHtml + ' ' + t.name + ' <span style="font-size:10px;opacity:.6">+</span></button>';
+    return '<button class="nav-tab" data-tab="' + firstGid + '" onclick="showTab(\'' + firstGid + '\')" style="display:inline-flex;align-items:center;gap:3px">' + iconHtml + ' ' + t.name + '</button>';
+  }).join('');
+  var navTabsEl = document.getElementById('nav-tabs');
+  if (navTabsEl) {
+    var adminSuffix = '<button class="nav-tab" data-tab="questions" onclick="showTab(\'questions\')">📚 שאלות</button>' +
+      '<button class="nav-tab" data-tab="reports" onclick="showTab(\'reports\')">📊 דיווחים</button>' +
+      '<button class="nav-tab" data-tab="myresults" onclick="showTab(\'myresults\')">🏅 ההתקדמות שלי</button>' +
+      '<button class="nav-tab" data-tab="advisor" onclick="showTab(\'advisor\')">💡 יועץ משחקים</button>' +
+      '<button class="nav-tab" data-tab="config" onclick="showTab(\'config\')">⚙️ הגדרות</button>';
+    navTabsEl.innerHTML = topicTabsHtml + adminSuffix;
+  }
   var el = document.getElementById('unified-topics-list');
   if (el) { el.innerHTML = buildUnifiedTopicList(); } else { renderConfig(document.getElementById('mc'), 'general'); }
 };
 
 window.addTopic = function(topic) {
-  var topics = window.getTopics();
-  if (topics.find(function(t){return t.id===topic.id;})) return;
-  topics.push(topic);
-  DB.topics = topics;
+  // Push directly to DB.topics to avoid getTopics() filtering out _keepEmpty before save
+  if (!DB.topics) DB.topics = [];
+  if (DB.topics.find(function(t){return t.id===topic.id;})) return;
+  DB.topics.push(topic);
   saveDB();
 };
 
