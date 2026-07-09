@@ -4375,6 +4375,17 @@ function exportFullHTML(){
     return (DB.questionsByGame && DB.questionsByGame[gameId]) || [];
   }
 
+  // סופר "פריטי תוכן" בהתאם לסוג המשחק — כי כל טמפלייט שומר את התוכן שלו במערך אחר
+  function getGameContentCount(game) {
+    if (!game) return 0;
+    if (game.templateId === 'image_hotspot') return (game.hotspots || []).length;
+    if (game.templateId === 'drag_drop') return (game.ddQuestions || []).length;
+    if (game.templateId === 'sequence_order') return (game.seqQuestions || []).length;
+    if (game.templateId === 'multi_stream') return (game.msQuestions || []).length;
+    return getGameQuestions(game.id).filter(function(q) { return q && q.active; }).length;
+  }
+  window.getGameContentCount = getGameContentCount;
+
   function getGameResults(gameId) {
     syncLegacyAliases();
     return (DB.resultsByGame && DB.resultsByGame[gameId]) || [];
@@ -7121,7 +7132,7 @@ window.showPlatformLobby = function() {
     (topic.gameIds || []).forEach(function(gid) {
       var gameObj = typeof getGame==='function' ? getGame(gid) : null;
       if (!gameObj) return;
-      var qCount = typeof getGameQuestions==='function' ? getGameQuestions(gid).filter(function(q){return q&&q.active;}).length : 0;
+      var qCount = typeof getGameContentCount==='function' ? getGameContentCount(gameObj) : 0;
       totalQ += qCount;
       var prog = getPlayerProgress(gid);
       if (prog) { anyProgress = true; totalPlays += prog.plays; totalAcc += prog.accuracy * prog.plays; accCount += prog.plays; }
@@ -7218,7 +7229,7 @@ window.showTopicFolder = function(topicId) {
     var label = typeof getGameLabel==='function' ? getGameLabel(gameObj) : (gameObj.name || gid);
     var desc = typeof getGameDescription==='function' ? getGameDescription(gameObj) : (gameObj.description || '');
     var icon = gameObj.icon || topic.icon || '🎮';
-    var qCount = typeof getGameQuestions==='function' ? getGameQuestions(gid).filter(function(q){return q&&q.active;}).length : 0;
+    var qCount = typeof getGameContentCount==='function' ? getGameContentCount(gameObj) : 0;
     var progress = getPlayerProgress(gid);
 
     var progressHtml = '';
